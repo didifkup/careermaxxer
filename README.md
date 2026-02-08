@@ -67,3 +67,4 @@ npm run start
 | `src/lib/` | constants, curriculum, progress, storage, analytics, confetti |
 
 Design system: CSS variables in `globals.css`; Tailwind theme (colors, radius, shadow, animation) in `tailwind.config.ts`.
+# careermaxxer
