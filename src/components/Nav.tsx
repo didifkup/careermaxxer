@@ -54,7 +54,7 @@ export function Nav() {
   };
 
   const tabs = [
-    { label: "Practice", href: "/practice" },
+    { label: "Technicals", href: "/practice" },
     { label: "Reading", href: "/reading" },
     { label: "Quiz", href: "/quiz" },
     { label: "Worlds", href: "/worlds" },

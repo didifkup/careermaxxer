@@ -1,12 +1,19 @@
-import type { Node } from "@/lib/curriculum";
 import { FLOOR4_QUESTIONS } from "@/lib/floor4Questions";
 import type { FloorSpec } from "./types";
 
 const SALARY = 10_000;
+const FLOOR_TITLE = "Equity Value & Enterprise Value – Concepts";
 
 export const floor4: FloorSpec = {
   floorNumber: 4,
-  title: "Equity Value & Enterprise Value – Concepts",
+  title: FLOOR_TITLE,
+  metadata: {
+    title: FLOOR_TITLE,
+    conceptFocus: "EV vs equity value, market cap, cash, debt, minority interest",
+    totalReward: 8 * SALARY,
+    milestoneCopy: "You now know what companies are really worth.",
+    backgroundStyle: "default",
+  },
   nodes: [
     {
       id: "node-ev-what",
@@ -133,7 +140,7 @@ export const floor4: FloorSpec = {
       },
       questions: [],
     },
-  ] as Node[],
+  ],
   questions: FLOOR4_QUESTIONS,
   completion: {
     lastNodeId: "node-equity-negative",

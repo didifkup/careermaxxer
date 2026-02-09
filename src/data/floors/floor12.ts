@@ -1,12 +1,19 @@
-import type { Node } from "@/lib/curriculum";
 import { FLOOR12_QUESTIONS } from "@/lib/floor12Questions";
 import type { FloorSpec } from "./types";
 
 const SALARY = 10_000;
+const FLOOR_TITLE = "LBO Models – Concepts";
 
 export const floor12: FloorSpec = {
   floorNumber: 12,
-  title: "LBO Models – Concepts",
+  title: FLOOR_TITLE,
+  metadata: {
+    title: FLOOR_TITLE,
+    conceptFocus: "Leveraged buyouts, leverage, LBO candidates, IRR drivers, exits",
+    totalReward: 6 * SALARY,
+    milestoneCopy: "You now understand how private equity creates returns.",
+    backgroundStyle: "accent",
+  },
   nodes: [
     {
       id: "node-what-is-lbo",
@@ -110,7 +117,7 @@ export const floor12: FloorSpec = {
       },
       questions: [],
     },
-  ] as Node[],
+  ],
   questions: FLOOR12_QUESTIONS,
   completion: {
     lastNodeId: "node-typical-exit-strategies",

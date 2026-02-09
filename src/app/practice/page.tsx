@@ -1,10 +1,16 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+/**
+ * Practice page = Tower (game system).
+ * Renders the entire practice experience: floors (concept groupings), nodes (playable lessons),
+ * stairs (progress connectors), landings (breathers), and rewards (salary, confidence, completion).
+ * See src/types/practice-game.ts for the conceptual vocabulary.
+ */
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { loadProgress, completeNode } from "@/lib/progress";
 import type { Progress } from "@/lib/progress";
-import { getNodeById } from "@/lib/curriculum";
+import { getNodeById, getNextNodeAfter } from "@/lib/curriculum";
 import type { Node } from "@/lib/curriculum";
 import { track } from "@/lib/analytics";
 import { useToast } from "@/contexts/ToastContext";
@@ -24,6 +30,33 @@ function PracticePageContent() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [postCompleteData, setPostCompleteData] = useState<PostCompleteData | null>(null);
+  const [justCompletedNodeId, setJustCompletedNodeId] = useState<string | null>(null);
+  const [justEarnedSalary, setJustEarnedSalary] = useState<number | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  /** After completion sequence, scroll tower so next node is clearly visible. Smooth; respect reduced-motion. */
+  useEffect(() => {
+    if (!justCompletedNodeId) return;
+    const nextNode = getNextNodeAfter(justCompletedNodeId);
+    if (!nextNode) return;
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const delayMs = 580; // Just after completion sequence (~550ms) so scroll feels like a guided next step
+
+    const t = setTimeout(() => {
+      const el = container.querySelector(`[data-node-id="${nextNode.id}"]`);
+      if (el instanceof HTMLElement) {
+        el.scrollIntoView({
+          behavior: prefersReducedMotion ? "auto" : "smooth",
+          block: "center",
+          inline: "nearest",
+        });
+      }
+    }, delayMs);
+    return () => clearTimeout(t);
+  }, [justCompletedNodeId]);
 
   useEffect(() => {
     setProgress(loadProgress());
@@ -53,7 +86,10 @@ function PracticePageContent() {
 
   if (progress === null) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
+      <div
+        className="practice-tower practice-tower-page flex min-h-[60vh] flex-1 items-center justify-center pt-6"
+        style={{ background: "var(--practice-tower-bg)" }}
+      >
         <div className="h-10 w-10 animate-spin rounded-full border-2 border-brand-primary border-t-transparent" />
       </div>
     );
@@ -81,7 +117,12 @@ function PracticePageContent() {
 
     addToast("Progress saved!", "info");
 
-    setPostCompleteData(buildPostCompleteData(selectedNode, newSessionCount));
+    setModalOpen(false);
+    setPostCompleteData(null);
+    setJustCompletedNodeId(selectedNode.id);
+    setJustEarnedSalary(selectedNode.salaryReward);
+    setTimeout(() => setJustCompletedNodeId(null), 800);
+    setTimeout(() => setJustEarnedSalary(null), 2500);
   };
 
   const handleClose = () => {
@@ -101,15 +142,26 @@ function PracticePageContent() {
   };
 
   return (
-    <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-10">
-      <section className="min-w-0 flex-1 overflow-auto">
-        <div className="max-h-[calc(100vh-8rem)] overflow-y-auto pr-2">
-          <BuildingPath progress={progress} onSelectNode={handleSelectNode} />
-        </div>
-      </section>
-      <section className="shrink-0 lg:sticky lg:top-24">
-        <WolfPanel progress={progress} />
-      </section>
+    <div
+      className="practice-tower practice-tower-page flex min-h-0 flex-1 flex-col pt-2"
+      style={{ background: "var(--practice-tower-bg)" }}
+    >
+      <div
+        ref={scrollContainerRef}
+        className="practice-tower-container mx-auto w-full max-w-[880px] flex-1 flex flex-col overflow-y-auto overflow-x-hidden pb-4 scroll-smooth"
+      >
+        <section className="flex flex-col gap-3">
+          <BuildingPath
+            progress={progress}
+            onSelectNode={handleSelectNode}
+            justCompletedNodeId={justCompletedNodeId}
+            selectedNodeId={selectedNode?.id ?? undefined}
+          />
+          <section>
+            <WolfPanel progress={progress} justEarnedSalary={justEarnedSalary} />
+          </section>
+        </section>
+      </div>
 
       <LearningModal
         open={modalOpen}

@@ -1,12 +1,19 @@
-import type { Node } from "@/lib/curriculum";
 import { FLOOR5_QUESTIONS } from "@/lib/floor5Questions";
 import type { FloorSpec } from "./types";
 
 const SALARY = 10_000;
+const FLOOR_TITLE = "Equity Value & Enterprise Value – Calculations";
 
 export const floor5: FloorSpec = {
   floorNumber: 5,
-  title: "Equity Value & Enterprise Value – Calculations",
+  title: FLOOR_TITLE,
+  metadata: {
+    title: FLOOR_TITLE,
+    conceptFocus: "Calculating EV, fully diluted shares, options, NOLs",
+    totalReward: 5 * SALARY,
+    milestoneCopy: "You can now turn stock prices into real value.",
+    backgroundStyle: "default",
+  },
   nodes: [
     {
       id: "node-calc-ev",
@@ -80,7 +87,7 @@ export const floor5: FloorSpec = {
       },
       questions: [],
     },
-  ] as Node[],
+  ],
   questions: FLOOR5_QUESTIONS,
   completion: {
     lastNodeId: "node-nols",

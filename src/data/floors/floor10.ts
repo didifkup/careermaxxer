@@ -1,12 +1,19 @@
-import type { Node } from "@/lib/curriculum";
 import { FLOOR10_QUESTIONS } from "@/lib/floor10Questions";
 import type { FloorSpec } from "./types";
 
 const SALARY = 10_000;
+const FLOOR_TITLE = "Merger Models – Concepts";
 
 export const floor10: FloorSpec = {
   floorNumber: 10,
-  title: "Merger Models – Concepts",
+  title: FLOOR_TITLE,
+  metadata: {
+    title: FLOOR_TITLE,
+    conceptFocus: "Accretion vs dilution, synergies, premiums, M&A risks",
+    totalReward: 7 * SALARY,
+    milestoneCopy: "You now understand why deals actually happen.",
+    backgroundStyle: "default",
+  },
   nodes: [
     {
       id: "node-accretion-dilution",
@@ -110,7 +117,7 @@ export const floor10: FloorSpec = {
       },
       questions: [],
     },
-  ] as Node[],
+  ],
   questions: FLOOR10_QUESTIONS,
   completion: {
     lastNodeId: "node-ma-risks",

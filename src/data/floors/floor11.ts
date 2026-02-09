@@ -1,12 +1,19 @@
-import type { Node } from "@/lib/curriculum";
 import { FLOOR11_QUESTIONS } from "@/lib/floor11Questions";
 import type { FloorSpec } from "./types";
 
 const SALARY = 10_000;
+const FLOOR_TITLE = "Merger Models – Calculations";
 
 export const floor11: FloorSpec = {
   floorNumber: 11,
-  title: "Merger Models – Calculations",
+  title: FLOOR_TITLE,
+  metadata: {
+    title: FLOOR_TITLE,
+    conceptFocus: "Merger model walkthrough, accretion/dilution, stock vs cash, synergies",
+    totalReward: 5 * SALARY,
+    milestoneCopy: "You can now explain merger math with confidence.",
+    backgroundStyle: "default",
+  },
   nodes: [
     {
       id: "node-merger-model-walkthrough",
@@ -93,7 +100,7 @@ export const floor11: FloorSpec = {
       },
       questions: [],
     },
-  ] as Node[],
+  ],
   questions: FLOOR11_QUESTIONS,
   completion: {
     lastNodeId: "node-purchase-accounting-intuition",

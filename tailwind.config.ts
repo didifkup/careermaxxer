@@ -44,10 +44,24 @@ const config: Config = {
         border: "hsl(var(--border) / <alpha-value>)",
         input: "hsl(var(--input) / <alpha-value>)",
         ring: "hsl(var(--ring) / <alpha-value>)",
+        /* Practice page only — use inside .practice-tower */
+        practice: {
+          "node-bg": "hsl(var(--practice-node-bg) / <alpha-value>)",
+          "node-border": "hsl(var(--practice-node-border) / <alpha-value>)",
+          "glow-active": "hsl(var(--practice-glow-active) / <alpha-value>)",
+          "glow-completed": "hsl(var(--practice-glow-completed) / <alpha-value>)",
+          "stair-locked": "hsl(var(--practice-stair-locked) / <alpha-value>)",
+          "stair-active": "hsl(var(--practice-stair-active) / <alpha-value>)",
+          "stair-completed": "hsl(var(--practice-stair-completed) / <alpha-value>)",
+          "landing-bg": "hsl(var(--practice-landing-bg) / <alpha-value>)",
+        },
       },
       fontFamily: {
         sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
         display: ["var(--font-geist-display)", "var(--font-geist-sans)", "sans-serif"],
+      },
+      scale: {
+        "practice-hover": "var(--practice-motion-hover-scale)",
       },
       borderRadius: {
         "2xl": "var(--radius-2xl)",
@@ -60,6 +74,23 @@ const config: Config = {
         card: "var(--shadow-card)",
         elevated: "var(--shadow-elevated)",
         glow: "var(--shadow-glow)",
+        "practice-node-rest": "var(--practice-node-shadow-rest)",
+        "practice-node-depth": "var(--practice-node-shadow-depth)",
+        "practice-node-depth-glow": "var(--practice-node-shadow-depth-glow)",
+        "practice-node-hover": "var(--practice-node-shadow-hover)",
+        "practice-node-active": "var(--practice-node-shadow-active)",
+      },
+      transitionDuration: {
+        "practice-hover": "var(--practice-motion-hover-duration)",
+        "practice-completion": "var(--practice-motion-completion-pop-duration)",
+        "practice-reward": "var(--practice-motion-reward-float-duration)",
+        "practice-scroll": "var(--practice-motion-auto-scroll-duration)",
+      },
+      transitionTimingFunction: {
+        "practice": "var(--practice-motion-hover-ease)",
+        "practice-completion": "var(--practice-motion-completion-pop-ease)",
+        "practice-reward": "var(--practice-motion-reward-float-ease)",
+        "practice-scroll": "var(--practice-motion-auto-scroll-ease)",
       },
       animation: {
         "bounce-soft": "bounce-soft 0.5s ease-out",
@@ -71,6 +102,9 @@ const config: Config = {
         "level-glow": "level-glow 1s ease-out forwards",
         float: "float 3s ease-in-out infinite",
         shake: "shake 0.4s ease-in-out",
+        "practice-idle-pulse": "practice-idle-pulse var(--practice-motion-idle-pulse-duration) var(--practice-motion-idle-pulse-ease) infinite",
+        "practice-completion-pop": "practice-completion-pop var(--practice-motion-completion-pop-duration) var(--practice-motion-completion-pop-ease) forwards",
+        "practice-reward-float": "practice-reward-float var(--practice-motion-reward-float-duration) var(--practice-motion-reward-float-ease) forwards",
       },
       keyframes: {
         shake: {

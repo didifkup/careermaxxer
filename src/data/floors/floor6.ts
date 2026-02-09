@@ -1,12 +1,19 @@
-import type { Node } from "@/lib/curriculum";
 import { FLOOR6_QUESTIONS } from "@/lib/floor6Questions";
 import type { FloorSpec } from "./types";
 
 const SALARY = 10_000;
+const FLOOR_TITLE = "Valuation Methodologies";
 
 export const floor6: FloorSpec = {
   floorNumber: 6,
-  title: "Valuation Methodologies",
+  title: FLOOR_TITLE,
+  metadata: {
+    title: FLOOR_TITLE,
+    conceptFocus: "Comps, precedent transactions, DCF, strengths & weaknesses",
+    totalReward: 6 * SALARY,
+    milestoneCopy: "You now think like a valuation professional.",
+    backgroundStyle: "default",
+  },
   nodes: [
     {
       id: "node-major-valuation-methods",
@@ -116,7 +123,7 @@ export const floor6: FloorSpec = {
       },
       questions: [],
     },
-  ] as Node[],
+  ],
   questions: FLOOR6_QUESTIONS,
   completion: {
     lastNodeId: "node-strengths-weaknesses",

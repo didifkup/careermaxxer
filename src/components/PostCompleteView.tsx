@@ -1,11 +1,9 @@
 "use client";
 
 /**
- * Post-complete views shown after a node is completed (binge session flow).
- * - nextReward: one-more-node preview (title, salary, "One more →" / "Save & come back")
- * - midSessionPeak: after 3rd node — "Promotion unlocked", floor highlight
- * - breather: after 4th node — gentle pause offer, "Keep going" default
- * - celebration: legacy view (e.g. every-Nth celebration); midSessionPeak is the main peak now.
+ * Post-complete UI: Rewards (salary, confidence, completion) and Landings (breathers).
+ * Views: nextReward (one-more preview), midSessionPeak (after 3rd node), breather (after 4th), celebration (legacy).
+ * See src/types/practice-game.ts for Tower/Floor/Node/Stairs/Landing/Rewards.
  */
 import type { Node } from "@/lib/curriculum";
 import { formatSalary } from "@/lib/format";
@@ -88,7 +86,7 @@ export function PostCompleteView({
 
   if (data.view === "breather") {
     return (
-      <div className={`flex flex-col gap-6 py-4 text-center ${transitionClass} ${isCalm ? "text-text-primary" : ""}`}>
+      <div className={`flex flex-col gap-6 rounded-2xl bg-practice-landing-bg py-4 text-center ${transitionClass} ${isCalm ? "text-text-primary" : ""}`}>
         <p className="text-lg font-semibold text-text-primary">
           You&apos;re on fire 🔥 Want a 60-second breather?
         </p>

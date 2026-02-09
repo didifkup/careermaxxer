@@ -1,12 +1,19 @@
-import type { Node } from "@/lib/curriculum";
 import { FLOOR3_QUESTIONS } from "@/lib/floor3Questions";
 import type { FloorSpec } from "./types";
 
 const SALARY = 10_000;
+const FLOOR_TITLE = "Accounting – Calculations";
 
 export const floor3: FloorSpec = {
   floorNumber: 3,
-  title: "Accounting – Calculations",
+  title: FLOOR_TITLE,
+  metadata: {
+    title: FLOOR_TITLE,
+    conceptFocus: "Projecting income statement, FCF, levered & unlevered cash flow",
+    totalReward: 8 * SALARY,
+    milestoneCopy: "You can now build the numbers behind a company.",
+    backgroundStyle: "default",
+  },
   nodes: [
     {
       id: "node-project-income-statement",
@@ -152,7 +159,7 @@ export const floor3: FloorSpec = {
       },
       questions: [],
     },
-  ] as Node[],
+  ],
   questions: FLOOR3_QUESTIONS,
   completion: {
     lastNodeId: "node-levered-fcf",

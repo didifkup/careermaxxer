@@ -1,6 +1,7 @@
 /**
  * Curriculum: floors and nodes (IB basics).
- * Data-driven floors (1–13) come from src/data/floors.
+ * Game-system concepts: Floors = concept groupings, Nodes = playable lessons.
+ * Data-driven floors (1–13) come from src/data/floors. See src/types/practice-game.ts.
  */
 import { FLOOR_NODES_FLAT, FLOOR_TITLES_FROM_DATA } from "@/data/floors";
 
@@ -65,9 +66,23 @@ export type Lesson = {
 
 export type NodeDifficulty = "Easy" | "Medium" | "Celebration";
 
+/**
+ * Node = playable lesson (one unit of learning; completes to grant rewards and unlock next).
+ * Supports variable-length floors (4–15+ nodes per floor).
+ * floorId + floorLabel + indexInFloor + totalNodesInFloor are set when building from floor specs.
+ */
 export type Node = {
   id: string;
+  /** Numeric floor (1-based). Kept for backward compat; prefer floorId for identity. */
   floorNumber: number;
+  /** Stable floor identity (e.g. "1", "2"). Safe for any number of floors. */
+  floorId: string;
+  /** Display label for the floor (e.g. "Finance Concepts"). */
+  floorLabel: string;
+  /** 0-based index of this node within its floor. */
+  indexInFloor: number;
+  /** Total number of nodes on this floor (enables variable-length floors: 4–15+). */
+  totalNodesInFloor: number;
   title: string;
   slug: string;
   salaryReward: number;
@@ -77,6 +92,17 @@ export type Node = {
   questions: Question[];
 };
 
+/** Node shape without salaryReward; used for BASE_NODES before reward allocation. */
+type NodeWithoutReward = Omit<Node, "salaryReward">;
+
+/**
+ * Input shape for a node when defining floor data. Enrichment (floorId, floorLabel, indexInFloor, totalNodesInFloor) is applied in data/floors/index.ts.
+ */
+export type FloorNodeInput = Omit<
+  Node,
+  "floorId" | "floorLabel" | "indexInFloor" | "totalNodesInFloor"
+>;
+
 /** Max questions per node for 2–4 min pacing (3–5 max). */
 export const MAX_QUESTIONS_PER_NODE = 5;
 
@@ -85,10 +111,92 @@ const SALARY_FIRST_4 = 20_000;  // nodes 1–4: 80k total → ~44% after 4 nodes
 const SALARY_NEXT_4 = 15_000;   // nodes 5–8
 const SALARY_LAST_4 = 10_000;   // nodes 9–12 → total 180k
 
-/** All nodes: data-driven floors (1–13) from @/data/floors. */
-export const NODES: Node[] = [
-  ...FLOOR_NODES_FLAT,
-];
+/** Total salary to distribute across playable nodes (must match SALARY_MAX in constants). */
+const TOTAL_SALARY = 180_000;
+
+/**
+ * Front-load curve exponent: earlier nodes get higher reward.
+ * Tune here: e.g. 1.25 = strong front-load, 1.1 = mild.
+ */
+export const FRONTLOAD_POWER = 1.25;
+
+/** Optional per-node clamps. Set to null to disable. After clamping, rewards are re-normalized so total = TOTAL_SALARY. */
+const MIN_REWARD: number | null = 1000;
+const MAX_REWARD: number | null = 20_000;
+
+/**
+ * Assigns salaryReward to nodes by position: playable nodes (questions.length > 0) share
+ * TOTAL_SALARY via a front-loaded weight curve; celebration/spacer nodes get 0.
+ * Optional min/max clamps are applied then re-normalized in a second pass so total stays exactly TOTAL_SALARY.
+ *
+ * Algorithm:
+ * 1) Playable = nodes where questions?.length > 0; order = path order (index i = 0..N-1).
+ * 2) weight(i) = (N - i) ** FRONTLOAD_POWER.
+ * 3) Distribute TOTAL_SALARY proportionally; floor each; assign leftover to first node.
+ * 4) If MIN_REWARD/MAX_REWARD set: clamp each reward, then second-pass adjust so sum = TOTAL_SALARY.
+ * 5) Non-playable nodes get salaryReward = 0.
+ */
+export function assignSalaryRewards(nodes: NodeWithoutReward[]): Node[] {
+  const playableIndices: number[] = [];
+  nodes.forEach((n, i) => {
+    if ((n.questions?.length ?? 0) > 0) playableIndices.push(i);
+  });
+  const N = playableIndices.length;
+  if (N === 0) {
+    return nodes.map((n) => ({ ...n, salaryReward: 0 }));
+  }
+  const weights = playableIndices.map((_, i) => Math.pow(N - i, FRONTLOAD_POWER));
+  const sumWeights = weights.reduce((a, b) => a + b, 0);
+  const rawRewards = weights.map((w) => (TOTAL_SALARY * w) / sumWeights);
+  let rewards = rawRewards.map(Math.floor);
+  let leftover = TOTAL_SALARY - rewards.reduce((a, b) => a + b, 0);
+  rewards[0] += leftover;
+
+  const minR = MIN_REWARD ?? -Infinity;
+  const maxR = MAX_REWARD ?? Infinity;
+
+  if (minR > -Infinity || maxR < Infinity) {
+    rewards = rewards.map((r) => Math.max(minR, Math.min(maxR, r)));
+    let sum = rewards.reduce((a, b) => a + b, 0);
+    let delta = TOTAL_SALARY - sum;
+    while (delta !== 0) {
+      if (delta > 0) {
+        for (let i = 0; i < N && delta > 0; i++) {
+          const room = maxR - rewards[i];
+          if (room <= 0) continue;
+          const add = Math.min(delta, room);
+          rewards[i] += add;
+          delta -= add;
+        }
+      } else {
+        for (let i = N - 1; i >= 0 && delta < 0; i--) {
+          const room = rewards[i] - minR;
+          if (room <= 0) continue;
+          const sub = Math.min(-delta, room);
+          rewards[i] -= sub;
+          delta += sub;
+        }
+      }
+      if (delta !== 0) {
+        rewards[0] += delta;
+        break;
+      }
+    }
+  }
+
+  const rewardByIndex = new Map<number, number>();
+  playableIndices.forEach((origIdx, i) => rewardByIndex.set(origIdx, rewards[i]));
+  return nodes.map((n, i) => ({
+    ...n,
+    salaryReward: rewardByIndex.get(i) ?? 0,
+  }));
+}
+
+/** Base nodes from floor data (salaryReward stripped; rewards assigned via assignSalaryRewards). */
+const BASE_NODES: NodeWithoutReward[] = FLOOR_NODES_FLAT.map(({ salaryReward: _s, ...rest }) => rest as NodeWithoutReward);
+
+/** All nodes with computed salaryReward. Rest of app consumes this. */
+export const NODES: Node[] = assignSalaryRewards(BASE_NODES);
 
 /** Total salary if all nodes completed (for validation). */
 export const TOTAL_SALARY_REWARD = NODES.reduce((sum, n) => sum + n.salaryReward, 0);

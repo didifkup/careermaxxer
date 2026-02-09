@@ -1,5 +1,6 @@
 /**
  * App constants — salary curve, node count, etc.
+ * Game system: Rewards (salary), Landings (breathers). See src/types/practice-game.ts.
  */
 
 export const SALARY_MAX = 180_000;
@@ -13,8 +14,8 @@ export const NODES_PER_FLOOR = 3;
 export const FLOOR_COUNT = 4;
 
 /**
- * 15-minute binge session: in-memory session node count (not persisted).
- * Used to show breather after this many nodes and to trigger calm-mode styling.
+ * Landing (psychological breather): after this many nodes in a session, show breather UI.
+ * In-memory session count (not persisted). Also triggers calm-mode styling.
  */
 export const BINGE_BREATHER_AFTER_NODES = 4;
 
@@ -28,3 +29,10 @@ export const BINGE_MID_SESSION_PEAK_AFTER_NODES = 3;
  * When session count >= this, post-complete UI uses calmer colors and slower transitions (soft burnout prevention).
  */
 export const BINGE_CALM_MODE_AFTER_NODES = 4;
+
+/**
+ * Practice motion: auto-scroll (align with CSS tokens in .practice-tower).
+ * Use for scrollIntoView / scroll animations: short, intentional, smooth.
+ * Easing: cubic-bezier(0.25, 0.46, 0.45, 0.94) — matches --practice-motion-auto-scroll-ease.
+ */
+export const PRACTICE_AUTO_SCROLL_MS = 480;

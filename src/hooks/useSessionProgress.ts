@@ -22,12 +22,9 @@ export function getPostCompleteViewType(sessionCompletedCount: number): PostComp
 }
 
 /**
- * In-memory session progress for the 15-minute binge flow.
- * Not persisted: resets when the user leaves the page. Used to:
- * - Show mid-session peak after 3rd node, breather after 4th
- * - Trigger calm-mode styling (slower animations, calmer colors) after 4 nodes
- * - Track analytics (e.g. session_4_nodes_reached)
- * Does not change persisted progress (that stays in progress.ts / localStorage).
+ * Session progress for Landings (psychological breathers) and reward flow.
+ * In-memory only; resets on leave. Used to: show mid-session peak (3rd node), breather (4th),
+ * calm-mode styling, analytics. See src/types/practice-game.ts (Landing, Rewards).
  */
 export function useSessionProgress() {
   const [sessionCompletedCount, setSessionCompletedCount] = useState(0);

@@ -86,6 +86,249 @@
   }
 }
 
+/* ============================================
+   Practice page — dedicated design system
+   Scoped to .practice-tower (Practice page only).
+   Premium, finance-grade; no neon; white/soft gray base;
+   blue = active, green = completed; animations enhance, never dominate.
+   ============================================ */
+.practice-tower {
+  /* Node: premium game tile — frosted/white, subtle border, depth shadow */
+  --practice-node-bg: 0 0% 100%;
+  --practice-node-bg-frosted: 0 0% 100% / 0.92;
+  --practice-node-border: 214 18% 90%;
+  --practice-node-shadow-rest: 0 1px 3px hsl(220 20% 40% / 0.06), 0 2px 6px hsl(220 20% 40% / 0.04);
+  --practice-node-shadow-depth: 0 4px 12px hsl(220 20% 40% / 0.08), 0 8px 24px hsl(220 20% 40% / 0.06);
+  /* Active: depth + subtle glow (idle); reward moments feel stronger by contrast */
+  --practice-node-shadow-depth-glow: 0 6px 14px hsl(220 20% 40% / 0.08), 0 10px 24px hsl(220 20% 40% / 0.06), 0 0 20px -2px hsl(var(--practice-glow-active) / 0.26);
+  --practice-node-active-scale: 1.05;
+  --practice-node-shadow-hover: 0 6px 14px hsl(220 20% 40% / 0.08), 0 10px 28px hsl(220 20% 40% / 0.06);
+  --practice-node-shadow-active: 0 2px 4px hsl(220 20% 40% / 0.06);
+
+  /* Glows: active = blue, completed = green (refined, not neon) */
+  --practice-glow-active: 217 65% 42%;
+  --practice-glow-completed: 142 38% 42%;
+
+  /* Locked state — recede: whole tile fades back */
+  --practice-locked-opacity: 0.55;
+  --practice-locked-blur: 3px;
+  --practice-locked-scale: 0.92;
+  --practice-locked-tile-opacity: 0.78;
+
+  /* Stairs (progress connectors) */
+  --practice-stair-locked: 214 18% 82%;
+  --practice-stair-active: 217 65% 42%;
+  --practice-stair-completed: 142 38% 42%;
+
+  /* Landing (psychological breather) */
+  --practice-landing-bg: 210 22% 97%;
+
+  /* Floor background gradient (subtle) */
+  --practice-floor-gradient-from: 210 20% 98% / 0.85;
+  --practice-floor-gradient-via: 210 20% 98% / 0;
+  --practice-floor-gradient-to: 210 20% 98% / 0.85;
+
+  /* Zig-zag: tight vertical stack for momentum */
+  --practice-zigzag-gap-y: 56px;
+  --practice-zigzag-offset-x: 240px;
+
+  /* Tower container: game-level background (very light gradient, no texture noise) */
+  --practice-tower-bg: linear-gradient(
+    180deg,
+    hsl(210 22% 98.5%) 0%,
+    hsl(212 24% 97.5%) 50%,
+    hsl(210 20% 98%) 100%
+  );
+}
+
+/* Practice: animation durations — subtle, never dominating */
+.practice-tower {
+  --practice-duration-rest: 200ms;
+  --practice-duration-hover: 220ms;
+  --practice-duration-active: 120ms;
+}
+
+/* Practice: motion tokens — short, intentional; reward moments pop, idle stays subtle */
+.practice-tower {
+  /* Idle: quick pulse so active node reads without feeling slow */
+  --practice-motion-idle-pulse-duration: 1.5s;
+  --practice-motion-idle-pulse-ease: ease-in-out;
+
+  /* Hover: snappy */
+  --practice-motion-hover-scale: 1.02;
+  --practice-motion-hover-duration: 180ms;
+  --practice-motion-hover-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* Completion: snappy reward */
+  --practice-motion-completion-pop-duration: 200ms;
+  --practice-motion-completion-pop-ease: cubic-bezier(0.34, 1.2, 0.64, 1);
+
+  /* Reward (e.g. salary float): short */
+  --practice-motion-reward-float-duration: 0.5s;
+  --practice-motion-reward-float-ease: cubic-bezier(0.33, 1, 0.68, 1);
+  /* Auto-scroll */
+  --practice-motion-auto-scroll-duration: 400ms;
+  --practice-motion-auto-scroll-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Practice motion utilities — use tokenized duration/ease */
+.practice-tower .animate-practice-idle-pulse {
+  animation: practice-idle-pulse var(--practice-motion-idle-pulse-duration) var(--practice-motion-idle-pulse-ease) infinite;
+}
+.practice-tower .animate-practice-idle-glow {
+  animation: practice-idle-glow var(--practice-motion-idle-pulse-duration) var(--practice-motion-idle-pulse-ease) infinite;
+}
+.practice-tower .animate-practice-completion-pop {
+  animation: practice-completion-pop var(--practice-motion-completion-pop-duration) var(--practice-motion-completion-pop-ease) forwards;
+}
+.practice-tower .animate-practice-reward-float {
+  animation: practice-reward-float var(--practice-motion-reward-float-duration) var(--practice-motion-reward-float-ease) forwards;
+}
+
+/* Node completion sequence: tight timing, reward feel */
+.practice-tower .completion-sequence-node-pop {
+  animation: practice-completion-pop 180ms cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+}
+.practice-tower .completion-sequence-check-snap {
+  animation: practice-check-snap 100ms cubic-bezier(0.34, 1.15, 0.64, 1) 80ms forwards;
+  transform-origin: center center;
+}
+.practice-tower .completion-sequence-salary-float {
+  animation: practice-salary-float-up 180ms ease-out 140ms forwards;
+}
+.practice-tower .completion-sequence-stair-light {
+  animation: practice-stair-light 160ms ease-out 260ms forwards;
+}
+
+/* Practice motion keyframes — short, intentional, not cartoonish */
+/* Active node only: slow scale pulse (base scale → 1.02× → base), no opacity change */
+@keyframes practice-idle-pulse {
+  0%, 100% { transform: scale(var(--practice-node-active-scale)); }
+  50% { transform: scale(calc(var(--practice-node-active-scale) * 1.02)); }
+}
+/* Active node only: subtle glow pulse (idle); reward = completion/stair */
+@keyframes practice-idle-glow {
+  0%, 100% {
+    box-shadow: 0 6px 14px hsl(220 20% 40% / 0.08), 0 10px 24px hsl(220 20% 40% / 0.06), 0 0 18px -2px hsl(217 65% 42% / 0.22);
+  }
+  50% {
+    box-shadow: 0 6px 14px hsl(220 20% 40% / 0.08), 0 10px 24px hsl(220 20% 40% / 0.06), 0 0 22px -2px hsl(217 65% 42% / 0.32);
+  }
+}
+
+/* Current node: subtle vertical bounce (apply to inner wrapper so button hover scale is unaffected) */
+@keyframes node-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.animate-node-bounce {
+  animation: node-bounce 1.6s ease-in-out infinite;
+}
+/* Current node: bounce only (override pulse when both data-unlocked and data-current) */
+.practice-tower [data-current].animate-node-bounce {
+  animation: node-bounce 1.6s ease-in-out infinite !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-node-bounce,
+  .practice-tower [data-current].animate-node-bounce {
+    animation: none !important;
+  }
+}
+/* Hover scale/lift only on hover-capable devices (avoid sticky hover on touch) */
+@media (hover: none) {
+  .practice-tower button[data-unlocked]:hover,
+  .practice-tower button[data-completed]:hover {
+    transform: none !important;
+  }
+}
+
+@keyframes practice-completion-pop {
+  0% { transform: scale(0.98); }
+  50% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+@keyframes practice-check-snap {
+  0% { transform: scale(0); opacity: 0; }
+  65% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes practice-salary-float-up {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-22px); opacity: 0; }
+}
+@keyframes practice-stair-light {
+  0% { filter: drop-shadow(0 0 3px hsl(var(--practice-glow-active) / 0.25)); opacity: 0.95; }
+  50% { filter: drop-shadow(0 0 10px hsl(var(--practice-glow-active) / 0.45)); opacity: 1; }
+  100% { filter: drop-shadow(0 0 5px hsl(var(--practice-glow-active) / 0.3)); opacity: 1; }
+}
+
+/* XP / salary gain: reward moment — clear green, brief */
+@keyframes xp-gain-glow {
+  0%, 100% { text-shadow: 0 0 0 transparent; }
+  30% { text-shadow: 0 0 10px hsl(var(--practice-glow-completed) / 0.45); }
+  70% { text-shadow: 0 0 8px hsl(var(--practice-glow-completed) / 0.35); }
+}
+@keyframes xp-gain-in {
+  0% { opacity: 0; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes xp-gain-bar-shimmer-keyframes {
+  0% { transform: translateX(-100%); opacity: 0; }
+  40% { opacity: 0.4; }
+  100% { transform: translateX(200%); opacity: 0; }
+}
+.practice-tower .xp-gain-glow {
+  animation: xp-gain-glow 0.5s ease-out forwards;
+}
+.practice-tower .animate-xp-gain-in {
+  animation: xp-gain-in 0.22s ease-out forwards;
+}
+.practice-tower .xp-gain-bar-shimmer {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    hsl(var(--practice-glow-completed) / 0.2) 45%,
+    hsl(var(--practice-glow-completed) / 0.28) 50%,
+    hsl(var(--practice-glow-completed) / 0.2) 55%,
+    transparent 100%
+  );
+  width: 45%;
+  animation: xp-gain-bar-shimmer-keyframes 0.45s ease-out forwards;
+  pointer-events: none;
+}
+
+/* Floor complete: quick pop + reward glow, then settle */
+.practice-tower .floor-complete-celebration {
+  animation: floor-complete-celebration 0.7s ease-out forwards;
+}
+@keyframes floor-complete-celebration {
+  0% {
+    transform: scale(0.97);
+    box-shadow: 0 0 0 0 hsl(var(--practice-glow-completed) / 0);
+  }
+  35% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 3px hsl(var(--practice-glow-completed) / 0.22),
+      0 0 12px 1px hsl(var(--practice-glow-completed) / 0.3);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 hsl(var(--practice-glow-completed) / 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .practice-tower .floor-complete-celebration {
+    animation: none;
+  }
+}
+@keyframes practice-reward-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
 /* Marquee + fade-in-up keyframes (for cta-with-text-marquee) */
 @keyframes marquee {
   from {

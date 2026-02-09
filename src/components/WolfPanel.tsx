@@ -15,13 +15,25 @@ const WOLF_STAGE_LABELS: Record<WolfStage, string> = {
   4: "Legend",
 };
 
-interface WolfPanelProps {
-  progress: Progress;
+const XP_COUNT_UP_MS = 420;
+function easeOutCubic(t: number): number {
+  return 1 - (1 - t) ** 3;
 }
 
-export function WolfPanel({ progress }: WolfPanelProps) {
+interface WolfPanelProps {
+  progress: Progress;
+  /** When set, show XP gain: count-up, green emphasis, "+$X" badge, brief glow. Cleared by parent after ~2.5s. */
+  justEarnedSalary?: number | null;
+}
+
+export function WolfPanel({ progress, justEarnedSalary }: WolfPanelProps) {
   const prevStageRef = useRef<WolfStage>(progress.wolfStage);
   const [levelUp, setLevelUp] = useState(false);
+  const [displaySalary, setDisplaySalary] = useState(progress.salary);
+
+  useEffect(() => {
+    if (justEarnedSalary == null) setDisplaySalary(progress.salary);
+  }, [progress.salary, justEarnedSalary]);
 
   useEffect(() => {
     if (progress.wolfStage > prevStageRef.current) {
@@ -33,32 +45,65 @@ export function WolfPanel({ progress }: WolfPanelProps) {
     prevStageRef.current = progress.wolfStage;
   }, [progress.wolfStage]);
 
-  const pct = Math.min(100, (progress.salary / SALARY_MAX) * 100);
+  /** Count-up animation when XP is just earned: animate from (salary - delta) to salary with ease-out. */
+  useEffect(() => {
+    if (justEarnedSalary == null || justEarnedSalary <= 0) return;
+    const startSalary = progress.salary - justEarnedSalary;
+    const endSalary = progress.salary;
+    setDisplaySalary(startSalary);
+    const startTime = performance.now();
+    let rafId: number;
+    const tick = () => {
+      const elapsed = performance.now() - startTime;
+      const t = Math.min(1, elapsed / XP_COUNT_UP_MS);
+      const eased = easeOutCubic(t);
+      setDisplaySalary(Math.round(startSalary + (endSalary - startSalary) * eased));
+      if (t < 1) rafId = requestAnimationFrame(tick);
+    };
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
+  }, [justEarnedSalary, progress.salary]);
+
+  const pct = Math.min(100, (displaySalary / SALARY_MAX) * 100);
+  const showXpGain = justEarnedSalary != null && justEarnedSalary > 0;
 
   return (
-    <aside className="flex w-full flex-col rounded-2xl bg-surface-raised p-6 shadow-elevated lg:sticky lg:top-24 lg:h-fit lg:max-h-[calc(100vh-7rem)] lg:w-80 lg:shrink-0">
-      <div className="flex flex-col items-center gap-6">
-        {/* Wolf avatar — BIG, with level-up animation */}
-        <div className="flex flex-col items-center gap-2">
-          <div className="rounded-2xl bg-surface-base p-5 shadow-card transition hover:shadow-elevated">
+    <aside className="flex w-full flex-col rounded-xl bg-surface-raised p-4 shadow-elevated lg:sticky lg:top-24 lg:h-fit lg:max-h-[calc(100vh-7rem)] lg:w-72 lg:shrink-0">
+      <div className="flex flex-col items-center gap-4">
+        {/* Wolf avatar with level-up animation */}
+        <div className="flex flex-col items-center gap-1.5">
+          <div className="rounded-xl bg-surface-base p-3 shadow-card transition hover:shadow-elevated">
             <WolfAvatar
               stage={progress.wolfStage}
               levelUp={levelUp}
-              size={220}
+              size={160}
               className="flex-shrink-0"
             />
           </div>
-          <span className="rounded-full bg-brand-primary/10 px-4 py-1.5 text-sm font-bold text-brand-primary">
+          <span className="rounded-full bg-brand-primary/10 px-3 py-1 text-xs font-bold text-brand-primary">
             {WOLF_STAGE_LABELS[progress.wolfStage]}
           </span>
         </div>
 
-        <div className="w-full space-y-2">
-          <div className="flex justify-between text-sm">
+        <div className="w-full space-y-1.5">
+          <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-0.5 text-xs">
             <span className="text-text-secondary">Salary progress</span>
-            <span className="font-semibold text-brand-accent">{formatSalary(progress.salary)}</span>
+            <span className="flex items-center gap-1.5">
+              <span
+                className={`font-semibold tabular-nums transition-colors duration-200 ${
+                  showXpGain ? "text-practice-glow-completed xp-gain-glow" : "text-brand-accent"
+                }`}
+              >
+                {formatSalary(displaySalary)}
+              </span>
+              {showXpGain && (
+                <span className="xp-gain-badge animate-xp-gain-in font-semibold text-practice-glow-completed">
+                  +{formatSalary(justEarnedSalary)}
+                </span>
+              )}
+            </span>
           </div>
-          <div className="h-4 w-full overflow-hidden rounded-full bg-black/10 shadow-inner">
+          <div className="relative h-4 w-full overflow-hidden rounded-full bg-black/10 shadow-inner">
             <div
               className="h-full rounded-full bg-brand-accent transition-all duration-700 ease-out"
               style={{ width: `${pct}%` }}
@@ -67,13 +112,14 @@ export function WolfPanel({ progress }: WolfPanelProps) {
               aria-valuemin={0}
               aria-valuemax={SALARY_MAX}
             />
+            {showXpGain && <span className="xp-gain-bar-shimmer" aria-hidden />}
           </div>
           <p className="text-right text-xs text-text-secondary">Goal: {formatSalary(SALARY_MAX)}</p>
         </div>
 
-        <div className="w-full rounded-xl bg-surface-base px-4 py-3 text-center shadow-card">
-          <p className="text-xs text-text-secondary">Your office floor</p>
-          <p className="text-2xl font-bold text-brand-primary">Floor {progress.currentFloor}</p>
+        <div className="w-full rounded-lg bg-surface-base px-3 py-2 text-center shadow-card">
+          <p className="text-[10px] text-text-secondary">Your office floor</p>
+          <p className="text-lg font-bold text-brand-primary">Floor {progress.currentFloor}</p>
         </div>
       </div>
     </aside>

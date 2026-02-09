@@ -1,12 +1,19 @@
-import type { Node } from "@/lib/curriculum";
 import { FLOOR7_QUESTIONS } from "@/lib/floor7Questions";
 import type { FloorSpec } from "./types";
 
 const SALARY = 10_000;
+const FLOOR_TITLE = "Valuation Metrics & Multiples";
 
 export const floor7: FloorSpec = {
   floorNumber: 7,
-  title: "Valuation Metrics & Multiples",
+  title: FLOOR_TITLE,
+  metadata: {
+    title: FLOOR_TITLE,
+    conceptFocus: "EV/EBITDA, P/E, why multiples differ, when EBITDA misleads",
+    totalReward: 6 * SALARY,
+    milestoneCopy: "You can now speak the language of valuation.",
+    backgroundStyle: "default",
+  },
   nodes: [
     {
       id: "node-common-multiples",
@@ -111,7 +118,7 @@ export const floor7: FloorSpec = {
       },
       questions: [],
     },
-  ] as Node[],
+  ],
   questions: FLOOR7_QUESTIONS,
   completion: {
     lastNodeId: "node-ebitda-misleading",

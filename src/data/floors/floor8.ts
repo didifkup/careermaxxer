@@ -1,12 +1,19 @@
-import type { Node } from "@/lib/curriculum";
 import { FLOOR8_QUESTIONS } from "@/lib/floor8Questions";
 import type { FloorSpec } from "./types";
 
 const SALARY = 10_000;
+const FLOOR_TITLE = "Discounted Cash Flow (DCF) – Assumptions & Analysis";
 
 export const floor8: FloorSpec = {
   floorNumber: 8,
-  title: "Discounted Cash Flow (DCF) – Assumptions & Analysis",
+  title: FLOOR_TITLE,
+  metadata: {
+    title: FLOOR_TITLE,
+    conceptFocus: "FCF projection, terminal value, perpetuity vs exit multiple",
+    totalReward: 6 * SALARY,
+    milestoneCopy: "You can now explain a DCF like a real banker.",
+    backgroundStyle: "cool",
+  },
   nodes: [
     {
       id: "node-dcf-step-by-step",
@@ -111,7 +118,7 @@ export const floor8: FloorSpec = {
       },
       questions: [],
     },
-  ] as Node[],
+  ],
   questions: FLOOR8_QUESTIONS,
   completion: {
     lastNodeId: "node-dcf-assumptions-change",

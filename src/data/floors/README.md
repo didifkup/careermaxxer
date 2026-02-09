@@ -2,6 +2,8 @@
 
 Each floor is **one file**: `floor1.ts`, `floor2.ts`, etc. Adding a new floor is fast.
 
+**Variable-length floors:** Each floor can have **4–15+ nodes**. Each node in the spec is a `FloorNodeInput` (id, floorNumber, title, slug, salaryReward, difficulty, lesson, questions). The build step in `index.ts` adds `floorId`, `floorLabel`, `indexInFloor`, and `totalNodesInFloor` to every node.
+
 ## How to add a new floor (e.g. Floor 3)
 
 1. **Create the questions file** (if you want Duolingo-style mixed types):
@@ -9,7 +11,8 @@ Each floor is **one file**: `floor1.ts`, `floor2.ts`, etc. Adding a new floor is
 
 2. **Create the floor spec**:
    - Copy `floor2.ts` → `floor3.ts`.
-   - Update: `floorNumber`, `title`, `nodes` (id, title, slug, lesson, salaryReward, difficulty), `questions` (import from `floor3Questions.ts`), and `completion` (lastNodeId, message, nextFloor).
+   - Update: `floorNumber`, `title`, `metadata` (title, conceptFocus, totalReward, optional milestoneCopy, backgroundStyle), `nodes`, `questions`, and `completion`.
+   - **metadata** makes the floor intentional: `conceptFocus` (short phrase), `totalReward` (sum of node salaries), `milestoneCopy` (optional; overrides completion.message when set), `backgroundStyle` ("default" | "warm" | "cool" | "accent" | "minimal" for design tokens).
 
 3. **Register the floor**:
    - In `index.ts`: add `import { floor3 } from "./floor3"` and add `floor3` to the `FLOOR_SPECS` array.

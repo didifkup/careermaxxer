@@ -1,12 +1,19 @@
-import type { Node } from "@/lib/curriculum";
 import { FLOOR9_QUESTIONS } from "@/lib/floor9Questions";
 import type { FloorSpec } from "./types";
 
 const SALARY = 10_000;
+const FLOOR_TITLE = "Discounted Cash Flow (DCF) – The Discount Rate (WACC)";
 
 export const floor9: FloorSpec = {
   floorNumber: 9,
-  title: "Discounted Cash Flow (DCF) – The Discount Rate (WACC)",
+  title: FLOOR_TITLE,
+  metadata: {
+    title: FLOOR_TITLE,
+    conceptFocus: "WACC, cost of equity & debt, beta, tax-affecting debt",
+    totalReward: 7 * SALARY,
+    milestoneCopy: "You now understand how risk controls value.",
+    backgroundStyle: "cool",
+  },
   nodes: [
     {
       id: "node-wacc-what",
@@ -127,7 +134,7 @@ export const floor9: FloorSpec = {
       },
       questions: [],
     },
-  ] as Node[],
+  ],
   questions: FLOOR9_QUESTIONS,
   completion: {
     lastNodeId: "node-wacc-increases",
