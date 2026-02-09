@@ -51,7 +51,7 @@ export function FeatureSections({
             only what interviews actually test.
           </p>
           <p className="mt-4 text-sm font-medium text-foreground">
-            You'll feel the difference after your{" "}
+            You&apos;ll feel the difference after your{" "}
             <span className="font-semibold text-primary">first 3 floors</span>.
           </p>
         </div>

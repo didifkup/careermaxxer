@@ -211,7 +211,7 @@ export function QuantOutcomesStats() {
                 with progress you can measure.
               </p>
               <p className="text-sm font-medium text-foreground mt-3 text-left">
-                You'll feel the difference after your{" "}
+                You&apos;ll feel the difference after your{" "}
                 <span className="text-primary font-semibold">first 3 floors</span>.
               </p>
             </div>

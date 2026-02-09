@@ -118,7 +118,7 @@ export function FinalCTA() {
               Start your first floor.
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed animate-fade-in-up [animation-delay:400ms]">
-              Two minutes. You'll feel the difference by floor 3.
+              Two minutes. You&apos;ll feel the difference by floor 3.
             </p>
             <div className="flex flex-wrap gap-4 animate-fade-in-up [animation-delay:600ms]">
               <a
