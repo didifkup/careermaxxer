@@ -9,6 +9,8 @@ import type {
   NumericQuestion,
   DragMatchQuestion,
   OrderQuestion,
+  ScenarioQuestion,
+  CashMeterQuestion,
 } from "@/lib/worlds";
 
 function isMCQuestion(q: Question): q is MCQuestion {
@@ -28,6 +30,12 @@ function isDragMatchQuestion(q: Question): q is DragMatchQuestion {
 }
 function isOrderQuestion(q: Question): q is OrderQuestion {
   return q.type === "order";
+}
+function isScenarioQuestion(q: Question): q is ScenarioQuestion {
+  return q.type === "scenario";
+}
+function isCashMeterQuestion(q: Question): q is CashMeterQuestion {
+  return q.type === "cash_meter";
 }
 
 /** Fisher–Yates shuffle; returns new array. */
@@ -69,6 +77,9 @@ export function QuestionRenderer({
   const [dragMatchPool, setDragMatchPool] = useState<string[]>([]);
   /** order: current order of item ids (shuffled initially). */
   const [orderOrderedIds, setOrderOrderedIds] = useState<string[]>([]);
+  /** cash_meter: user's ending cash input and meter display (animates to correct on success). */
+  const [cashMeterEndingInput, setCashMeterEndingInput] = useState("");
+  const [cashMeterDisplayCash, setCashMeterDisplayCash] = useState(0);
 
   useEffect(() => {
     setSelected(null);
@@ -83,6 +94,10 @@ export function QuestionRenderer({
     if (isOrderQuestion(question)) {
       setOrderOrderedIds(shuffle(question.items.map((i) => i.id)));
     }
+    if (isCashMeterQuestion(question)) {
+      setCashMeterEndingInput("");
+      setCashMeterDisplayCash(question.startingCash);
+    }
   }, [question.id]);
 
   const handleChoice = (value: number | boolean) => {
@@ -90,9 +105,11 @@ export function QuestionRenderer({
     const correct =
       isMCQuestion(question)
         ? value === question.correctIndex
-        : isBooleanQuestion(question)
-          ? value === question.correct
-          : false;
+        : isScenarioQuestion(question)
+          ? value === question.correctIndex
+          : isBooleanQuestion(question)
+            ? value === question.correct
+            : false;
     setFeedback(correct ? "correct" : "incorrect");
     if (correct) {
       onCorrect();
@@ -110,6 +127,51 @@ export function QuestionRenderer({
     }
     return (
       <div className="space-y-4">
+        <p className="text-lg font-medium text-text-primary">{question.prompt}</p>
+        {feedback !== null && (
+          <p
+            className={`text-sm ${feedback === "correct" ? "text-success" : "text-error"}`}
+            role="status"
+          >
+            {feedback === "correct" ? "Nice." : "Try again."}
+          </p>
+        )}
+        <div className="space-y-2">
+          {choices.map((choice, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => handleChoice(i)}
+              className={`w-full rounded-xl border-2 px-4 py-3 text-left text-sm font-medium transition ${
+                selected === i
+                  ? "border-brand-primary bg-brand-primary/10 text-brand-primary"
+                  : "border-black/10 bg-surface-raised text-text-primary hover:border-brand-primary/30"
+              }`}
+            >
+              {choice}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (isScenarioQuestion(question)) {
+    const choices = question.choices;
+    if (!choices || choices.length < 2) {
+      return (
+        <p className="text-sm text-error">Invalid scenario question (need at least 2 choices).</p>
+      );
+    }
+    const caseTitle = question.title ?? "Mini Case";
+    return (
+      <div className="space-y-4">
+        <div className="rounded-xl border-2 border-brand-primary/20 bg-surface-base p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-text-secondary">
+            {caseTitle}
+          </p>
+          <p className="mt-2 whitespace-pre-line text-sm text-text-primary">{question.context}</p>
+        </div>
         <p className="text-lg font-medium text-text-primary">{question.prompt}</p>
         {feedback !== null && (
           <p
@@ -527,6 +589,133 @@ export function QuestionRenderer({
             );
           })}
         </ul>
+        <button
+          type="button"
+          onClick={handleCheck}
+          className="rounded-xl bg-brand-primary px-6 py-3 font-semibold text-text-inverse transition hover:opacity-90 active:scale-[0.98]"
+        >
+          Check
+        </button>
+      </div>
+    );
+  }
+
+  if (isCashMeterQuestion(question)) {
+    const title = question.title ?? "Cash Meter";
+    const displayCash =
+      cashMeterDisplayCash === 0 ? question.startingCash : cashMeterDisplayCash;
+    const maxRange =
+      Math.max(question.startingCash, question.correctEndingCash, 0) + 50;
+    const barPct = Math.min(
+      100,
+      Math.max(0, (displayCash / maxRange) * 100)
+    );
+    const handleCheck = () => {
+      const parsed = Number(cashMeterEndingInput.trim());
+      const valid = Number.isFinite(parsed);
+      const correct = valid && parsed === question.correctEndingCash;
+      setFeedback(correct ? "correct" : "incorrect");
+      if (correct) {
+        setCashMeterDisplayCash(question.correctEndingCash);
+        onCorrect();
+      } else {
+        onIncorrect();
+      }
+    };
+    return (
+      <div className="space-y-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-text-secondary">
+          {title}
+        </p>
+        <p className="text-lg font-medium text-text-primary">{question.prompt}</p>
+
+        {/* Cash in Pocket meter */}
+        <div className="rounded-xl border-2 border-black/10 bg-surface-base p-4">
+          <p className="text-xs font-medium text-text-secondary">
+            Cash in Pocket
+          </p>
+          <p className="mt-1 font-semibold tabular-nums text-brand-accent">
+            {displayCash.toLocaleString("en-US")}
+          </p>
+          <div
+            className="mt-2 h-2.5 overflow-hidden rounded-full bg-black/10"
+            role="progressbar"
+            aria-valuenow={displayCash}
+            aria-valuemin={0}
+            aria-valuemax={maxRange}
+          >
+            <div
+              className="h-full rounded-full bg-brand-accent transition-all duration-500 ease-out"
+              style={{ width: `${barPct}%` }}
+            />
+          </div>
+          <p className="mt-1 text-xs text-text-secondary">
+            Starting cash: {question.startingCash.toLocaleString("en-US")}
+          </p>
+        </div>
+
+        {/* Steps as stacked cards */}
+        <div className="flex flex-col gap-2">
+          {question.steps.map((step) => (
+            <div
+              key={step.id}
+              className="rounded-xl border-2 border-black/10 bg-surface-raised p-3"
+            >
+              <p className="font-medium text-text-primary">{step.label}</p>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                <span
+                  className={`rounded px-2 py-0.5 text-xs font-medium ${
+                    step.direction === "wc_asset"
+                      ? "bg-brand-primary/15 text-brand-primary"
+                      : "bg-warning/15 text-warning"
+                  }`}
+                >
+                  {step.direction === "wc_asset" ? "WC Asset" : "WC Liability"}
+                </span>
+                <span
+                  className={`rounded px-2 py-0.5 text-xs font-medium ${
+                    step.polarity === "increase"
+                      ? "bg-success/15 text-success"
+                      : "bg-error/15 text-error"
+                  }`}
+                >
+                  {step.polarity === "increase" ? "Increase" : "Decrease"}
+                </span>
+                <span className="text-sm font-semibold tabular-nums text-text-primary">
+                  {step.amount.toLocaleString("en-US")}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Ending Cash input */}
+        <div>
+          <label htmlFor="cash-meter-ending" className="text-sm font-medium text-text-primary">
+            Ending Cash
+          </label>
+          <input
+            id="cash-meter-ending"
+            type="number"
+            inputMode="decimal"
+            value={cashMeterEndingInput}
+            onChange={(e) => setCashMeterEndingInput(e.target.value)}
+            className="mt-1 w-full max-w-[200px] rounded-xl border-2 border-black/10 bg-surface-raised px-4 py-3 text-text-primary focus:border-brand-primary focus:outline-none focus:ring-0"
+            aria-label="Ending cash"
+          />
+        </div>
+
+        {feedback !== null && (
+          <p
+            className={`text-sm ${feedback === "correct" ? "text-success" : "text-error"}`}
+            role="status"
+          >
+            {feedback === "correct"
+              ? "Nice."
+              : "Try again. Rule: WC assets ↑ use cash, ↓ give cash. WC liabilities ↑ give cash, ↓ use cash."}
+          </p>
+        )}
+
         <button
           type="button"
           onClick={handleCheck}

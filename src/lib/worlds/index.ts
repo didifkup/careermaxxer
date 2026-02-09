@@ -58,8 +58,31 @@ export type OrderQuestion = {
 /** Placeholder — not implemented yet. */
 export type DragQuestion = { type: "drag"; id: string };
 
-/** Placeholder — not implemented yet. */
-export type ScenarioQuestion = { type: "scenario"; id: string };
+export type ScenarioQuestion = {
+  type: "scenario";
+  id: string;
+  title?: string;
+  context: string;
+  prompt: string;
+  choices: string[];
+  correctIndex: number;
+};
+
+export type CashMeterQuestion = {
+  type: "cash_meter";
+  id: string;
+  title?: string;
+  startingCash: number;
+  prompt: string;
+  steps: Array<{
+    id: string;
+    label: string;
+    direction: "wc_asset" | "wc_liability";
+    polarity: "increase" | "decrease";
+    amount: number;
+  }>;
+  correctEndingCash: number;
+};
 
 export type Question =
   | MCQuestion
@@ -69,7 +92,8 @@ export type Question =
   | DragMatchQuestion
   | OrderQuestion
   | DragQuestion
-  | ScenarioQuestion;
+  | ScenarioQuestion
+  | CashMeterQuestion;
 
 // ---------------------------------------------------------------------------
 // Path node & lesson
@@ -242,6 +266,61 @@ export const WORLDS: World[] = [
       { id: "w2n5", title: "Segment Revenue Builds", order: 5, lessonId: "w2_lesson_5_segments", salaryReward: 2000, isBoss: false },
       { id: "w2n6", title: "Revenue Sanity Checks", order: 6, lessonId: "w2_lesson_6_sanity", salaryReward: 2100, isBoss: false },
       { id: "w2n7", title: "Forecasting vs Reality", order: 7, lessonId: "w2_lesson_7_reality", salaryReward: 2400, isBoss: true },
+    ],
+  },
+  // =========================
+  // WORLD 3 (MAX GAMEY + SCENARIO) — DATA
+  // =========================
+  {
+    id: "w3",
+    slug: "world-3",
+    title: "World 3: Costs & Margins",
+    description: "Train analyst intuition: what costs move, and why margins change.",
+    nodes: [
+      { id: "w3n1", title: "Deep Fixed vs Variable Costs", order: 1, lessonId: "w3_lesson_1_fixed_variable", salaryReward: 1700, isBoss: false },
+      { id: "w3n2", title: "Gross vs Operating Profit", order: 2, lessonId: "w3_lesson_2_profit_levels", salaryReward: 1800, isBoss: false },
+      { id: "w3n3", title: "Margin Expansion", order: 3, lessonId: "w3_lesson_3_expansion", salaryReward: 1900, isBoss: false },
+      { id: "w3n4", title: "Margin Compression", order: 4, lessonId: "w3_lesson_4_compression", salaryReward: 1900, isBoss: false },
+      { id: "w3n5", title: "Operating Leverage", order: 5, lessonId: "w3_lesson_5_operating_leverage", salaryReward: 2100, isBoss: false },
+      { id: "w3n6", title: "Cost Structure Red Flags", order: 6, lessonId: "w3_lesson_6_red_flags", salaryReward: 2400, isBoss: true },
+    ],
+  },
+  // =========================
+  // WORLD 4 (BALANCE SHEET) — DATA
+  // =========================
+  {
+    id: "w4",
+    slug: "world-4",
+    title: "World 4: Balance Sheet",
+    description: "Learn the company's 'stuff' (assets), 'IOUs' (liabilities), and 'owner share' (equity).",
+    nodes: [
+      { id: "w4n1", title: "Assets vs Liabilities vs Equity", order: 1, lessonId: "w4_lesson_1_ale", salaryReward: 1900, isBoss: false },
+      { id: "w4n2", title: "Current vs Non-Current", order: 2, lessonId: "w4_lesson_2_current_noncurrent", salaryReward: 1900, isBoss: false },
+      { id: "w4n3", title: "Retained Earnings Roll-Forward", order: 3, lessonId: "w4_lesson_3_re_rollforward", salaryReward: 2100, isBoss: false },
+      { id: "w4n4", title: "Dividends & Buybacks", order: 4, lessonId: "w4_lesson_4_div_buyback", salaryReward: 2200, isBoss: false },
+      { id: "w4n5", title: "Other Assets/Liabilities (Plugs)", order: 5, lessonId: "w4_lesson_5_other_plugs", salaryReward: 2200, isBoss: false },
+      { id: "w4n6", title: "Balance Sheet Must Balance", order: 6, lessonId: "w4_lesson_6_must_balance", salaryReward: 2400, isBoss: false },
+      { id: "w4n7", title: "Balance Sheet Red Flags", order: 7, lessonId: "w4_lesson_7_red_flags", salaryReward: 2600, isBoss: true },
+    ],
+  },
+  // =========================
+  // WORLD 5 (WORKING CAPITAL + DYNAMIC CASH METER) — DATA
+  // =========================
+  {
+    id: "w5",
+    slug: "world-5",
+    title: "World 5: Working Capital",
+    description: "Feel cash get trapped (or freed) by A/R, Inventory, A/P, and Deferred Revenue.",
+    nodes: [
+      { id: "w5n1", title: "What Working Capital Is", order: 1, lessonId: "w5_lesson_1_wc_intro", salaryReward: 2000, isBoss: false },
+      { id: "w5n2", title: "Accounts Receivable", order: 2, lessonId: "w5_lesson_2_ar", salaryReward: 2100, isBoss: false },
+      { id: "w5n3", title: "Inventory", order: 3, lessonId: "w5_lesson_3_inventory", salaryReward: 2100, isBoss: false },
+      { id: "w5n4", title: "Accounts Payable", order: 4, lessonId: "w5_lesson_4_ap", salaryReward: 2200, isBoss: false },
+      { id: "w5n5", title: "Deferred Revenue", order: 5, lessonId: "w5_lesson_5_defrev", salaryReward: 2200, isBoss: false },
+      { id: "w5n6", title: "WC Roll-Forwards", order: 6, lessonId: "w5_lesson_6_rollforwards", salaryReward: 2300, isBoss: false },
+      { id: "w5n7", title: "Net WC Impact", order: 7, lessonId: "w5_lesson_7_net_wc", salaryReward: 2400, isBoss: false },
+      { id: "w5n8", title: "Liquidity Analysis", order: 8, lessonId: "w5_lesson_8_liquidity", salaryReward: 2500, isBoss: false },
+      { id: "w5n9", title: "Profitable but Dying Case", order: 9, lessonId: "w5_lesson_9_profitable_dying", salaryReward: 2800, isBoss: true },
     ],
   },
 ];
@@ -1776,6 +1855,1581 @@ export const LESSONS: Record<string, Lesson> = {
       badgeName: "Forecasting Realist",
       celebrationCopy: "You forecast like an analyst now.\nWorld 3: costs + margins (profit gets spicy).",
       salaryReward: 2400,
+    },
+  },
+
+  // =========================
+  // WORLD 3 (MAX GAMEY + SCENARIO) — LESSONS
+  // =========================
+
+  w3_lesson_1_fixed_variable: {
+    id: "w3_lesson_1_fixed_variable",
+    headline: "Some costs scale with sales. Some don't. That changes everything.",
+    story:
+      "Lemonade stand example:\n- Cups + lemons scale when you sell more (variable).\n- Booth rent stays mostly the same (fixed).\n\nFixed vs variable tells you how profits behave when revenue moves.",
+    ruleCard: "Variable costs move with volume. Fixed costs stay mostly the same (short term).",
+    questions: [
+      {
+        type: "drag_match",
+        id: "w3q1_1",
+        prompt: "Match each cost to Fixed or Variable (lemonade stand).",
+        items: [
+          { id: "i1", label: "Lemons" },
+          { id: "i2", label: "Cups" },
+          { id: "i3", label: "Monthly booth rent" },
+          { id: "i4", label: "Card fee per sale" },
+        ],
+        slots: [
+          { id: "s1", label: "Variable" },
+          { id: "s2", label: "Variable" },
+          { id: "s3", label: "Fixed" },
+          { id: "s4", label: "Variable" },
+        ],
+        correct: { s1: "i1", s2: "i2", s3: "i3", s4: "i4" },
+      },
+      {
+        type: "scenario",
+        id: "w3q1_2",
+        title: "Mini Case",
+        context:
+          "You run a stand.\nRent is $60 per month.\nLemons cost $1 per cup.\n\nYou expect to sell 100 cups this month.",
+        prompt: "Which cost is MOST 'locked in' even if you sell 0 cups?",
+        choices: ["Lemons", "Rent", "Cups", "Card fees"],
+        correctIndex: 1,
+      },
+      {
+        type: "numeric",
+        id: "w3q1_3",
+        prompt: "You sell 100 cups. Variable cost is $1 per cup. Total variable cost = ?",
+        answer: 100,
+        tolerance: 0,
+      },
+      {
+        type: "order",
+        id: "w3q1_4",
+        prompt: "Order the analyst thinking when you see a cost line item.",
+        items: [
+          { id: "a", label: "Ask: does it depend on units sold?" },
+          { id: "b", label: "Decide: fixed vs variable" },
+          { id: "c", label: "Predict: what happens if revenue changes?" },
+        ],
+        correctOrder: ["a", "b", "c"],
+      },
+      {
+        type: "mc",
+        id: "w3q1_5",
+        prompt: "If sales double, which cost is MOST likely to double?",
+        choices: ["Rent", "Insurance", "Raw materials", "Office salary"],
+        correctIndex: 2,
+      },
+    ],
+    bossQuestion: {
+      type: "scenario",
+      id: "w3b1",
+      title: "Boss Case",
+      context:
+        "Two businesses have the same revenue today.\n\nBusiness A has high fixed costs.\nBusiness B has mostly variable costs.\n\nNext month, revenue might jump up.",
+      prompt: "Which business is more likely to see profit jump FAST when revenue grows?",
+      choices: ["Business A", "Business B", "Both the same", "Neither"],
+      correctIndex: 0,
+    },
+    mastery: {
+      badgeName: "Cost Type Spotter",
+      celebrationCopy: "You can now predict what costs do when revenue moves.\nNext: the profit staircase.",
+      salaryReward: 1700,
+    },
+  },
+
+  w3_lesson_2_profit_levels: {
+    id: "w3_lesson_2_profit_levels",
+    headline: "Profit has levels. Analysts care which level is changing.",
+    story:
+      "Think of profit like a staircase:\nRevenue\n− COGS = Gross Profit\n− Operating Expenses = Operating Profit\n\nGross tells you about the product.\nOperating tells you about the whole business machine.",
+    ruleCard: "Gross Profit = Revenue - COGS. Operating Profit = Gross Profit - OpEx.",
+    questions: [
+      {
+        type: "order",
+        id: "w3q2_1",
+        prompt: "Put the staircase in order (top to bottom).",
+        items: [
+          { id: "a", label: "Revenue" },
+          { id: "b", label: "COGS" },
+          { id: "c", label: "Gross Profit" },
+          { id: "d", label: "Operating Expenses" },
+          { id: "e", label: "Operating Profit" },
+        ],
+        correctOrder: ["a", "b", "c", "d", "e"],
+      },
+      {
+        type: "numeric",
+        id: "w3q2_2",
+        prompt: "Revenue 100. COGS 60. Gross Profit = ?",
+        answer: 40,
+        tolerance: 0,
+      },
+      {
+        type: "numeric",
+        id: "w3q2_3",
+        prompt: "Gross Profit 40. OpEx 25. Operating Profit = ?",
+        answer: 15,
+        tolerance: 0,
+      },
+      {
+        type: "drag_match",
+        id: "w3q2_4",
+        prompt: "Match the cost to where it usually lives.",
+        items: [
+          { id: "i1", label: "Raw materials" },
+          { id: "i2", label: "Shipping per order" },
+          { id: "i3", label: "Office rent" },
+          { id: "i4", label: "Marketing salaries" },
+        ],
+        slots: [
+          { id: "s1", label: "COGS (hits Gross Profit)" },
+          { id: "s2", label: "COGS (hits Gross Profit)" },
+          { id: "s3", label: "OpEx (hits Operating Profit)" },
+          { id: "s4", label: "OpEx (hits Operating Profit)" },
+        ],
+        correct: { s1: "i1", s2: "i2", s3: "i3", s4: "i4" },
+      },
+      {
+        type: "scenario",
+        id: "w3q2_5",
+        title: "Mini Case",
+        context:
+          "A company has strong Gross Profit.\nBut Operating Profit is weak.\n\nRevenue is fine. COGS is fine.",
+        prompt: "What's the most likely problem?",
+        choices: ["COGS too high", "Operating expenses too high", "Revenue too high", "Taxes too low"],
+        correctIndex: 1,
+      },
+    ],
+    bossQuestion: {
+      type: "mc",
+      id: "w3b2",
+      prompt: "If COGS drops while OpEx stays the same, which improves first?",
+      choices: ["Gross Profit", "Taxes", "Cash", "Shares outstanding"],
+      correctIndex: 0,
+    },
+    mastery: {
+      badgeName: "Profit Staircase Pro",
+      celebrationCopy: "You can now diagnose profit at the right level.\nNext: margin expansion.",
+      salaryReward: 1800,
+    },
+  },
+
+  w3_lesson_3_expansion: {
+    id: "w3_lesson_3_expansion",
+    headline: "Expansion means you keep MORE money per $1 of revenue.",
+    story:
+      "If you sell $100 and keep $20 as profit, that's 20% margin.\nIf you later keep $25 on $100, margin expanded.\n\nExpansion usually happens when costs grow slower than revenue.",
+    ruleCard: "Margin = Profit ÷ Revenue. Expansion = margin goes up.",
+    questions: [
+      {
+        type: "numeric",
+        id: "w3q3_1",
+        prompt: "Revenue 100. Profit 20. Margin (%) = ? (enter 20)",
+        answer: 20,
+        tolerance: 0,
+      },
+      {
+        type: "numeric",
+        id: "w3q3_2",
+        prompt: "Revenue 100. Profit 25. Margin (%) = ?",
+        answer: 25,
+        tolerance: 0,
+      },
+      {
+        type: "drag_match",
+        id: "w3q3_3",
+        prompt: "Match the event to what it usually does to margins.",
+        items: [
+          { id: "i1", label: "Supplier price cuts" },
+          { id: "i2", label: "Automation lowers labor needs" },
+          { id: "i3", label: "Heavy discounting" },
+        ],
+        slots: [
+          { id: "s1", label: "Margin up" },
+          { id: "s2", label: "Margin up" },
+          { id: "s3", label: "Margin down" },
+        ],
+        correct: { s1: "i1", s2: "i2", s3: "i3" },
+      },
+      {
+        type: "scenario",
+        id: "w3q3_4",
+        title: "Mini Case",
+        context:
+          "Revenue grows 10%.\nCosts only grow 3%.\n\nProfit grows faster than revenue.",
+        prompt: "What likely happened to margins?",
+        choices: ["Expanded", "Compressed", "Stayed exactly the same", "Went negative"],
+        correctIndex: 0,
+      },
+      {
+        type: "order",
+        id: "w3q3_5",
+        prompt: "Order the margin expansion chain reaction.",
+        items: [
+          { id: "a", label: "Revenue grows" },
+          { id: "b", label: "Costs grow slower than revenue" },
+          { id: "c", label: "Margin increases" },
+        ],
+        correctOrder: ["a", "b", "c"],
+      },
+    ],
+    bossQuestion: {
+      type: "mc",
+      id: "w3b3",
+      prompt: "Cleanest definition of margin expansion?",
+      choices: ["Profit per $ of revenue increases", "Revenue increases", "Costs exist", "Taxes decrease"],
+      correctIndex: 0,
+    },
+    mastery: {
+      badgeName: "Margin Expander",
+      celebrationCopy: "You can spot efficiency improving.\nNext: compression (the pain).",
+      salaryReward: 1900,
+    },
+  },
+
+  w3_lesson_4_compression: {
+    id: "w3_lesson_4_compression",
+    headline: "Compression means you keep LESS per $1 of revenue.",
+    story:
+      "Margins shrink when costs rise, prices fall, or the business gets sloppy.\n\nAnalysts watch this closely because shrinking margins can crush value.",
+    ruleCard: "Compression = margin goes down.",
+    questions: [
+      {
+        type: "scenario",
+        id: "w3q4_1",
+        title: "Mini Case",
+        context:
+          "Revenue grows 15%.\nCOGS grows 25%.\n\nProfit barely moves.",
+        prompt: "What's the most likely story?",
+        choices: ["Margin expansion", "Margin compression", "Operating leverage improving", "No change"],
+        correctIndex: 1,
+      },
+      {
+        type: "numeric",
+        id: "w3q4_2",
+        prompt: "Year 1: Rev 100, Profit 30. Margin = 30. Year 2: Rev 100, Profit 20. Margin = ?",
+        answer: 20,
+        tolerance: 0,
+      },
+      {
+        type: "drag_match",
+        id: "w3q4_3",
+        prompt: "Match the cause to what it usually does to margins.",
+        items: [
+          { id: "i1", label: "Raw material costs spike" },
+          { id: "i2", label: "Discount prices hard" },
+          { id: "i3", label: "Hire a lot without revenue growth" },
+        ],
+        slots: [
+          { id: "s1", label: "Margin down" },
+          { id: "s2", label: "Margin down" },
+          { id: "s3", label: "Margin down" },
+        ],
+        correct: { s1: "i1", s2: "i2", s3: "i3" },
+      },
+      {
+        type: "order",
+        id: "w3q4_4",
+        prompt: "Order the compression story.",
+        items: [
+          { id: "a", label: "Costs rise or prices fall" },
+          { id: "b", label: "Profit per dollar shrinks" },
+          { id: "c", label: "Margin decreases" },
+        ],
+        correctOrder: ["a", "b", "c"],
+      },
+      {
+        type: "boolean",
+        id: "w3q4_5",
+        prompt: "Compression can happen even if revenue is growing.",
+        correct: true,
+      },
+    ],
+    bossQuestion: {
+      type: "mc",
+      id: "w3b4",
+      prompt: "Revenue up 15% but profit up 2%. Likely margins…",
+      choices: ["Expanded", "Compressed", "Stayed the same", "Went infinite"],
+      correctIndex: 1,
+    },
+    mastery: {
+      badgeName: "Compression Catcher",
+      celebrationCopy: "You can spot margin pain.\nNext: operating leverage (the turbo).",
+      salaryReward: 1900,
+    },
+  },
+
+  w3_lesson_5_operating_leverage: {
+    id: "w3_lesson_5_operating_leverage",
+    headline: "Operating leverage = profits move faster than revenue (when fixed costs exist).",
+    story:
+      "If you have fixed costs, extra revenue can turn into profit fast.\n\nThat's why some businesses scale like crazy once they pass break-even.",
+    ruleCard: "High fixed costs + growing revenue = profits can jump fast (operating leverage).",
+    questions: [
+      {
+        type: "drag_match",
+        id: "w3q5_1",
+        prompt: "Match the business to its typical cost structure.",
+        items: [
+          { id: "i1", label: "Software subscriptions" },
+          { id: "i2", label: "Restaurant" },
+          { id: "i3", label: "Factory making goods" },
+        ],
+        slots: [
+          { id: "s1", label: "Higher fixed-cost share (often)" },
+          { id: "s2", label: "More variable costs (often)" },
+          { id: "s3", label: "Mixed fixed + variable (often)" },
+        ],
+        correct: { s1: "i1", s2: "i2", s3: "i3" },
+      },
+      {
+        type: "scenario",
+        id: "w3q5_2",
+        title: "Mini Case",
+        context:
+          "Company A has big fixed costs.\nRevenue increases 20%.\nFixed costs barely change.\n\nProfit jumps a lot.",
+        prompt: "What concept is this?",
+        choices: ["Operating leverage", "Margin compression", "CAGR", "Tax shield"],
+        correctIndex: 0,
+      },
+      {
+        type: "numeric",
+        id: "w3q5_3",
+        prompt: "Fixed costs = 60. Variable cost = $1 per unit. Units = 50. Total cost = ?",
+        answer: 110,
+        tolerance: 0,
+      },
+      {
+        type: "numeric",
+        id: "w3q5_4",
+        prompt: "Revenue = 200. Total cost = 110. Profit = ?",
+        answer: 90,
+        tolerance: 0,
+      },
+      {
+        type: "order",
+        id: "w3q5_5",
+        prompt: "Order the operating leverage chain reaction.",
+        items: [
+          { id: "a", label: "Revenue increases" },
+          { id: "b", label: "Fixed costs stay mostly the same" },
+          { id: "c", label: "Profit jumps faster than revenue" },
+        ],
+        correctOrder: ["a", "b", "c"],
+      },
+    ],
+    bossQuestion: {
+      type: "scenario",
+      id: "w3b5",
+      title: "Boss Case",
+      context:
+        "Two companies grow revenue by 10%.\nCompany A's profit grows 25%.\nCompany B's profit grows 8%.",
+      prompt: "Which company likely has stronger operating leverage?",
+      choices: ["Company A", "Company B", "They're identical", "Impossible to tell"],
+      correctIndex: 0,
+    },
+    mastery: {
+      badgeName: "Operating Leverage Wizard",
+      celebrationCopy: "You now get why some companies scale like monsters.\nFinal boss: red flags.",
+      salaryReward: 2100,
+    },
+  },
+
+  w3_lesson_6_red_flags: {
+    id: "w3_lesson_6_red_flags",
+    headline: "Red flags are patterns that scream: \"Margins might break.\"",
+    story:
+      "Analysts look for patterns like:\n- costs growing faster than revenue\n- margins shrinking for multiple periods\n- heavy discounting\n- hiring like crazy without revenue\n\nThese patterns can wreck a model fast.",
+    ruleCard: "Red flags = costs up faster than revenue, or margin worse without a good reason.",
+    questions: [
+      {
+        type: "drag_match",
+        id: "w3q6_1",
+        prompt: "Match each situation to: Healthy or Red Flag.",
+        items: [
+          { id: "i1", label: "Revenue +20%, OpEx +5%" },
+          { id: "i2", label: "Revenue +10%, COGS +25%" },
+          { id: "i3", label: "Margin down 3 years in a row" },
+          { id: "i4", label: "Hiring doubles while revenue is flat" },
+        ],
+        slots: [
+          { id: "s1", label: "Healthy" },
+          { id: "s2", label: "Red Flag" },
+          { id: "s3", label: "Red Flag" },
+          { id: "s4", label: "Red Flag" },
+        ],
+        correct: { s1: "i1", s2: "i2", s3: "i3", s4: "i4" },
+      },
+      {
+        type: "scenario",
+        id: "w3q6_2",
+        title: "Mini Case",
+        context:
+          "A company reports:\nRevenue +12%\nCOGS +22%\n\nManagement says: \"All good.\"",
+        prompt: "What's the best analyst reaction?",
+        choices: [
+          "No problem—growth is growth",
+          "This is likely margin compression; investigate pricing/cost pressure",
+          "Celebrate and stop checking",
+          "Ignore COGS completely",
+        ],
+        correctIndex: 1,
+      },
+      {
+        type: "order",
+        id: "w3q6_3",
+        prompt: "Order the analyst response when you spot a red flag.",
+        items: [
+          { id: "a", label: "Identify the cost line causing it (COGS vs OpEx)" },
+          { id: "b", label: "Ask: is there a real reason? (pricing, mix, inflation, strategy)" },
+          { id: "c", label: "Adjust assumptions + re-forecast" },
+        ],
+        correctOrder: ["a", "b", "c"],
+      },
+      {
+        type: "boolean",
+        id: "w3q6_4",
+        prompt: "Costs rising faster than revenue can be a major warning sign.",
+        correct: true,
+      },
+    ],
+    bossQuestion: {
+      type: "scenario",
+      id: "w3b6",
+      title: "Final Boss Case",
+      context:
+        "Year 1:\nRevenue 100\nCOGS 60\nOpEx 20\n\nYear 2:\nRevenue 110\nCOGS 75\nOpEx 22",
+      prompt: "What's the cleanest story?",
+      choices: [
+        "Margin expansion (more efficient)",
+        "Margin compression (COGS pressure)",
+        "Operating leverage improving",
+        "No meaningful change",
+      ],
+      correctIndex: 1,
+    },
+    mastery: {
+      badgeName: "Red Flag Hunter",
+      celebrationCopy: "You can now talk like an analyst about margins, leverage, and red flags.\nNext world: Balance Sheet basics.",
+      salaryReward: 2400,
+    },
+  },
+
+  // =========================
+  // WORLD 4 (BALANCE SHEET) — LESSONS
+  // =========================
+
+  w4_lesson_1_ale: {
+    id: "w4_lesson_1_ale",
+    headline: "Balance Sheet = what you own, what you owe, and what's left for owners.",
+    story:
+      "Imagine a kid owns a bike.\n\nIf they bought it with a loan:\n- The bike is an ASSET (stuff you own)\n- The loan is a LIABILITY (stuff you owe)\n- What's left is EQUITY (owner's share)\n\nThe rule is always:\nAssets = Liabilities + Equity",
+    ruleCard: "Assets = Liabilities + Equity (A = L + E). Always.",
+    questions: [
+      {
+        type: "drag_match",
+        id: "w4q1_1",
+        prompt: "Match each item to Assets, Liabilities, or Equity.",
+        items: [
+          { id: "i1", label: "Cash" },
+          { id: "i2", label: "Accounts payable (bills you owe)" },
+          { id: "i3", label: "Inventory" },
+          { id: "i4", label: "Retained earnings" },
+        ],
+        slots: [
+          { id: "s1", label: "Asset" },
+          { id: "s2", label: "Liability" },
+          { id: "s3", label: "Asset" },
+          { id: "s4", label: "Equity" },
+        ],
+        correct: { s1: "i1", s2: "i2", s3: "i3", s4: "i4" },
+      },
+      {
+        type: "scenario",
+        id: "w4q1_2",
+        title: "Mini Case",
+        context:
+          "A company has:\nAssets = 200\nLiabilities = 120",
+        prompt: "What must Equity be?",
+        choices: ["80", "120", "200", "320"],
+        correctIndex: 0,
+      },
+      {
+        type: "numeric",
+        id: "w4q1_3",
+        prompt: "Assets 500. Liabilities 300. Equity = ?",
+        answer: 200,
+        tolerance: 0,
+      },
+      {
+        type: "boolean",
+        id: "w4q1_4",
+        prompt: "Equity is what owners would get if the company sold all assets and paid all liabilities.",
+        correct: true,
+      },
+      {
+        type: "order",
+        id: "w4q1_5",
+        prompt: "Order the logic of the balance sheet equation.",
+        items: [
+          { id: "a", label: "List what the company owns (Assets)" },
+          { id: "b", label: "List what the company owes (Liabilities)" },
+          { id: "c", label: "Whatever is left belongs to owners (Equity)" },
+        ],
+        correctOrder: ["a", "b", "c"],
+      },
+    ],
+    bossQuestion: {
+      type: "scenario",
+      id: "w4b1",
+      title: "Boss Case",
+      context:
+        "Assets are 1,000.\nLiabilities increase by 50.\nAssets stay the same.",
+      prompt: "What must happen to Equity for the balance sheet to still balance?",
+      choices: ["Equity increases by 50", "Equity decreases by 50", "Nothing changes", "Equity becomes zero"],
+      correctIndex: 1,
+    },
+    mastery: {
+      badgeName: "A=L+E Enforcer",
+      celebrationCopy: "You now know the one rule you can't break.\nNext: current vs non-current.",
+      salaryReward: 1900,
+    },
+  },
+
+  w4_lesson_2_current_noncurrent: {
+    id: "w4_lesson_2_current_noncurrent",
+    headline: "Current = happens within ~1 year. Non-current = longer-term.",
+    story:
+      "Think 'soon' vs 'later':\n- Current assets: cash, A/R, inventory\n- Current liabilities: A/P, accrued expenses\n\nNon-current is longer-term stuff:\n- PP&E (factories)\n- Long-term debt",
+    ruleCard: "Current = expected to turn into cash / be paid within ~1 year.",
+    questions: [
+      {
+        type: "drag_match",
+        id: "w4q2_1",
+        prompt: "Match each item to Current or Non-Current.",
+        items: [
+          { id: "i1", label: "Cash" },
+          { id: "i2", label: "Inventory" },
+          { id: "i3", label: "PP&E (equipment)" },
+          { id: "i4", label: "Long-term debt" },
+        ],
+        slots: [
+          { id: "s1", label: "Current" },
+          { id: "s2", label: "Current" },
+          { id: "s3", label: "Non-Current" },
+          { id: "s4", label: "Non-Current" },
+        ],
+        correct: { s1: "i1", s2: "i2", s3: "i3", s4: "i4" },
+      },
+      {
+        type: "scenario",
+        id: "w4q2_2",
+        title: "Mini Case",
+        context:
+          "A company must pay this bill in 6 months.",
+        prompt: "Is it current or non-current?",
+        choices: ["Current", "Non-Current"],
+        correctIndex: 0,
+      },
+      {
+        type: "mc",
+        id: "w4q2_3",
+        prompt: "Which is usually a current liability?",
+        choices: ["Accounts payable", "Goodwill", "PP&E", "Retained earnings"],
+        correctIndex: 0,
+      },
+      {
+        type: "boolean",
+        id: "w4q2_4",
+        prompt: "Current items are usually more tied to daily operations.",
+        correct: true,
+      },
+      {
+        type: "order",
+        id: "w4q2_5",
+        prompt: "Order the 'current asset' vibe from most liquid to less liquid.",
+        items: [
+          { id: "a", label: "Cash" },
+          { id: "b", label: "Accounts receivable" },
+          { id: "c", label: "Inventory" },
+        ],
+        correctOrder: ["a", "b", "c"],
+      },
+    ],
+    bossQuestion: {
+      type: "scenario",
+      id: "w4b2",
+      title: "Boss Case",
+      context:
+        "A company sells inventory today.\nThe customer will pay next month.",
+      prompt: "What current asset usually increases first?",
+      choices: ["Accounts receivable", "PP&E", "Long-term debt", "Common stock"],
+      correctIndex: 0,
+    },
+    mastery: {
+      badgeName: "Current vs Long-Term",
+      celebrationCopy: "You can now bucket the balance sheet like an analyst.\nNext: retained earnings roll-forward.",
+      salaryReward: 1900,
+    },
+  },
+
+  w4_lesson_3_re_rollforward: {
+    id: "w4_lesson_3_re_rollforward",
+    headline: "Retained earnings is basically the company's 'saved profits' account.",
+    story:
+      "Retained earnings rolls forward like a piggy bank:\n\nRE (start)\n+ Net Income\n- Dividends (money paid out)\n= RE (end)\n\nThis is one of the most important roll-forwards in modeling.",
+    ruleCard: "RE_end = RE_start + Net Income - Dividends.",
+    questions: [
+      {
+        type: "numeric",
+        id: "w4q3_1",
+        prompt: "RE start 100. Net income 30. Dividends 5. RE end = ?",
+        answer: 125,
+        tolerance: 0,
+      },
+      {
+        type: "scenario",
+        id: "w4q3_2",
+        title: "Mini Case",
+        context:
+          "A company has RE start = 200.\nIt loses money: Net income = -20.\nIt still pays dividends = 10.",
+        prompt: "What happens to retained earnings?",
+        choices: ["It increases", "It decreases", "It stays the same", "It becomes an asset"],
+        correctIndex: 1,
+      },
+      {
+        type: "numeric",
+        id: "w4q3_3",
+        prompt: "RE start 500. Net income 0. Dividends 20. RE end = ?",
+        answer: 480,
+        tolerance: 0,
+      },
+      {
+        type: "boolean",
+        id: "w4q3_4",
+        prompt: "If net income is negative, retained earnings can go down.",
+        correct: true,
+      },
+      {
+        type: "order",
+        id: "w4q3_5",
+        prompt: "Order the roll-forward steps.",
+        items: [
+          { id: "a", label: "Start with last period RE" },
+          { id: "b", label: "Add net income" },
+          { id: "c", label: "Subtract dividends" },
+          { id: "d", label: "You get ending RE" },
+        ],
+        correctOrder: ["a", "b", "c", "d"],
+      },
+    ],
+    bossQuestion: {
+      type: "scenario",
+      id: "w4b3",
+      title: "Boss Case",
+      context:
+        "RE start = 1,000\nNet income = 100\nDividends = 0",
+      prompt: "Ending RE = ?",
+      choices: ["900", "1,000", "1,100", "1,200"],
+      correctIndex: 2,
+    },
+    mastery: {
+      badgeName: "RE Roll-Forward",
+      celebrationCopy: "You can now roll equity forward like a real modeler.\nNext: dividends & buybacks.",
+      salaryReward: 2100,
+    },
+  },
+
+  w4_lesson_4_div_buyback: {
+    id: "w4_lesson_4_div_buyback",
+    headline: "Dividends and buybacks both return cash to shareholders.",
+    story:
+      "Two ways to give owners money:\n1) Dividends = cash paid out\n2) Buybacks = company buys its own stock\n\nBoth reduce equity (because cash leaves the company).",
+    ruleCard: "Dividends & buybacks = cash outflows and usually reduce equity.",
+    questions: [
+      {
+        type: "scenario",
+        id: "w4q4_1",
+        title: "Mini Case",
+        context:
+          "Company pays a dividend of 10.\nCash goes down by 10.",
+        prompt: "What happens to equity?",
+        choices: ["Up 10", "Down 10", "No change", "Becomes a liability"],
+        correctIndex: 1,
+      },
+      {
+        type: "scenario",
+        id: "w4q4_2",
+        title: "Mini Case",
+        context:
+          "Company spends 50 to buy back shares.\nCash goes down by 50.",
+        prompt: "What's the cleanest equity impact?",
+        choices: ["Equity increases by 50", "Equity decreases by 50", "Liabilities increase by 50", "Assets increase by 50"],
+        correctIndex: 1,
+      },
+      {
+        type: "mc",
+        id: "w4q4_3",
+        prompt: "Which is more like 'paying owners directly'?",
+        choices: ["Dividend", "Inventory", "Depreciation", "Accounts payable"],
+        correctIndex: 0,
+      },
+      {
+        type: "boolean",
+        id: "w4q4_4",
+        prompt: "A company can do buybacks even if it has zero dividends.",
+        correct: true,
+      },
+      {
+        type: "numeric",
+        id: "w4q4_5",
+        prompt: "Cash decreases by 20 from dividends. If liabilities don't change, equity must change by ?",
+        answer: -20,
+        tolerance: 0,
+      },
+    ],
+    bossQuestion: {
+      type: "scenario",
+      id: "w4b4",
+      title: "Boss Case",
+      context:
+        "Assets = 300\nLiabilities = 200\nEquity = 100\n\nCompany pays dividends of 30 (cash out).",
+      prompt: "New equity must be…",
+      choices: ["130", "100", "70", "170"],
+      correctIndex: 2,
+    },
+    mastery: {
+      badgeName: "Shareholder Payouts",
+      celebrationCopy: "You understand how cash returning to owners hits equity.\nNext: 'Other' plugs.",
+      salaryReward: 2200,
+    },
+  },
+
+  w4_lesson_5_other_plugs: {
+    id: "w4_lesson_5_other_plugs",
+    headline: "Sometimes models use 'Other' as a catch-all bucket.",
+    story:
+      "Companies often have messy stuff that's hard to forecast.\nThey group it like:\n- Other assets\n- Other liabilities\n\nAnalysts treat these carefully:\n- If it's tied to operations → grow with revenue\n- If unclear/immaterial → straight-line",
+    ruleCard: "'Other' items are catch-alls. Forecast based on what they really are.",
+    questions: [
+      {
+        type: "scenario",
+        id: "w4q5_1",
+        title: "Mini Case",
+        context:
+          "You see 'Other assets' jump a lot.\nThe footnote says it's mostly prepaid supplier deposits tied to sales volume.",
+        prompt: "Best forecast approach?",
+        choices: ["Grow with revenue", "Straight-line forever", "Set to zero", "Treat as equity"],
+        correctIndex: 0,
+      },
+      {
+        type: "scenario",
+        id: "w4q5_2",
+        title: "Mini Case",
+        context:
+          "'Other liabilities' is small and management doesn't explain it.\nIt's not material.",
+        prompt: "Best simple approach?",
+        choices: ["Straight-line prior period", "Triple it", "Delete it", "Move it to revenue"],
+        correctIndex: 0,
+      },
+      {
+        type: "boolean",
+        id: "w4q5_3",
+        prompt: "You should check footnotes if 'Other' seems large.",
+        correct: true,
+      },
+      {
+        type: "mc",
+        id: "w4q5_4",
+        prompt: "Why are 'Other' items annoying in modeling?",
+        choices: ["They combine unrelated stuff", "They are always cash", "They are always taxes", "They are never important"],
+        correctIndex: 0,
+      },
+      {
+        type: "order",
+        id: "w4q5_5",
+        prompt: "Order the 'Other item' workflow.",
+        items: [
+          { id: "a", label: "Check if it's material (big enough to matter)" },
+          { id: "b", label: "Look for footnote detail / what it really is" },
+          { id: "c", label: "Choose driver: revenue-tied vs straight-line" },
+        ],
+        correctOrder: ["a", "b", "c"],
+      },
+    ],
+    bossQuestion: {
+      type: "scenario",
+      id: "w4b5",
+      title: "Boss Case",
+      context:
+        "Other assets = 5% of total assets and growing with revenue historically.",
+      prompt: "What's a reasonable first-pass forecast method?",
+      choices: ["Grow with revenue", "Set to zero", "Make it a liability", "Randomize it"],
+      correctIndex: 0,
+    },
+    mastery: {
+      badgeName: "Plug Whisperer",
+      celebrationCopy: "You can now handle messy 'Other' items like a sane modeler.\nNext: the balance sheet must balance.",
+      salaryReward: 2200,
+    },
+  },
+
+  w4_lesson_6_must_balance: {
+    id: "w4_lesson_6_must_balance",
+    headline: "If the balance sheet doesn't balance, the model is wrong. Period.",
+    story:
+      "This is like a video game rule:\nIf A ≠ L + E, the game is broken.\n\nIn real life, most 'model not balancing' problems come from a small mistake somewhere.",
+    ruleCard: "A must equal L + E. If not, something is wrong in the model.",
+    questions: [
+      {
+        type: "numeric",
+        id: "w4q6_1",
+        prompt: "Assets = 900. Liabilities = 500. Equity must be = ?",
+        answer: 400,
+        tolerance: 0,
+      },
+      {
+        type: "scenario",
+        id: "w4q6_2",
+        title: "Mini Case",
+        context:
+          "Assets = 1,000\nLiabilities = 650\nEquity = 300",
+        prompt: "Does it balance?",
+        choices: ["Yes", "No"],
+        correctIndex: 1,
+      },
+      {
+        type: "numeric",
+        id: "w4q6_3",
+        prompt: "In that case, how big is the imbalance? (A - (L+E))",
+        answer: 50,
+        tolerance: 0,
+      },
+      {
+        type: "boolean",
+        id: "w4q6_4",
+        prompt: "A small imbalance (like 1) still means the model is broken.",
+        correct: true,
+      },
+      {
+        type: "order",
+        id: "w4q6_5",
+        prompt: "Order the debugging steps when the balance sheet doesn't balance.",
+        items: [
+          { id: "a", label: "Check the equation: A vs (L+E)" },
+          { id: "b", label: "Look for a missing / double-counted line item" },
+          { id: "c", label: "Check sign errors (plus vs minus)" },
+          { id: "d", label: "Re-check roll-forwards (RE, debt, PP&E)" },
+        ],
+        correctOrder: ["a", "b", "c", "d"],
+      },
+    ],
+    bossQuestion: {
+      type: "scenario",
+      id: "w4b6",
+      title: "Boss Case",
+      context:
+        "Assets = 800\nLiabilities = 500\nEquity = 300\n\nCompany pays dividends of 20 (cash out).",
+      prompt: "After dividends, what must equity be for the balance sheet to still balance? (Liabilities unchanged)",
+      choices: ["320", "300", "280", "500"],
+      correctIndex: 2,
+    },
+    mastery: {
+      badgeName: "Balance Guardian",
+      celebrationCopy: "You can now spot and debug imbalance like a real analyst.\nFinal boss: red flags.",
+      salaryReward: 2400,
+    },
+  },
+
+  w4_lesson_7_red_flags: {
+    id: "w4_lesson_7_red_flags",
+    headline: "Balance sheet red flags are 'something smells off' patterns.",
+    story:
+      "Red flags analysts watch:\n- Receivables growing way faster than revenue\n- Inventory piling up\n- Weird 'Other' items getting huge\n- Debt rising fast while cash is falling\n\nBalance sheet tells the truth about reality.",
+    ruleCard: "Red flags = assets/liabilities moving in weird ways vs the business story.",
+    questions: [
+      {
+        type: "scenario",
+        id: "w4q7_1",
+        title: "Mini Case",
+        context:
+          "Revenue grows 5%.\nAccounts receivable grows 30%.",
+        prompt: "Cleanest concern?",
+        choices: [
+          "Customers may not be paying (collection issue)",
+          "Margins are expanding",
+          "COGS is falling",
+          "Tax rate changed",
+        ],
+        correctIndex: 0,
+      },
+      {
+        type: "scenario",
+        id: "w4q7_2",
+        title: "Mini Case",
+        context:
+          "Inventory grows fast for 3 periods.\nSales are flat.",
+        prompt: "What's a likely red flag story?",
+        choices: [
+          "They might be overproducing / can't sell",
+          "They are collecting cash faster",
+          "They paid down debt",
+          "They issued dividends",
+        ],
+        correctIndex: 0,
+      },
+      {
+        type: "scenario",
+        id: "w4q7_3",
+        title: "Mini Case",
+        context:
+          "'Other assets' jumps from 2% → 12% of total assets.\nNo explanation.",
+        prompt: "Best analyst reaction?",
+        choices: [
+          "Investigate footnotes; could hide risks",
+          "Ignore it; it's called 'Other' for a reason",
+          "Call it revenue",
+          "Move it to cash",
+        ],
+        correctIndex: 0,
+      },
+      {
+        type: "drag_match",
+        id: "w4q7_4",
+        prompt: "Match the pattern to the likely concern.",
+        items: [
+          { id: "i1", label: "A/R up much faster than revenue" },
+          { id: "i2", label: "Inventory up while sales flat" },
+          { id: "i3", label: "Debt up while cash down" },
+        ],
+        slots: [
+          { id: "s1", label: "Collection risk" },
+          { id: "s2", label: "Demand / stockpile risk" },
+          { id: "s3", label: "Liquidity / leverage risk" },
+        ],
+        correct: { s1: "i1", s2: "i2", s3: "i3" },
+      },
+    ],
+    bossQuestion: {
+      type: "scenario",
+      id: "w4b7",
+      title: "Final Boss Case",
+      context:
+        "Year 1:\nRevenue 100\nA/R 10\nInventory 12\nDebt 30\nCash 20\n\nYear 2:\nRevenue 105\nA/R 18\nInventory 20\nDebt 50\nCash 5",
+      prompt: "Which combo is the biggest red flag?",
+      choices: [
+        "A/R and inventory growing way faster than revenue + debt up + cash down",
+        "Revenue is growing",
+        "Debt exists",
+        "Cash is a number",
+      ],
+      correctIndex: 0,
+    },
+    mastery: {
+      badgeName: "Balance Sheet Detective",
+      celebrationCopy: "You can now read the balance sheet like an analyst and spot danger.\nNext world: Working Capital.",
+      salaryReward: 2600,
+    },
+  },
+
+  // -------------------------
+  // WORLD 5 — NODE 1 — What Working Capital Is
+  // -------------------------
+  w5_lesson_1_wc_intro: {
+    id: "w5_lesson_1_wc_intro",
+    headline: "Working Capital = money stuck in day-to-day operations.",
+    story:
+      "Think lemonade stand:\n- You buy lemons first (cash out)\n- You sell lemonade\n- Sometimes customers pay later (A/R)\n\nSo you can 'make a sale' but not get cash yet.\nThat gap is working capital.",
+    ruleCard:
+      "The only rule:\nWC assets ↑ use cash, ↓ give cash.\nWC liabilities ↑ give cash, ↓ use cash.",
+    questions: [
+      {
+        type: "scenario",
+        id: "w5q1_0",
+        title: "The Only Rule",
+        context:
+          "Pick the correct cash impact rule.",
+        prompt: "Which is correct?",
+        choices: [
+          "WC assets ↑ cash ↑, WC liabilities ↑ cash ↑",
+          "WC assets ↑ cash ↓, WC liabilities ↑ cash ↑",
+          "WC assets ↑ cash ↑, WC liabilities ↑ cash ↓",
+          "WC assets ↓ cash ↓, WC liabilities ↓ cash ↓",
+        ],
+        correctIndex: 1,
+      },
+      {
+        type: "drag_match",
+        id: "w5q1_1",
+        prompt: "Match each item to WC Asset or WC Liability.",
+        items: [
+          { id: "i1", label: "Accounts Receivable (A/R)" },
+          { id: "i2", label: "Inventory" },
+          { id: "i3", label: "Accounts Payable (A/P)" },
+          { id: "i4", label: "Deferred Revenue" },
+        ],
+        slots: [
+          { id: "s1", label: "WC Asset" },
+          { id: "s2", label: "WC Asset" },
+          { id: "s3", label: "WC Liability" },
+          { id: "s4", label: "WC Liability" },
+        ],
+        correct: { s1: "i1", s2: "i2", s3: "i3", s4: "i4" },
+      },
+      {
+        type: "scenario",
+        id: "w5q1_2",
+        title: "Mini Case",
+        context:
+          "You sell $100 of lemonade.\nCustomers pay $70 today.\n$30 comes later.",
+        prompt: "What likely increased?",
+        choices: ["Cash", "Accounts receivable", "Inventory", "Accounts payable"],
+        correctIndex: 1,
+      },
+      {
+        type: "boolean",
+        id: "w5q1_3",
+        prompt: "A company can be profitable and still run out of cash because of working capital.",
+        correct: true,
+      },
+      {
+        type: "order",
+        id: "w5q1_4",
+        prompt: "Order the 'cash gets trapped' story.",
+        items: [
+          { id: "a", label: "You make sales" },
+          { id: "b", label: "Customers pay later (A/R rises)" },
+          { id: "c", label: "Cash today is lower than profit suggests" },
+        ],
+        correctOrder: ["a", "b", "c"],
+      },
+    ],
+    bossQuestion: {
+      type: "scenario",
+      id: "w5b1",
+      title: "Boss Case",
+      context:
+        "Two companies have the same profit.\nCompany A collects cash fast.\nCompany B collects cash slow (A/R rising).",
+      prompt: "Which company is more likely to have better cash flow?",
+      choices: ["Company A", "Company B", "Both same", "Impossible to tell"],
+      correctIndex: 0,
+    },
+    mastery: {
+      badgeName: "WC Basics",
+      celebrationCopy: "You understand why cash can lag profit.\nNext: A/R (the 'pay me later' line).",
+      salaryReward: 2000,
+    },
+  },
+
+  // -------------------------
+  // WORLD 5 — NODE 2 — Accounts Receivable
+  // -------------------------
+  w5_lesson_2_ar: {
+    id: "w5_lesson_2_ar",
+    headline: "A/R = sales you counted… but cash you haven't collected yet.",
+    story:
+      "A/R is like customer IOUs.\nIf A/R increases, cash is usually worse than profit.\nIf A/R decreases, you collected cash → cash flow improves.",
+    ruleCard: "A/R (WC asset): ↑ uses cash, ↓ gives cash.",
+    questions: [
+      {
+        type: "cash_meter",
+        id: "w5q2_1",
+        title: "Cash Pocket Meter",
+        startingCash: 100,
+        prompt: "Apply the A/R move and compute ending cash.",
+        steps: [
+          { id: "s1", label: "Δ Accounts Receivable", direction: "wc_asset", polarity: "increase", amount: 15 },
+        ],
+        correctEndingCash: 85,
+      },
+      {
+        type: "cash_meter",
+        id: "w5q2_2",
+        title: "Cash Pocket Meter",
+        startingCash: 100,
+        prompt: "A/R goes down (collections improved). Compute ending cash.",
+        steps: [
+          { id: "s1", label: "Δ Accounts Receivable", direction: "wc_asset", polarity: "decrease", amount: 20 },
+        ],
+        correctEndingCash: 120,
+      },
+      {
+        type: "scenario",
+        id: "w5q2_3",
+        title: "Mini Case",
+        context:
+          "Revenue is up 10%.\nA/R is up 40%.",
+        prompt: "Cleanest concern?",
+        choices: ["Customers paying slower", "COGS fell", "Tax rate changed", "Capex increased"],
+        correctIndex: 0,
+      },
+      {
+        type: "boolean",
+        id: "w5q2_4",
+        prompt: "If A/R decreases, cash flow is helped (all else equal).",
+        correct: true,
+      },
+    ],
+    bossQuestion: {
+      type: "cash_meter",
+      id: "w5b2",
+      title: "Boss: A/R Chaos",
+      startingCash: 200,
+      prompt: "Apply both A/R moves and compute ending cash.",
+      steps: [
+        { id: "s1", label: "Δ Accounts Receivable", direction: "wc_asset", polarity: "increase", amount: 35 },
+        { id: "s2", label: "Δ Accounts Receivable", direction: "wc_asset", polarity: "decrease", amount: 10 },
+      ],
+      correctEndingCash: 175,
+    },
+    mastery: {
+      badgeName: "A/R Collector",
+      celebrationCopy: "You now feel A/R as cash moving.\nNext: inventory (cash turns into stuff).",
+      salaryReward: 2100,
+    },
+  },
+
+  // -------------------------
+  // WORLD 5 — NODE 3 — Inventory
+  // -------------------------
+  w5_lesson_3_inventory: {
+    id: "w5_lesson_3_inventory",
+    headline: "Inventory = cash turned into stuff on a shelf.",
+    story:
+      "Inventory rising means you bought more than you sold.\nThat traps cash.\nInventory falling means you sold more than you bought.\nThat frees cash.",
+    ruleCard: "Inventory (WC asset): ↑ uses cash, ↓ gives cash.",
+    questions: [
+      {
+        type: "cash_meter",
+        id: "w5q3_1",
+        title: "Cash Pocket Meter",
+        startingCash: 120,
+        prompt: "Inventory increases. Compute ending cash.",
+        steps: [
+          { id: "s1", label: "Δ Inventory", direction: "wc_asset", polarity: "increase", amount: 20 },
+        ],
+        correctEndingCash: 100,
+      },
+      {
+        type: "cash_meter",
+        id: "w5q3_2",
+        title: "Cash Pocket Meter",
+        startingCash: 120,
+        prompt: "Inventory decreases (you sold through stock). Compute ending cash.",
+        steps: [
+          { id: "s1", label: "Δ Inventory", direction: "wc_asset", polarity: "decrease", amount: 30 },
+        ],
+        correctEndingCash: 150,
+      },
+      {
+        type: "scenario",
+        id: "w5q3_3",
+        title: "Mini Case",
+        context:
+          "Sales are flat.\nInventory is rising fast.",
+        prompt: "Likely story?",
+        choices: ["Overstock / can't sell", "Collecting cash faster", "Paid down debt", "Margin expansion"],
+        correctIndex: 0,
+      },
+      {
+        type: "boolean",
+        id: "w5q3_4",
+        prompt: "Inventory rising can be a red flag if sales aren't rising too.",
+        correct: true,
+      },
+    ],
+    bossQuestion: {
+      type: "cash_meter",
+      id: "w5b3",
+      title: "Boss: Shelf Trap Mix",
+      startingCash: 300,
+      prompt: "Inventory goes up then down. Compute ending cash.",
+      steps: [
+        { id: "s1", label: "Δ Inventory", direction: "wc_asset", polarity: "increase", amount: 60 },
+        { id: "s2", label: "Δ Inventory", direction: "wc_asset", polarity: "decrease", amount: 10 },
+      ],
+      correctEndingCash: 250,
+    },
+    mastery: {
+      badgeName: "Inventory Hunter",
+      celebrationCopy: "You understand the shelf trap.\nNext: A/P (pay later).",
+      salaryReward: 2100,
+    },
+  },
+
+  // -------------------------
+  // WORLD 5 — NODE 4 — Accounts Payable
+  // -------------------------
+  w5_lesson_4_ap: {
+    id: "w5_lesson_4_ap",
+    headline: "A/P = bills you owe suppliers. It can boost cash (short-term).",
+    story:
+      "If A/P increases, you delayed paying suppliers.\nThat keeps cash in your pocket (for now).\nIf A/P decreases, you paid suppliers.\nThat uses cash.",
+    ruleCard: "A/P (WC liability): ↑ gives cash, ↓ uses cash.",
+    questions: [
+      {
+        type: "cash_meter",
+        id: "w5q4_1",
+        title: "Cash Pocket Meter",
+        startingCash: 100,
+        prompt: "A/P increases. Compute ending cash.",
+        steps: [
+          { id: "s1", label: "Δ Accounts Payable", direction: "wc_liability", polarity: "increase", amount: 25 },
+        ],
+        correctEndingCash: 125,
+      },
+      {
+        type: "cash_meter",
+        id: "w5q4_2",
+        title: "Cash Pocket Meter",
+        startingCash: 100,
+        prompt: "A/P decreases (you paid suppliers). Compute ending cash.",
+        steps: [
+          { id: "s1", label: "Δ Accounts Payable", direction: "wc_liability", polarity: "decrease", amount: 30 },
+        ],
+        correctEndingCash: 70,
+      },
+      {
+        type: "boolean",
+        id: "w5q4_3",
+        prompt: "A/P rising can temporarily help cash flow.",
+        correct: true,
+      },
+    ],
+    bossQuestion: {
+      type: "cash_meter",
+      id: "w5b4",
+      title: "Boss: Supplier Float",
+      startingCash: 180,
+      prompt: "A/P up then down. Compute ending cash.",
+      steps: [
+        { id: "s1", label: "Δ Accounts Payable", direction: "wc_liability", polarity: "increase", amount: 40 },
+        { id: "s2", label: "Δ Accounts Payable", direction: "wc_liability", polarity: "decrease", amount: 10 },
+      ],
+      correctEndingCash: 210,
+    },
+    mastery: {
+      badgeName: "A/P Ninja",
+      celebrationCopy: "You get the supplier-float effect.\nNext: deferred revenue (cash first).",
+      salaryReward: 2200,
+    },
+  },
+
+  // -------------------------
+  // WORLD 5 — NODE 5 — Deferred Revenue
+  // -------------------------
+  w5_lesson_5_defrev: {
+    id: "w5_lesson_5_defrev",
+    headline: "Deferred revenue = cash now, revenue later.",
+    story:
+      "Gift card logic:\nThey pay you today.\nYou record a liability until you deliver.\nWhen deferred revenue rises, cash usually rises too.",
+    ruleCard: "Deferred revenue (WC liability): ↑ gives cash, ↓ uses cash.",
+    questions: [
+      {
+        type: "cash_meter",
+        id: "w5q5_1",
+        title: "Cash Pocket Meter",
+        startingCash: 90,
+        prompt: "Deferred revenue increases. Compute ending cash.",
+        steps: [
+          { id: "s1", label: "Δ Deferred Revenue", direction: "wc_liability", polarity: "increase", amount: 30 },
+        ],
+        correctEndingCash: 120,
+      },
+      {
+        type: "cash_meter",
+        id: "w5q5_2",
+        title: "Cash Pocket Meter",
+        startingCash: 90,
+        prompt: "Deferred revenue decreases (you delivered service). Compute ending cash.",
+        steps: [
+          { id: "s1", label: "Δ Deferred Revenue", direction: "wc_liability", polarity: "decrease", amount: 20 },
+        ],
+        correctEndingCash: 70,
+      },
+      {
+        type: "scenario",
+        id: "w5q5_3",
+        title: "Mini Case",
+        context:
+          "A company sells annual subscriptions.\nCustomers pay upfront.",
+        prompt: "Which line likely increases when customers pay?",
+        choices: ["Deferred revenue", "Inventory", "PP&E", "Retained earnings immediately"],
+        correctIndex: 0,
+      },
+      {
+        type: "boolean",
+        id: "w5q5_4",
+        prompt: "Deferred revenue increasing usually means cash came in before revenue is recognized.",
+        correct: true,
+      },
+    ],
+    bossQuestion: {
+      type: "cash_meter",
+      id: "w5b5",
+      title: "Boss: Subscription Flow",
+      startingCash: 50,
+      prompt: "Upfront cash then delivery. Compute ending cash.",
+      steps: [
+        { id: "s1", label: "Δ Deferred Revenue", direction: "wc_liability", polarity: "increase", amount: 40 },
+        { id: "s2", label: "Δ Deferred Revenue", direction: "wc_liability", polarity: "decrease", amount: 10 },
+      ],
+      correctEndingCash: 80,
+    },
+    mastery: {
+      badgeName: "Deferred Rev Wizard",
+      celebrationCopy: "You understand cash-before-revenue.\nNext: roll-forwards.",
+      salaryReward: 2200,
+    },
+  },
+
+  // -------------------------
+  // WORLD 5 — NODE 6 — WC Roll-Forwards
+  // -------------------------
+  w5_lesson_6_rollforwards: {
+    id: "w5_lesson_6_rollforwards",
+    headline: "Roll-forward = Beginning + increases − decreases = Ending.",
+    story:
+      "This is the modeling pattern you'll use constantly.\nIt works for A/R, inventory, A/P, deferred revenue—everything.\n\nIt's just tracking change over time.",
+    ruleCard: "EOP = BOP + Increase − Decrease.",
+    questions: [
+      {
+        type: "numeric",
+        id: "w5q6_1",
+        prompt: "A/R BOP 10. Increase 8. Decrease 3. A/R EOP = ?",
+        answer: 15,
+        tolerance: 0,
+      },
+      {
+        type: "numeric",
+        id: "w5q6_2",
+        prompt: "A/P BOP 20. Increase 6. Decrease 11. A/P EOP = ?",
+        answer: 15,
+        tolerance: 0,
+      },
+      {
+        type: "scenario",
+        id: "w5q6_3",
+        title: "Mini Case",
+        context:
+          "A/R EOP is way higher than BOP.\nManagement says collections improved.",
+        prompt: "Best analyst reaction?",
+        choices: ["Something doesn't add up; investigate drivers", "Ignore it", "It must be taxes", "It means margins expanded"],
+        correctIndex: 0,
+      },
+      {
+        type: "boolean",
+        id: "w5q6_4",
+        prompt: "Roll-forwards are a structured way to explain why an account changed.",
+        correct: true,
+      },
+    ],
+    bossQuestion: {
+      type: "numeric",
+      id: "w5b6",
+      prompt: "Inventory BOP 30. Increase 25. Decrease 10. Inventory EOP = ?",
+      answer: 45,
+      tolerance: 0,
+    },
+    mastery: {
+      badgeName: "Roll-Forward Machine",
+      celebrationCopy: "You can track working capital accounts like an analyst.\nNext: net WC impact (combo cash meter).",
+      salaryReward: 2300,
+    },
+  },
+
+  // -------------------------
+  // WORLD 5 — NODE 7 — Net WC Impact
+  // -------------------------
+  w5_lesson_7_net_wc: {
+    id: "w5_lesson_7_net_wc",
+    headline: "Net WC impact = combined cash punch of all WC changes.",
+    story:
+      "Now you combine everything:\n- WC assets ↑ use cash, ↓ give cash\n- WC liabilities ↑ give cash, ↓ use cash\n\nNet cash impact is the sum of all moves.",
+    ruleCard: "Add/subtract each WC move based on the rule.",
+    questions: [
+      {
+        type: "cash_meter",
+        id: "w5q7_1",
+        title: "Combo Cash Meter",
+        startingCash: 100,
+        prompt: "Apply all WC moves and compute ending cash.",
+        steps: [
+          { id: "s1", label: "Δ Accounts Receivable", direction: "wc_asset", polarity: "increase", amount: 10 },
+          { id: "s2", label: "Δ Inventory", direction: "wc_asset", polarity: "increase", amount: 5 },
+          { id: "s3", label: "Δ Accounts Payable", direction: "wc_liability", polarity: "increase", amount: 12 },
+        ],
+        correctEndingCash: 97,
+      },
+      {
+        type: "cash_meter",
+        id: "w5q7_2",
+        title: "Combo Cash Meter",
+        startingCash: 200,
+        prompt: "Apply the moves (watch the polarity).",
+        steps: [
+          { id: "s1", label: "Δ Deferred Revenue", direction: "wc_liability", polarity: "increase", amount: 20 },
+          { id: "s2", label: "Δ Accounts Receivable", direction: "wc_asset", polarity: "increase", amount: 30 },
+          { id: "s3", label: "Δ Inventory", direction: "wc_asset", polarity: "decrease", amount: 10 },
+        ],
+        correctEndingCash: 200,
+      },
+      {
+        type: "boolean",
+        id: "w5q7_3",
+        prompt: "Net WC can make cash flow much higher or lower than net income.",
+        correct: true,
+      },
+    ],
+    bossQuestion: {
+      type: "cash_meter",
+      id: "w5b7",
+      title: "Boss: Net WC Stress Test",
+      startingCash: 150,
+      prompt: "One period of WC chaos. Where does cash land?",
+      steps: [
+        { id: "s1", label: "Δ Accounts Receivable", direction: "wc_asset", polarity: "increase", amount: 25 },
+        { id: "s2", label: "Δ Inventory", direction: "wc_asset", polarity: "increase", amount: 10 },
+        { id: "s3", label: "Δ Accounts Payable", direction: "wc_liability", polarity: "decrease", amount: 5 },
+        { id: "s4", label: "Δ Deferred Revenue", direction: "wc_liability", polarity: "increase", amount: 15 },
+      ],
+      correctEndingCash: 125,
+    },
+    mastery: {
+      badgeName: "Net WC Calculator",
+      celebrationCopy: "You can now compute WC's cash impact like a real modeler.\nNext: liquidity analysis.",
+      salaryReward: 2400,
+    },
+  },
+
+  // -------------------------
+  // WORLD 5 — NODE 8 — Liquidity Analysis
+  // -------------------------
+  w5_lesson_8_liquidity: {
+    id: "w5_lesson_8_liquidity",
+    headline: "Liquidity = can you pay bills without panicking?",
+    story:
+      "Liquidity is short-term survival.\nWorking capital can quietly drain liquidity even when profits look fine.\n\nYour goal: spot cash stress early.",
+    ruleCard: "Liquidity risk rises when cash shrinks and WC assets rise.",
+    questions: [
+      {
+        type: "scenario",
+        id: "w5q8_1",
+        title: "Mini Case",
+        context:
+          "Company is profitable.\nBut A/R and inventory are rising fast.\nCash is shrinking.",
+        prompt: "Best explanation?",
+        choices: [
+          "Cash is trapped in working capital",
+          "Margins expanded",
+          "Taxes disappeared",
+          "Capex must be zero",
+        ],
+        correctIndex: 0,
+      },
+      {
+        type: "cash_meter",
+        id: "w5q8_2",
+        title: "Liquidity Meter",
+        startingCash: 80,
+        prompt: "Working capital changes hit cash. Where does cash end?",
+        steps: [
+          { id: "s1", label: "Δ Accounts Receivable", direction: "wc_asset", polarity: "increase", amount: 25 },
+          { id: "s2", label: "Δ Inventory", direction: "wc_asset", polarity: "increase", amount: 15 },
+          { id: "s3", label: "Δ Accounts Payable", direction: "wc_liability", polarity: "decrease", amount: 10 },
+        ],
+        correctEndingCash: 30,
+      },
+      {
+        type: "boolean",
+        id: "w5q8_3",
+        prompt: "Liquidity problems can show up on the balance sheet before the income statement.",
+        correct: true,
+      },
+    ],
+    bossQuestion: {
+      type: "scenario",
+      id: "w5b8",
+      title: "Boss Case",
+      context:
+        "Cash is falling.\nA/R rising.\nInventory rising.\nA/P falling.",
+      prompt: "Best summary?",
+      choices: [
+        "Liquidity is worsening because cash is trapped and bills are being paid faster",
+        "Everything is fine because revenue exists",
+        "Margins must be expanding",
+        "This only affects taxes",
+      ],
+      correctIndex: 0,
+    },
+    mastery: {
+      badgeName: "Liquidity Watch",
+      celebrationCopy: "You can spot cash stress early.\nFinal boss: profitable but dying.",
+      salaryReward: 2500,
+    },
+  },
+
+  // -------------------------
+  // WORLD 5 — NODE 9 (BOSS) — Profitable but Dying Case
+  // -------------------------
+  w5_lesson_9_profitable_dying: {
+    id: "w5_lesson_9_profitable_dying",
+    headline: "Final Boss: Profitable… but dying from cash drain.",
+    story:
+      "Classic trap:\nIncome statement looks good.\nBut cash is disappearing.\nWorking capital is exploding.\n\nYour job: diagnose it in one sentence.",
+    ruleCard: "Profit ≠ cash. WC can kill a profitable company.",
+    questions: [
+      {
+        type: "scenario",
+        id: "w5q9_1",
+        title: "Mini Case",
+        context:
+          "Net income is up.\nBut CFO is down big.\nA/R and inventory increased a lot.",
+        prompt: "Most likely explanation?",
+        choices: [
+          "Cash got trapped in working capital",
+          "Taxes went negative",
+          "Depreciation disappeared",
+          "Revenue became fake automatically",
+        ],
+        correctIndex: 0,
+      },
+      {
+        type: "cash_meter",
+        id: "w5q9_2",
+        title: "The Dying Company Meter",
+        startingCash: 120,
+        prompt: "Working capital explodes. Where does cash end?",
+        steps: [
+          { id: "s1", label: "Δ Accounts Receivable", direction: "wc_asset", polarity: "increase", amount: 50 },
+          { id: "s2", label: "Δ Inventory", direction: "wc_asset", polarity: "increase", amount: 40 },
+          { id: "s3", label: "Δ Accounts Payable", direction: "wc_liability", polarity: "increase", amount: 10 },
+        ],
+        correctEndingCash: 40,
+      },
+    ],
+    bossQuestion: {
+      type: "scenario",
+      id: "w5b9",
+      title: "FINAL BOSS",
+      context:
+        "Profit is higher.\nCash fell 120 → 40.\nA/R jumped.\nInventory jumped.\nA/P barely moved.",
+      prompt: "Best one-sentence analyst answer?",
+      choices: [
+        "Profit is real, but cash is trapped in working capital—liquidity risk is rising.",
+        "Everything is great because profit is up.",
+        "This is only a tax timing issue.",
+        "Margins must be expanding.",
+      ],
+      correctIndex: 0,
+    },
+    mastery: {
+      badgeName: "WC Boss Slayer",
+      celebrationCopy: "You just learned why profitable companies can still die: cash trapped in working capital.\nNext world: Depreciation & CapEx.",
+      salaryReward: 2800,
     },
   },
 };

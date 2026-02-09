@@ -28,6 +28,22 @@ const config: Config = {
         success: "hsl(var(--color-success) / <alpha-value>)",
         warning: "hsl(var(--color-warning) / <alpha-value>)",
         error: "hsl(var(--color-error) / <alpha-value>)",
+        // shadcn/Origin UI
+        background: "hsl(var(--background) / <alpha-value>)",
+        foreground: "hsl(var(--foreground) / <alpha-value>)",
+        primary: "hsl(var(--primary) / <alpha-value>)",
+        "primary-foreground": "hsl(var(--primary-foreground) / <alpha-value>)",
+        "muted-foreground": "hsl(var(--muted-foreground) / <alpha-value>)",
+        accent: "hsl(var(--accent) / <alpha-value>)",
+        "accent-foreground": "hsl(var(--accent-foreground) / <alpha-value>)",
+        destructive: "hsl(var(--destructive) / <alpha-value>)",
+        "destructive-foreground": "hsl(var(--destructive-foreground) / <alpha-value>)",
+        secondary: "hsl(var(--secondary) / <alpha-value>)",
+        "secondary-foreground": "hsl(var(--secondary-foreground) / <alpha-value>)",
+        card: "hsl(var(--card) / <alpha-value>)",
+        border: "hsl(var(--border) / <alpha-value>)",
+        input: "hsl(var(--input) / <alpha-value>)",
+        ring: "hsl(var(--ring) / <alpha-value>)",
       },
       fontFamily: {
         sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
@@ -50,6 +66,8 @@ const config: Config = {
         "fade-in": "fade-in 0.3s ease-out",
         "slide-up": "slide-up 0.4s ease-out",
         "scale-pop": "scale-pop 0.5s ease-out",
+        "pop-in": "pop-in 0.3s ease-out forwards",
+        "scale-pulse": "scale-pulse 0.15s ease-out forwards",
         "level-glow": "level-glow 1s ease-out forwards",
         float: "float 3s ease-in-out infinite",
         shake: "shake 0.4s ease-in-out",
@@ -77,6 +95,14 @@ const config: Config = {
         "scale-pop": {
           "0%, 100%": { transform: "scale(1)" },
           "50%": { transform: "scale(1.12)" },
+        },
+        "pop-in": {
+          "0%": { transform: "scale(0.85)" },
+          "100%": { transform: "scale(1)" },
+        },
+        "scale-pulse": {
+          "0%, 100%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.05)" },
         },
         "level-glow": {
           "0%": { opacity: "0.4", transform: "scale(1)" },

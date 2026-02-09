@@ -14,6 +14,8 @@ import type {
   NumericQuestion,
   DragMatchQuestion,
   OrderQuestion,
+  ScenarioQuestion,
+  CashMeterQuestion,
 } from "@/lib/worlds";
 import {
   markNodeComplete,
@@ -38,14 +40,18 @@ function isRunnableQuestion(
   | FillQuestion
   | NumericQuestion
   | DragMatchQuestion
-  | OrderQuestion {
+  | OrderQuestion
+  | ScenarioQuestion
+  | CashMeterQuestion {
   return (
     q.type === "mc" ||
     q.type === "boolean" ||
     q.type === "fill" ||
     q.type === "numeric" ||
     q.type === "drag_match" ||
-    q.type === "order"
+    q.type === "order" ||
+    q.type === "scenario" ||
+    q.type === "cash_meter"
   );
 }
 
