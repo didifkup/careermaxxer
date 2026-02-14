@@ -90,7 +90,7 @@ export function ProfileSettingsForm({
     setError(null);
     if (!canSave || saving) return;
 
-    const payload: { username?: string; school_id?: string | null } = {};
+    const payload: { username?: string | null; school_id?: string | null } = {};
     if (normalizedUsername !== (initialProfile.username ?? "")) {
       payload.username = normalizedUsername || null;
     }
