@@ -58,6 +58,7 @@ export function Nav() {
     { label: "Reading", href: "/reading" },
     { label: "Quiz", href: "/quiz" },
     { label: "Worlds", href: "/worlds" },
+    { label: "Arena", href: "/arena" },
   ];
 
   return (
@@ -72,7 +73,10 @@ export function Nav() {
 
         <nav className="flex items-center gap-1 rounded-full bg-black/5 p-1" aria-label="Main">
           {tabs.map(({ label, href }) => {
-            const isActive = pathname === href || (href === "/" && pathname === "/");
+            const isActive =
+              href === "/arena"
+                ? pathname === "/arena" || pathname.startsWith("/arena/")
+                : pathname === href || (href === "/" && pathname === "/");
             return (
               <Link
                 key={href}
