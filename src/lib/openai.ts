@@ -28,7 +28,7 @@ export function getOpenAIClient(): OpenAI {
 /** Lazy client instance (same as getOpenAIClient()). Use server-side only. */
 export const openai = new Proxy({} as OpenAI, {
   get(_, prop) {
-    return (getOpenAIClient() as Record<string, unknown>)[prop as string];
+    return (getOpenAIClient() as unknown as Record<string, unknown>)[prop as string];
   },
 });
 
