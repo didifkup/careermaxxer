@@ -41,7 +41,7 @@ function LoginForm() {
       }
 
       setStatus("sent");
-      setMessage("Check your email for the sign-in link.");
+      setMessage("Welcome to CareerMaxxer. We sent you a sign-in link—use it to sign in.");
     } catch (err) {
       setStatus("error");
       setMessage(err instanceof Error ? err.message : "Something went wrong.");
@@ -78,7 +78,7 @@ function LoginForm() {
           className="w-full"
           disabled={status === "loading" || status === "sent" || !email.trim()}
         >
-          {status === "loading" ? "Sending…" : status === "sent" ? "Check your email" : "Send magic link"}
+          {status === "loading" ? "Sending…" : status === "sent" ? "Link sent" : "Send magic link"}
         </Button>
       </form>
 
