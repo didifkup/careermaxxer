@@ -141,7 +141,7 @@ export function AIPanel({
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={() =>
-                    setTheme((prev) => (prev ? `${prev}, ${chip}` : chip))
+                    setTheme(theme ? `${theme}, ${chip}` : chip)
                   }
                   className={cn(
                     chipBaseClass,
@@ -203,9 +203,7 @@ export function AIPanel({
                       whileHover={{ scale: 1.04 }}
                       whileTap={{ scale: 0.97 }}
                       onClick={() =>
-                        setTopic((prev) =>
-                          prev ? `${prev} — ${chip}` : chip
-                        )
+                        setTopic(topic ? `${topic} — ${chip}` : chip)
                       }
                       className={cn(
                         chipBaseClass,
