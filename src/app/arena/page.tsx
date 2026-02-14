@@ -9,6 +9,8 @@ import {
 import { ArenaDashboardClient } from "./ArenaDashboardClient";
 import { ArenaPrestigePanel } from "./ArenaPrestigePanel";
 
+export const dynamic = "force-dynamic";
+
 export default async function ArenaPage() {
   const supabase = await createClient();
   const {
