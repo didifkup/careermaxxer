@@ -3,6 +3,8 @@ import { createClient, upsertProfileForUser } from "@/lib/supabase/server";
 import { AccountClient } from "./AccountClient";
 import { ProfileSettingsForm } from "@/components/account/ProfileSettingsForm";
 
+export const dynamic = "force-dynamic";
+
 export default async function AccountPage() {
   const supabase = await createClient();
   const {
