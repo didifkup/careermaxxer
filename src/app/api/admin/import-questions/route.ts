@@ -9,7 +9,7 @@ const BATCH_SIZE = 250;
 
 export async function POST(request: NextRequest) {
   const admin = await requireAdmin();
-  if (admin.error) return admin.error;
+  if ("error" in admin) return admin.error;
 
   const contentType = request.headers.get("content-type") ?? "";
   if (!contentType.includes("multipart/form-data")) {
