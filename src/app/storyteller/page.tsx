@@ -2,17 +2,17 @@ import { StorytellerClient } from "@/components/storyteller/StorytellerClient";
 
 export const dynamic = "force-dynamic";
 
+const storytellerPageBg = {
+  backgroundImage: `radial-gradient(ellipse at top, rgba(37,99,235,0.14), transparent 60%), linear-gradient(rgba(37,99,235,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.035) 1px, transparent 1px)`,
+  backgroundSize: "100% 100%, 44px 44px, 44px 44px",
+};
+
 export default function StorytellerPage() {
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      <header>
-        <h1 className="font-display text-2xl font-bold text-brand-primary">
-          Storyteller
-        </h1>
-        <p className="mt-1 text-text-secondary">
-          Tell me what you&apos;re into. Then tell me what finance thing is confusing you.
-        </p>
-      </header>
+    <div
+      className="min-h-screen"
+      style={storytellerPageBg}
+    >
       <StorytellerClient />
     </div>
   );

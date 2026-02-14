@@ -329,6 +329,52 @@
   50% { transform: translateY(-5px); }
 }
 
+/* Storyteller: moving perimeter glow border (Theme + Topic textareas) */
+@keyframes perimeter-dash {
+  to { stroke-dashoffset: -680; }
+}
+.pg-anim {
+  animation: perimeter-dash 2.6s linear infinite;
+}
+.perimeter-glow-wrap.group:focus-within .pg-anim {
+  animation-duration: 2.2s;
+}
+.pg-trail {
+  animation-delay: -0.4s;
+}
+.pg-main,
+.pg-glow,
+.pg-trail {
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+.perimeter-glow-wrap.group:hover .pg-main {
+  opacity: 0.85;
+}
+.perimeter-glow-wrap.group:hover .pg-glow {
+  opacity: 0.45;
+}
+.perimeter-glow-wrap.group:hover .pg-trail {
+  opacity: 0.3;
+}
+.perimeter-glow-wrap.group:focus-within .pg-main {
+  opacity: 1;
+}
+.perimeter-glow-wrap.group:focus-within .pg-glow {
+  opacity: 0.6;
+}
+.perimeter-glow-wrap.group:focus-within .pg-trail {
+  opacity: 0.4;
+}
+.perimeter-glow-wrap.group:focus-within {
+  box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .pg-anim {
+    animation: none !important;
+  }
+}
+
 /* Marquee + fade-in-up keyframes (for cta-with-text-marquee) */
 @keyframes marquee {
   from {
