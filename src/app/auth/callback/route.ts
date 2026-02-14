@@ -1,6 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
+/**
+ * Handles auth callback from Supabase (e.g. password reset link).
+ * Normal login/signup use email+password and do not redirect here.
+ */
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");

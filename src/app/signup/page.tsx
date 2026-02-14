@@ -1,19 +1,13 @@
 "use client";
 
-import { Suspense, useState, useMemo } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 
-function LoginForm() {
+function SignupForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const next = useMemo(
-    () => (searchParams.get("next") ?? "/account").replace(/^[^/]/, "/$&"),
-    [searchParams]
-  );
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
@@ -28,7 +22,7 @@ function LoginForm() {
 
     try {
       const supabase = createClient();
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signUp({
         email: email.trim(),
         password,
       });
@@ -39,7 +33,19 @@ function LoginForm() {
         return;
       }
 
-      router.push(next);
+      if (!data.session) {
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email: email.trim(),
+          password,
+        });
+        if (signInError) {
+          setStatus("error");
+          setMessage(signInError.message);
+          return;
+        }
+      }
+
+      router.push("/arena");
       router.refresh();
     } catch (err) {
       setStatus("error");
@@ -50,19 +56,19 @@ function LoginForm() {
   return (
     <div className="mx-auto max-w-sm space-y-6 pt-8">
       <div className="text-center">
-        <h1 className="font-display text-2xl font-bold text-brand-primary">Sign in</h1>
+        <h1 className="font-display text-2xl font-bold text-brand-primary">Sign up</h1>
         <p className="mt-1 text-sm text-text-secondary">
-          Enter your email and password.
+          Create an account with your email and password.
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="email" className="sr-only">
+          <label htmlFor="signup-email" className="sr-only">
             Email
           </label>
           <input
-            id="email"
+            id="signup-email"
             type="email"
             autoComplete="email"
             placeholder="you@example.com"
@@ -73,26 +79,28 @@ function LoginForm() {
           />
         </div>
         <div>
-          <label htmlFor="password" className="sr-only">
+          <label htmlFor="signup-password" className="sr-only">
             Password
           </label>
           <input
-            id="password"
+            id="signup-password"
             type="password"
-            autoComplete="current-password"
+            autoComplete="new-password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={status === "loading"}
+            minLength={6}
             className="w-full rounded-lg border border-input bg-background px-4 py-2.5 text-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring"
           />
+          <p className="mt-1 text-xs text-text-secondary">At least 6 characters</p>
         </div>
         <Button
           type="submit"
           className="w-full"
           disabled={status === "loading" || !email.trim() || !password}
         >
-          {status === "loading" ? "Signing in…" : "Sign in"}
+          {status === "loading" ? "Creating account…" : "Create account"}
         </Button>
       </form>
 
@@ -106,9 +114,9 @@ function LoginForm() {
       )}
 
       <p className="text-center text-sm text-text-secondary">
-        Don&apos;t have an account?{" "}
-        <Link href="/signup" className="text-brand-primary hover:underline">
-          Sign up
+        Already have an account?{" "}
+        <Link href="/login" className="text-brand-primary hover:underline">
+          Sign in
         </Link>
         {" · "}
         <Link href="/" className="text-brand-primary hover:underline">
@@ -119,21 +127,21 @@ function LoginForm() {
   );
 }
 
-export default function LoginPage() {
+export default function SignupPage() {
   return (
-    <Suspense fallback={<LoginFormFallback />}>
-      <LoginForm />
+    <Suspense fallback={<SignupFormFallback />}>
+      <SignupForm />
     </Suspense>
   );
 }
 
-function LoginFormFallback() {
+function SignupFormFallback() {
   return (
     <div className="mx-auto max-w-sm space-y-6 pt-8">
       <div className="text-center">
-        <h1 className="font-display text-2xl font-bold text-brand-primary">Sign in</h1>
+        <h1 className="font-display text-2xl font-bold text-brand-primary">Sign up</h1>
         <p className="mt-1 text-sm text-text-secondary">
-          Enter your email and password.
+          Create an account with your email and password.
         </p>
       </div>
       <div className="h-[120px] animate-pulse rounded-lg bg-black/5" aria-hidden />
