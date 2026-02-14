@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
   }
 
   const updates: {
-    username?: string;
+    username?: string | null;
     school_id?: string | null;
     avatar_url?: string | null;
   } = {};
