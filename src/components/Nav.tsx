@@ -58,6 +58,7 @@ export function Nav() {
     { label: "Reading", href: "/reading" },
     { label: "Quiz", href: "/quiz" },
     { label: "Worlds", href: "/worlds" },
+    { label: "Storyteller", href: "/storyteller" },
     { label: "Arena", href: "/arena" },
   ];
 
@@ -76,7 +77,9 @@ export function Nav() {
             const isActive =
               href === "/arena"
                 ? pathname === "/arena" || pathname.startsWith("/arena/")
-                : pathname === href || (href === "/" && pathname === "/");
+                : href === "/storyteller"
+                  ? pathname === "/storyteller" || pathname.startsWith("/storyteller/")
+                  : pathname === href || (href === "/" && pathname === "/");
             return (
               <Link
                 key={href}

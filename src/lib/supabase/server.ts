@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
+import { SUPABASE_CONFIG_ERROR_CODE } from "./errors";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -16,13 +17,19 @@ function getServerEnvError(requireServiceRole = false): string {
   return `Missing Supabase env: ${missing.join(", ")}. Add them to .env.local. See https://supabase.com/dashboard/project/_/settings/api`;
 }
 
+function createConfigError(message: string): Error & { code: string } {
+  const err = new Error(message) as Error & { code: string };
+  err.code = SUPABASE_CONFIG_ERROR_CODE;
+  return err;
+}
+
 /**
  * Request-scoped Supabase client for Server Components, Server Actions, and Route Handlers.
  * Uses cookie-based session. Do not use for admin operations (use createServiceRoleClient instead).
  */
 export async function createClient() {
-  const err = getServerEnvError(false);
-  if (err) throw new Error(err);
+  const errMsg = getServerEnvError(false);
+  if (errMsg) throw createConfigError(errMsg);
 
   const cookieStore = await cookies();
 
@@ -49,8 +56,8 @@ export async function createClient() {
  * Only use in server code (route handlers, server actions). Never expose to the client.
  */
 export function createServiceRoleClient() {
-  const err = getServerEnvError(true);
-  if (err) throw new Error(err);
+  const errMsg = getServerEnvError(true);
+  if (errMsg) throw createConfigError(errMsg);
 
   return createSupabaseClient(supabaseUrl!, supabaseServiceRoleKey!, {
     auth: { persistSession: false, autoRefreshToken: false },
