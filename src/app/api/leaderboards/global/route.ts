@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getAuthOr401 } from "@/app/api/arena/auth";
 import { createServiceRoleClient } from "@/lib/supabase/server";
 
+/** Normalized shape after taking first profile/school from Supabase relation arrays. */
 type RatingRow = {
   user_id: string;
   market_value: number;
@@ -13,6 +14,38 @@ type RatingRow = {
     schools: { name: string } | null;
   } | null;
 };
+
+/** Raw shape from Supabase (profiles/schools can be arrays from joins). */
+type RawRatingRow = {
+  user_id: string;
+  market_value: number;
+  peak_market_value: number;
+  title: string;
+  profiles: Array<{
+    username: string | null;
+    school_id: string | null;
+    schools: Array<{ name: string }> | null;
+  }> | null;
+};
+
+function normalizeRatingRow(r: RawRatingRow): RatingRow {
+  const profile = r.profiles?.[0] ?? null;
+  const schools = profile?.schools;
+  const school = Array.isArray(schools) ? schools[0] ?? null : schools;
+  return {
+    user_id: r.user_id,
+    market_value: r.market_value,
+    peak_market_value: r.peak_market_value,
+    title: r.title,
+    profiles: profile
+      ? {
+          username: profile.username,
+          school_id: profile.school_id,
+          schools: school ? { name: school.name } : null,
+        }
+      : null,
+  };
+}
 
 export async function GET() {
   const auth = await getAuthOr401();
@@ -33,7 +66,9 @@ export async function GET() {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  const withUsername = (rows ?? []) as RatingRow[];
+  const withUsername = (rows ?? []).map((r) =>
+    normalizeRatingRow(r as RawRatingRow)
+  );
   const filtered = withUsername.filter(
     (r) => r.profiles?.username != null && r.profiles.username.trim() !== ""
   );
