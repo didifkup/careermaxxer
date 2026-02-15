@@ -1,11 +1,18 @@
 "use client";
 
 import type { Node } from "@/lib/curriculum";
+import type { NodeDifficulty } from "@/lib/curriculum";
 import type { Progress } from "@/lib/progress";
 import { isNodeUnlocked } from "@/lib/progress";
 import { formatSalary } from "@/lib/format";
 
 type NodeState = "locked" | "unlocked" | "completed";
+
+const DIFFICULTY_LABEL: Record<NodeDifficulty, string> = {
+  Easy: "Foundation",
+  Medium: "Intermediate",
+  Celebration: "Advanced",
+};
 
 function getNodeState(progress: Progress, node: Node): NodeState {
   if (progress.completedNodeIds.includes(node.id)) return "completed";
@@ -71,18 +78,11 @@ export function NodeButton({
     }
   };
 
-  const shadowClass =
-    isCompleted
-      ? "shadow-practice-node-rest"
-      : isUnlocked
-        ? "shadow-practice-node-depth-glow"
-        : "shadow-practice-node-rest";
-
   return (
     <button
       type="button"
       onClick={handleClick}
-      className="group relative flex w-[96px] flex-col items-center transition-transform duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-practice-glow-active focus-visible:ring-offset-2 disabled:cursor-not-allowed data-[locked]:cursor-not-allowed data-[unlocked]:cursor-pointer data-[unlocked]:hover:scale-[1.06] data-[unlocked]:hover:-translate-y-0.5 data-[completed]:cursor-pointer data-[completed]:hover:scale-[1.06] data-[completed]:hover:-translate-y-0.5"
+      className="group relative flex w-[96px] flex-col items-center transition-transform duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 focus-visible:ring-offset-2 disabled:cursor-not-allowed data-[locked]:cursor-not-allowed data-[unlocked]:cursor-pointer data-[unlocked]:hover:scale-[1.05] data-[unlocked]:hover:-translate-y-0.5 data-[completed]:cursor-pointer data-[completed]:hover:scale-[1.02] data-[completed]:hover:-translate-y-0.5"
       data-locked={isLocked ? "" : undefined}
       data-unlocked={isUnlocked ? "" : undefined}
       data-completed={isCompleted ? "" : undefined}
@@ -90,35 +90,35 @@ export function NodeButton({
       aria-label={isLocked ? `${node.title} (locked)` : isCompleted ? `${node.title} (completed)` : node.title}
     >
       <div
-        className={`flex w-full flex-col items-center rounded-xl border bg-white px-2 py-2 text-left transition-[box-shadow,opacity] duration-200 ease-out ${shadowClass}
+        className={`flex w-full flex-col items-center rounded-2xl border border-blue-100/70 bg-white/80 px-2 py-2 text-left shadow-[0_8px_24px_rgba(37,99,235,0.08)] transition-all duration-200 ease-out
           data-[locked]:scale-[var(--practice-locked-scale)] data-[locked]:opacity-[var(--practice-locked-tile-opacity)]
-          data-[unlocked]:z-10 data-[unlocked]:scale-[var(--practice-node-active-scale)] data-[unlocked]:border-2 data-[unlocked]:border-practice-glow-active/50 data-[unlocked]:bg-white data-[unlocked]:animate-practice-idle-pulse data-[unlocked]:animate-practice-idle-glow data-[unlocked]:hover:shadow-practice-node-hover data-[unlocked]:active:scale-[0.98] data-[unlocked]:active:shadow-practice-node-active
-          data-[current]:ring-2 data-[current]:ring-sky-500/60 data-[current]:shadow-[0_0_0_4px_rgba(59,130,246,0.25),0_14px_40px_rgba(59,130,246,0.22)] data-[current]:hover:ring-sky-500/70 data-[current]:hover:shadow-[0_0_0_4px_rgba(59,130,246,0.32),0_14px_40px_rgba(59,130,246,0.26)]
-          data-[completed]:ring-2 data-[completed]:ring-green-500/40 data-[completed]:shadow-[0_0_0_4px_rgba(34,197,94,0.20),0_10px_30px_rgba(34,197,94,0.18)] data-[completed]:hover:ring-green-500/55 data-[completed]:hover:shadow-[0_0_0_4px_rgba(34,197,94,0.30),0_10px_30px_rgba(34,197,94,0.25)] data-[completed]:opacity-90 data-[completed]:border-practice-node-border
+          data-[unlocked]:z-10 data-[unlocked]:scale-[var(--practice-node-active-scale)] data-[unlocked]:border-blue-200/70 data-[unlocked]:shadow-[0_12px_32px_rgba(37,99,235,0.12)] data-[unlocked]:animate-practice-idle-pulse data-[unlocked]:animate-practice-idle-glow data-[unlocked]:hover:border-blue-300 data-[unlocked]:hover:shadow-[0_14px_36px_rgba(37,99,235,0.14)] data-[unlocked]:active:scale-[0.98]
+          data-[current]:ring-2 data-[current]:ring-blue-300 data-[current]:shadow-[0_0_0_4px_rgba(59,130,246,0.2),0_14px_40px_rgba(37,99,235,0.15)] data-[current]:hover:ring-blue-400
+          data-[completed]:ring-1 data-[completed]:ring-emerald-200 data-[completed]:shadow-[0_0_0_3px_rgba(34,197,94,0.12),0_8px_24px_rgba(34,197,94,0.08)] data-[completed]:hover:ring-emerald-300 data-[completed]:hover:shadow-[0_0_0_4px_rgba(34,197,94,0.18)] data-[completed]:border-emerald-100
           ${runCompletionSequence ? "completion-sequence-node-pop" : ""}
-          border-practice-node-border ${isCurrent ? "animate-node-bounce" : ""}`}
+          ${isCurrent ? "animate-node-bounce" : ""}`}
         data-locked={isLocked ? "" : undefined}
         data-unlocked={isUnlocked ? "" : undefined}
         data-current={isCurrent ? "" : undefined}
         data-completed={isCompleted ? "" : undefined}
       >
-      {/* Difficulty badge — top (active = bold; completed = soft; locked = muted) */}
+      {/* Difficulty badge — Foundation / Intermediate / Advanced */}
       <span
         className={`mb-1 w-full text-center text-[9px] font-semibold uppercase tracking-wider ${
-          isCompleted ? "text-practice-glow-completed/90" : isUnlocked ? "text-practice-glow-active font-bold" : "text-text-secondary/80"
+          isCompleted ? "text-emerald-600/90" : isUnlocked ? "text-blue-600 font-bold" : "text-slate-400"
         }`}
       >
-        {node.difficulty}
+        {DIFFICULTY_LABEL[node.difficulty] ?? node.difficulty}
       </span>
 
-      {/* Large acronym — center (active = prominent; completed = soft green; locked = faint). Checkmark snaps in on completion. */}
+      {/* Large acronym — center. Checkmark snaps in on completion. */}
       <span
-        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-base font-bold tabular-nums ${
+        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-base font-bold tabular-nums ${
           isCompleted
-            ? "bg-practice-glow-completed/12 text-practice-glow-completed/90"
+            ? "bg-emerald-100/80 text-emerald-700"
             : isUnlocked
-              ? "bg-practice-glow-active/15 text-practice-glow-active"
-              : "bg-black/[0.06] text-text-secondary/70"
+              ? "bg-blue-100/80 text-blue-700"
+              : "bg-slate-100 text-slate-400"
         }`}
       >
         {isCompleted ? (
@@ -133,23 +133,23 @@ export function NodeButton({
         )}
       </span>
 
-      {/* Lesson title (active = full weight; completed/locked = softer) */}
+      {/* Lesson title */}
       <span
         className={`mt-1 line-clamp-2 max-w-full text-center text-[11px] leading-tight ${
-          isUnlocked ? "font-semibold text-text-primary" : isCompleted ? "font-medium text-text-primary/90" : "font-medium text-text-secondary/70"
+          isUnlocked ? "font-semibold text-slate-800" : isCompleted ? "font-medium text-slate-700" : "font-medium text-slate-400"
         }`}
       >
         {node.title}
       </span>
 
-      {/* Small salary reward (recedes when not active). On completion, "+$X" floats up. */}
+      {/* Small salary reward. On completion, "+$X" floats up. */}
       <span
-        className={`relative mt-0.5 text-[9px] ${isUnlocked ? "font-semibold text-text-secondary" : "font-medium text-text-secondary/60"}`}
+        className={`relative mt-0.5 text-[9px] ${isUnlocked ? "font-semibold text-slate-600" : "font-medium text-slate-500"}`}
       >
         +{formatSalary(node.salaryReward)}
         {runCompletionSequence && (
           <span
-            className="completion-sequence-salary-float xp-gain-glow absolute left-1/2 top-0 -translate-x-1/2 whitespace-nowrap font-semibold text-practice-glow-completed"
+            className="completion-sequence-salary-float xp-gain-glow absolute left-1/2 top-0 -translate-x-1/2 whitespace-nowrap font-semibold text-emerald-600"
             aria-hidden
           >
             +{formatSalary(node.salaryReward)}
@@ -158,24 +158,24 @@ export function NodeButton({
       </span>
       </div>
 
-      {/* Completed: small check badge — satisfying but secondary */}
+      {/* Completed: small check badge */}
       {isCompleted && (
         <span
-          className="absolute -right-0.5 -top-0.5 flex h-3 w-3 items-center justify-center rounded-full bg-practice-glow-completed/90 text-white text-[8px] shadow-practice-node-rest"
+          className="absolute -right-0.5 -top-0.5 flex h-3 w-3 items-center justify-center rounded-full bg-emerald-500 text-white text-[8px] shadow-sm"
           aria-hidden
         >
           ✓
         </span>
       )}
 
-      {/* Locked: blur + opacity overlay so tile recedes */}
+      {/* Locked: blur + opacity overlay */}
       {isLocked && (
         <span
-          className="absolute inset-0 flex items-center justify-center rounded-xl bg-white/70 backdrop-blur-[var(--practice-locked-blur)]"
+          className="absolute inset-0 flex items-center justify-center rounded-2xl bg-white/70 backdrop-blur-[var(--practice-locked-blur)]"
           style={{ opacity: "var(--practice-locked-opacity)" }}
           aria-hidden
         >
-          <span className="flex h-5 w-5 items-center justify-center rounded-md bg-black/[0.08] text-xs">
+          <span className="flex h-5 w-5 items-center justify-center rounded-lg bg-slate-200/80 text-xs">
             🔒
           </span>
         </span>

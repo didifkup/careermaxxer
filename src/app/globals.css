@@ -442,6 +442,38 @@ svg .svg-origin {
   to { transform: translateX(400%); }
 }
 
+/* Wolf mascot card: level-up pop, glow pulse, accessory in */
+@keyframes wolf-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+@keyframes glow-pulse {
+  0% { opacity: 0; }
+  40% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes acc-in {
+  0% { opacity: 0; transform: translateY(4px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.wolf-mascot-pop {
+  animation: wolf-pop 0.28s ease-out;
+}
+.wolf-mascot-glow {
+  animation: glow-pulse 0.6s ease-out;
+}
+.wolf-mascot-acc-in {
+  animation: acc-in 0.2s ease-out backwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wolf-mascot-pop,
+  .wolf-mascot-glow,
+  .wolf-mascot-acc-in {
+    animation: none !important;
+  }
+}
+
 /* Utility: use design tokens with opacity */
 @layer utilities {
   .text-balance {
@@ -462,6 +494,29 @@ svg .svg-origin {
 
   .animate-fade-in-up {
     animation: fade-in-up 0.6s ease-out forwards;
+  }
+
+  /* Legal pages: prose-style spacing and typography (Labs-consistent) */
+  .legal-prose h2 {
+    @apply mt-8 text-lg font-semibold text-slate-800 first:mt-0;
+  }
+  .legal-prose h3 {
+    @apply mt-4 text-base font-semibold text-slate-800;
+  }
+  .legal-prose p {
+    @apply leading-relaxed text-slate-700;
+  }
+  .legal-prose ul {
+    @apply list-disc space-y-1 pl-6 text-slate-700;
+  }
+  .legal-prose ol {
+    @apply list-decimal space-y-1 pl-6 text-slate-700;
+  }
+  .legal-prose li {
+    @apply leading-relaxed;
+  }
+  .legal-prose a {
+    @apply text-blue-600 hover:underline;
   }
 
   /* One-time horizontal light sweep over text (e.g. $180,000 unlocked) */

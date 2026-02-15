@@ -2,38 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
-import { loadProgress, resetProgress } from "@/lib/progress";
-import { SALARY_MAX } from "@/lib/constants";
+import { useEffect, useRef, useState } from "react";
+import { resetProgress } from "@/lib/progress";
 import { useToast } from "@/contexts/ToastContext";
-
-function formatSalary(n: number): string {
-  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-    minimumFractionDigits: 0,
-  }).format(n);
-}
 
 export function Nav() {
   const pathname = usePathname();
-  const [salary, setSalary] = useState(0);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const { addToast } = useToast();
-
-  useEffect(() => {
-    setSalary(loadProgress().salary);
-  }, []);
-
-  useEffect(() => {
-    const onReset = () => setSalary(loadProgress().salary);
-    window.addEventListener("progress-reset", onReset);
-    return () => window.removeEventListener("progress-reset", onReset);
-  }, []);
 
   useEffect(() => {
     if (!settingsOpen) return;
@@ -97,21 +75,6 @@ export function Nav() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <div className="hidden min-w-[100px] text-right sm:block">
-            <span className="text-xs text-text-secondary">Salary</span>
-            <p className="font-semibold text-brand-accent">{formatSalary(salary)}</p>
-          </div>
-          <div className="h-10 w-24 overflow-hidden rounded-full bg-black/10 shadow-inner">
-            <div
-              className="h-full rounded-full bg-brand-accent transition-all duration-500 ease-out"
-              style={{ width: `${Math.min(100, (salary / SALARY_MAX) * 100)}%` }}
-              role="progressbar"
-              aria-valuenow={salary}
-              aria-valuemin={0}
-              aria-valuemax={SALARY_MAX}
-            />
-          </div>
-
           <div className="relative" ref={menuRef}>
             <button
               type="button"

@@ -15,15 +15,9 @@ export function MicroLanding({ copy }: MicroLandingProps) {
       className="relative z-[1] col-span-2 flex w-full items-center justify-center py-1.5"
       aria-hidden
     >
-      <div
-        className="w-full max-w-[200px] rounded-xl border border-practice-node-border/50 px-3 py-1.5 text-center"
-        style={{
-          background: "hsl(var(--practice-landing-bg) / 0.9)",
-          boxShadow: "0 1px 3px hsl(220 20% 40% / 0.05)",
-        }}
-      >
+      <div className="w-full max-w-[200px] rounded-2xl border border-blue-100/70 bg-white/70 px-3 py-1.5 text-center shadow-[0_4px_12px_rgba(37,99,235,0.06)] backdrop-blur-sm">
         {copy && (
-          <span className="text-[11px] font-medium uppercase tracking-wider text-text-secondary/80">
+          <span className="text-[11px] font-medium uppercase tracking-wider text-slate-500">
             {copy}
           </span>
         )}

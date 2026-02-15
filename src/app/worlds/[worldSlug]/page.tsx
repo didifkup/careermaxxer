@@ -10,6 +10,11 @@ import { getProgressSnapshot } from "@/lib/worlds/progress";
 import { getLabBySlug } from "@/lib/worlds/catalog";
 import { SalaryHUD } from "@/components/worlds/SalaryHUD";
 import { FSMDetailClient } from "@/components/worlds/FSMDetailClient";
+import { DCFDetailClient } from "@/components/worlds/DCFDetailClient";
+import { MADetailClient } from "@/components/worlds/MADetailClient";
+import { MarketSignalDetailClient } from "@/components/worlds/MarketSignalDetailClient";
+import { DealIntelligenceDetailClient } from "@/components/worlds/DealIntelligenceDetailClient";
+import { LeverageEngineDetailClient } from "@/components/worlds/LeverageEngineDetailClient";
 import { WorldComingSoon } from "@/components/worlds/WorldComingSoon";
 import { useMounted } from "@/hooks/useMounted";
 
@@ -190,6 +195,61 @@ export default function WorldPage() {
         style={worldsDetailBg}
       >
         <FSMDetailClient />
+      </div>
+    );
+  }
+
+  if (lab && lab.slug === "dcf") {
+    return (
+      <div
+        className="min-h-screen px-4 py-8 md:py-12"
+        style={worldsDetailBg}
+      >
+        <DCFDetailClient />
+      </div>
+    );
+  }
+
+  if (lab && lab.slug === "ma") {
+    return (
+      <div
+        className="min-h-screen px-4 py-8 md:py-12"
+        style={worldsDetailBg}
+      >
+        <MADetailClient />
+      </div>
+    );
+  }
+
+  if (lab && lab.slug === "market-signals") {
+    return (
+      <div
+        className="min-h-screen px-4 py-8 md:py-12"
+        style={worldsDetailBg}
+      >
+        <MarketSignalDetailClient />
+      </div>
+    );
+  }
+
+  if (lab && lab.slug === "deal-intelligence") {
+    return (
+      <div
+        className="min-h-screen px-4 py-8 md:py-12"
+        style={worldsDetailBg}
+      >
+        <DealIntelligenceDetailClient />
+      </div>
+    );
+  }
+
+  if (lab && lab.slug === "leverage") {
+    return (
+      <div
+        className="min-h-screen px-4 py-8 md:py-12"
+        style={worldsDetailBg}
+      >
+        <LeverageEngineDetailClient />
       </div>
     );
   }

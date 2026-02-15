@@ -5,6 +5,7 @@ import { FeatureSections } from "@/components/ui/feature-sections";
 import { FloatingIconsHero } from "@/components/ui/floating-icons-hero-section";
 import { HowItWorks } from "@/components/ui/how-it-works";
 import { QuantOutcomesStats } from "@/components/ui/stats-section-with-text";
+import { LandingFooter } from "@/components/landing/LandingFooter";
 import type { FloatingIconsHeroProps } from "@/components/ui/floating-icons-hero-section";
 import {
   IconGoldman,
@@ -58,6 +59,7 @@ export default function LandingPage() {
       <FeatureSections />
       <QuantOutcomesStats />
       <FinalCTA />
+      <LandingFooter />
     </>
   );
 }

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import type { Node } from "@/lib/curriculum";
-import { getFloorTitle } from "@/lib/curriculum";
 import type { Progress } from "@/lib/progress";
 import { isNodeUnlocked } from "@/lib/progress";
 import { FloorProgressHint } from "./FloorProgressHint";
@@ -97,21 +96,21 @@ export function FloorSection({
   return (
     <section
       className="relative flex w-full flex-col items-stretch py-0"
-      aria-label={`Floor ${floorNumber}`}
+      aria-label={`Level ${String(floorNumber).padStart(2, "0")}`}
     >
-      {/* Floor label + Floor complete badge when done */}
+      {/* Level label + Level complete badge when done */}
       <div className="flex flex-wrap items-center gap-1">
-        <span className="rounded-full bg-brand-primary/15 px-2 py-0.5 text-xs font-bold text-brand-primary">
-          {getFloorTitle(floorNumber)}
+        <span className="rounded-full bg-blue-100/80 px-2.5 py-0.5 text-xs font-semibold text-blue-700">
+          Level {String(floorNumber).padStart(2, "0")}
         </span>
-        <div className="h-px flex-1 min-w-4 bg-brand-primary/20" />
+        <div className="h-px flex-1 min-w-4 bg-blue-100/60" />
         {floorIsComplete && (
           <span
-            className={`rounded-full bg-practice-glow-completed/12 px-2.5 py-0.5 text-[11px] font-semibold text-practice-glow-completed/95 ${
+            className={`rounded-full bg-emerald-100/80 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700 ${
               floorCelebrationActive ? "floor-complete-celebration" : ""
             }`}
           >
-            Floor complete
+            Level complete
           </span>
         )}
       </div>
