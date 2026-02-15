@@ -3,8 +3,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  // Use project root for file tracing (avoids "multiple lockfiles" warning when parent has package-lock.json)
   outputFileTracingRoot: path.join(__dirname),
+  experimental: {
+    serverActions: { bodySizeLimit: "52mb" },
+  },
 };
 
 export default nextConfig;

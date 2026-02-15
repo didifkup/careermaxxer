@@ -541,3 +541,29 @@ svg .svg-origin {
     animation: shimmer-sweep-once 0.7s ease-out forwards;
   }
 }
+
+/* CareerMaxxer brand lockup: electric ring + glass sheen */
+@keyframes cm-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes cm-sheen {
+  0% { transform: translateX(-120%) skewX(-18deg); opacity: 0; }
+  20% { opacity: .55; }
+  55% { opacity: .55; }
+  100% { transform: translateX(220%) skewX(-18deg); opacity: 0; }
+}
+
+/* Brand lockup: trigger only on parent .group hover so animations restart each time */
+.group:hover .cm-sheen-trigger {
+  animation: cm-sheen 900ms ease-out both;
+}
+.group:hover .cm-spin-ring {
+  animation: cm-spin 1.35s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .group:hover .cm-sheen-trigger,
+  .group:hover .cm-spin-ring {
+    animation: none;
+  }
+}

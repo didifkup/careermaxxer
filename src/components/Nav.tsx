@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -9,6 +10,7 @@ import { useToast } from "@/contexts/ToastContext";
 export function Nav() {
   const pathname = usePathname();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [logoError, setLogoError] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const { addToast } = useToast();
@@ -37,6 +39,7 @@ export function Nav() {
     { label: "Quiz", href: "/quiz" },
     { label: "Labs", href: "/worlds" },
     { label: "Storyteller", href: "/storyteller" },
+    { label: "Mock", href: "/mock-interview" },
     { label: "Arena", href: "/arena" },
   ];
 
@@ -45,9 +48,75 @@ export function Nav() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link
           href="/"
-          className="font-display text-xl font-bold tracking-tight text-brand-primary transition hover:opacity-90 active:scale-[0.98]"
+          aria-label="CareerMaxxer home"
+          className="group relative inline-flex items-center gap-3 rounded-full px-2 py-1.5 transition-all duration-200 hover:bg-slate-900/[0.035] active:scale-[0.99]"
         >
-          CareerMaxxer
+          {/* Glass highlight sweep */}
+          <span className="pointer-events-none absolute inset-0 overflow-hidden rounded-full">
+            <span
+              className="cm-sheen-trigger absolute -left-1/2 top-[-60%] h-[220%] w-1/2 opacity-0 group-hover:opacity-100"
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent)",
+              }}
+            />
+          </span>
+
+          {/* Logo + animated ring */}
+          <span className="relative flex h-10 w-10 items-center justify-center">
+            {/* Soft glow */}
+            <span className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-tr from-blue-500/25 via-cyan-400/20 to-indigo-500/25 blur-md opacity-70 transition-opacity duration-200 group-hover:opacity-95" />
+
+            {/* Electric ring (appears + rotates on hover) */}
+            <span
+              className="cm-spin-ring pointer-events-none absolute -inset-1 rounded-[18px] opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+              style={{
+                background:
+                  "conic-gradient(from 180deg, rgba(59,130,246,.60), rgba(34,211,238,.50), rgba(99,102,241,.55), rgba(59,130,246,.60))",
+                WebkitMask:
+                  "radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px))",
+                mask:
+                  "radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px))",
+              }}
+            />
+
+            {/* Logo chip */}
+            <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-black/5 transition-transform duration-200 group-hover:scale-[1.06]">
+              {logoError ? (
+                <span className="text-sm font-black tracking-tighter text-slate-800" aria-hidden>
+                  CM
+                </span>
+              ) : (
+                <Image
+                  src="/branding/cm-logo.png"
+                  alt="CareerMaxxer"
+                  width={40}
+                  height={40}
+                  priority
+                  className="h-9 w-9 object-contain"
+                  onError={() => setLogoError(true)}
+                />
+              )}
+            </span>
+          </span>
+
+          {/* Aggressive wordmark */}
+          <span className="flex flex-col leading-none">
+            <span className="flex items-baseline gap-1">
+              <span className="text-[15px] font-extrabold tracking-tight text-slate-950">
+                Career
+              </span>
+              <span className="text-[15px] font-black tracking-tight bg-gradient-to-r from-slate-950 via-blue-700 to-cyan-500 bg-clip-text text-transparent">
+                Maxxer
+              </span>
+            </span>
+            <span className="mt-1 hidden sm:block text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+              fastest ib prep
+            </span>
+          </span>
+
+          {/* Spark dot */}
+          <span className="ml-1 hidden md:inline-flex h-1.5 w-1.5 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 opacity-70 group-hover:opacity-100 transition-opacity" />
         </Link>
 
         <nav className="flex items-center gap-1 rounded-full bg-black/5 p-1" aria-label="Main">
@@ -57,7 +126,9 @@ export function Nav() {
                 ? pathname === "/arena" || pathname.startsWith("/arena/")
                 : href === "/storyteller"
                   ? pathname === "/storyteller" || pathname.startsWith("/storyteller/")
-                  : pathname === href || (href === "/" && pathname === "/");
+                  : href === "/mock-interview"
+                    ? pathname === "/mock-interview" || pathname.startsWith("/mock-interview/")
+                    : pathname === href || (href === "/" && pathname === "/");
             return (
               <Link
                 key={href}
