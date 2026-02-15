@@ -2,12 +2,11 @@
 
 import { Suspense, useState, useMemo } from "react";
 import Link from "next/link";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 
 function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const next = useMemo(
     () => (searchParams.get("next") ?? "/account").replace(/^[^/]/, "/$&"),
@@ -39,8 +38,9 @@ function LoginForm() {
         return;
       }
 
-      router.push(next);
-      router.refresh();
+      // Full page redirect so the next request includes the auth cookies set by Supabase
+      window.location.href = next;
+      return;
     } catch (err) {
       setStatus("error");
       setMessage(err instanceof Error ? err.message : "Something went wrong.");

@@ -2,12 +2,10 @@
 
 import { Suspense, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 
 function SignupForm() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
@@ -45,8 +43,9 @@ function SignupForm() {
         }
       }
 
-      router.push("/arena");
-      router.refresh();
+      // Full page redirect so the next request includes the auth cookies
+      window.location.href = "/arena";
+      return;
     } catch (err) {
       setStatus("error");
       setMessage(err instanceof Error ? err.message : "Something went wrong.");
