@@ -35,7 +35,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 
   const addToast = useCallback((message: string, variant: ToastVariant = "default") => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    setToast({ message, variant, visible: true });
+    const safeMessage = typeof message === "string" ? message : String(message ?? "Something went wrong");
+    setToast({ message: safeMessage, variant, visible: true });
     timeoutRef.current = setTimeout(() => {
       setToast((prev) => ({ ...prev, visible: false }));
       timeoutRef.current = null;

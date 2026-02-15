@@ -167,8 +167,11 @@ export function useQuestionDeck({
         setQuestionHistory([first]);
         setHistoryIndex(0);
       })
-      .catch((err) => {
-        if (!cancelled) onPoolErrorRef.current?.(err instanceof Error ? err.message : "Failed to load questions");
+      .catch((err: unknown) => {
+        if (cancelled) return;
+        const message =
+          err instanceof Error ? err.message : typeof err === "string" ? err : "Failed to load questions";
+        onPoolErrorRef.current?.(message);
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
