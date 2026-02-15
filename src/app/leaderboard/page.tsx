@@ -23,6 +23,7 @@ type Profile = {
   user_id: string;
   username: string | null;
   school_id: string | null;
+  school_name: string | null;
   market_value: number;
   title: string;
 };
@@ -73,6 +74,7 @@ export default function LeaderboardPage() {
         user_id: data.user_id,
         username: data.username ?? null,
         school_id: data.school_id ?? null,
+        school_name: data.school_name ?? null,
         market_value: data.market_value ?? 60_000,
         title: data.title ?? "Intern",
       });

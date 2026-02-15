@@ -20,6 +20,7 @@ type Profile = {
   user_id: string;
   username: string | null;
   school_id: string | null;
+  school_name?: string | null;
   market_value: number;
   title: string;
 };
@@ -59,8 +60,13 @@ export function YourStatusCard({
 
   if (!userId) return null;
 
-  const displayUsername = myRow?.username ?? profile?.username;
-  const displaySchoolName = myRow?.school_name ?? (profile?.school_id ? "Your school" : null);
+  const rowUsername = myRow?.username?.trim();
+  const hasRealUsername = rowUsername && rowUsername !== "Anonymous";
+  const displayUsername = hasRealUsername ? rowUsername : (profile?.username?.trim() || null);
+  const displaySchoolName =
+    myRow?.school_name?.trim() ||
+    profile?.school_name?.trim() ||
+    (profile?.school_id ? "Your school" : null);
   const displayTitle = myRow?.title ?? profile?.title ?? "Intern";
   const globalRank = tab === "global" ? myRow?.rank ?? null : null;
   const schoolRank = tab === "school" ? myRow?.rank ?? null : null;
@@ -88,9 +94,11 @@ export function YourStatusCard({
             You
           </p>
           <p className="mt-0.5 font-bold text-slate-800">
-            {displayUsername ? `@${displayUsername}` : (
+            {displayUsername ? (
+              `@${displayUsername}`
+            ) : (
               <Link href="/account" className="text-blue-600 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 rounded">
-                Set username
+                Set username in Account
               </Link>
             )}
           </p>
