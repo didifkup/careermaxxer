@@ -5,7 +5,9 @@ import Link from "next/link";
 import { LeaderboardHeader } from "@/components/leaderboard/LeaderboardHeader";
 import { YourStatusCard } from "@/components/leaderboard/YourStatusCard";
 import { LeaderboardTable } from "@/components/leaderboard/LeaderboardTable";
-import { Button } from "@/components/ui/button";
+import { PageContainer } from "@/components/ui/page-container";
+import { SegmentedToggle } from "@/components/ui/segmented-toggle";
+import { GlassCard } from "@/components/ui/glass-card";
 
 type LeaderboardRow = {
   rank: number;
@@ -24,6 +26,25 @@ type Profile = {
   market_value: number;
   title: string;
 };
+
+const SEGMENT_OPTIONS = [
+  { value: "global" as const, label: "Global" },
+  { value: "school" as const, label: "School" },
+];
+
+function LeaderboardSkeleton() {
+  return (
+    <div className="space-y-2">
+      {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+        <div
+          key={i}
+          className="h-14 animate-pulse rounded-xl border border-slate-200/80 bg-white/60"
+          aria-hidden
+        />
+      ))}
+    </div>
+  );
+}
 
 export default function LeaderboardPage() {
   const [tab, setTab] = useState<"global" | "school">("global");
@@ -103,97 +124,85 @@ export default function LeaderboardPage() {
 
   if (authError) {
     return (
-      <div className="mx-auto max-w-2xl space-y-6 py-8">
-        <h1 className="font-display text-2xl font-bold text-brand-primary">
-          Leaderboards
-        </h1>
-        <p className="text-text-secondary">
-          <Link href="/login" className="text-brand-primary hover:underline">
-            Sign in
-          </Link>{" "}
-          to view leaderboards.
-        </p>
-      </div>
+      <PageContainer>
+        <div className="space-y-4">
+          <h1 className="font-display text-3xl font-semibold text-slate-800">
+            Leaderboards
+          </h1>
+          <p className="text-slate-600">
+            <Link
+              href="/login"
+              className="text-blue-600 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 rounded"
+            >
+              Sign in
+            </Link>{" "}
+            to view leaderboards.
+          </p>
+        </div>
+      </PageContainer>
     );
   }
 
-  const rows = tab === "global" ? globalData : (schoolData ?? []);
+  const rows = tab === "global" ? globalData : schoolData ?? [];
   const loading = tab === "global" ? globalLoading : schoolLoading;
   const schoolSet = tab === "school" && schoolError === null;
+  const myRow = userId ? rows.find((r) => r.user_id === userId) : null;
+  const schoolRank = tab === "school" ? myRow?.rank : null;
+  const schoolName = myRow?.school_name ?? (tab === "school" ? rows[0]?.school_name : null);
+  const headerSubtitle =
+    tab === "school" && schoolRank != null && schoolName
+      ? `You're #${schoolRank} at ${schoolName}`
+      : undefined;
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6 py-8">
-      <LeaderboardHeader tab={tab} />
+    <PageContainer>
+      <div className="space-y-8">
+        <LeaderboardHeader tab={tab} subtitle={headerSubtitle} />
 
-      <div
-        className="flex gap-1 rounded-full bg-black/5 p-1"
-        role="tablist"
-        aria-label="Leaderboard type"
-      >
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === "global"}
-          onClick={() => setTab("global")}
-          className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${
-            tab === "global"
-              ? "bg-white text-brand-primary shadow-card"
-              : "text-text-secondary hover:bg-white/60 hover:text-text-primary"
-          }`}
-        >
-          Global
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === "school"}
-          onClick={() => setTab("school")}
-          className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${
-            tab === "school"
-              ? "bg-white text-brand-primary shadow-card"
-              : "text-text-secondary hover:bg-white/60 hover:text-text-primary"
-          }`}
-        >
-          School
-        </button>
-      </div>
-
-      {userId && (
-        <YourStatusCard
-          userId={userId}
-          profile={profile}
-          rows={rows}
-          tab={tab}
-          schoolSet={tab === "school" ? !schoolError : null}
+        <SegmentedToggle
+          options={SEGMENT_OPTIONS}
+          value={tab}
+          onChange={setTab}
+          aria-label="Leaderboard type"
         />
-      )}
 
-      {loading ? (
-        <div className="flex items-center gap-2 text-text-secondary">
-          <span
-            className="inline-block h-5 w-5 animate-spin rounded-full border-2 border-brand-primary border-t-transparent"
-            aria-hidden
+        {userId && (
+          <YourStatusCard
+            userId={userId}
+            profile={profile}
+            rows={rows}
+            tab={tab}
+            schoolSet={schoolSet}
           />
-          Loading…
-        </div>
-      ) : (
-        <LeaderboardTable rows={rows} userId={userId} />
-      )}
+        )}
 
-      <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-black/10 bg-surface-raised px-6 py-5 sm:flex-row">
-        <p className="text-lg font-semibold text-text-primary">Ready to climb?</p>
-        <div className="flex items-center gap-3">
-          <Button asChild size="lg">
-            <Link href="/arena">Go to Arena →</Link>
-          </Button>
-          <Link
-            href="/arena"
-            className="text-sm text-text-secondary hover:text-brand-primary hover:underline"
-          >
-            Back to Arena
-          </Link>
-        </div>
+        {loading ? (
+          <GlassCard className="p-6">
+            <p className="mb-4 text-sm text-slate-500">Loading rankings…</p>
+            <LeaderboardSkeleton />
+          </GlassCard>
+        ) : (
+          <LeaderboardTable rows={rows} userId={userId} />
+        )}
+
+        <GlassCard className="flex flex-col items-center justify-between gap-4 p-6 sm:flex-row">
+          <p className="text-lg font-semibold text-slate-800">Ready to climb?</p>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/arena"
+              className="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_25px_rgba(37,99,235,0.30)] transition hover:shadow-[0_12px_28px_rgba(37,99,235,0.35)] active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 focus-visible:ring-offset-2"
+            >
+              Go to Arena →
+            </Link>
+            <Link
+              href="/arena"
+              className="text-sm text-slate-500 hover:text-blue-600 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 rounded"
+            >
+              Back to Arena
+            </Link>
+          </div>
+        </GlassCard>
       </div>
-    </div>
+    </PageContainer>
   );
 }

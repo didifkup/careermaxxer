@@ -4,6 +4,7 @@ import Link from "next/link";
 import { TierPill } from "./TierPill";
 import { SchoolBadge } from "./SchoolBadge";
 import { formatMoney } from "@/lib/arena/ladder";
+import { GlassCard } from "@/components/ui/glass-card";
 
 export type LeaderboardRow = {
   rank: number;
@@ -67,28 +68,28 @@ export function YourStatusCard({
 
   if (tab === "school" && !schoolSet) {
     return (
-      <div className="rounded-xl border-2 border-amber-200 bg-amber-50/80 p-6">
+      <GlassCard className="border-amber-200/80 bg-amber-50/75 p-6">
         <p className="font-semibold text-amber-900">Set your school to compete</p>
         <p className="mt-1 text-sm text-amber-800">
-          <Link href="/account" className="font-medium underline hover:no-underline">
+          <Link href="/account" className="font-medium text-blue-600 underline hover:no-underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 rounded">
             Go to Account
           </Link>{" "}
           to set your school and see your rank.
         </p>
-      </div>
+      </GlassCard>
     );
   }
 
   return (
-    <div className="rounded-xl border-2 border-brand-primary/20 bg-surface-raised p-6 shadow-sm">
+    <GlassCard className="p-6">
       <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-xs font-medium uppercase tracking-wide text-text-secondary">
+          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
             You
           </p>
-          <p className="mt-0.5 font-bold text-text-primary">
+          <p className="mt-0.5 font-bold text-slate-800">
             {displayUsername ? `@${displayUsername}` : (
-              <Link href="/account" className="text-brand-primary hover:underline">
+              <Link href="/account" className="text-blue-600 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 rounded">
                 Set username
               </Link>
             )}
@@ -101,14 +102,14 @@ export function YourStatusCard({
         <div className="flex flex-wrap items-center gap-4">
           {globalRank != null && (
             <div>
-              <p className="text-xs text-text-secondary">Global Rank</p>
-              <p className="font-bold tabular-nums text-text-primary">#{globalRank}</p>
+              <p className="text-xs text-slate-500">Global Rank</p>
+              <p className="font-bold tabular-nums text-slate-800">#{globalRank}</p>
             </div>
           )}
           {schoolRank != null && (
             <div>
-              <p className="text-xs text-text-secondary">School Rank</p>
-              <p className="font-bold tabular-nums text-text-primary">#{schoolRank}</p>
+              <p className="text-xs text-slate-500">School Rank</p>
+              <p className="font-bold tabular-nums text-slate-800">#{schoolRank}</p>
             </div>
           )}
           <TierPill title={displayTitle} />
@@ -116,31 +117,31 @@ export function YourStatusCard({
 
         <div className="min-w-[180px]">
           {showProgress && above && (
-            <p className="text-xs text-text-secondary">
+            <p className="text-xs text-slate-500">
               {formatDollars(awayFromAbove)} away from #{above.rank}
             </p>
           )}
           {showProgress && below && (
-            <p className="mt-0.5 text-xs text-text-secondary">
+            <p className="mt-0.5 text-xs text-slate-500">
               {formatDollars(aheadOfBelow)} ahead of #{below.rank}
             </p>
           )}
           {showProgress && (above || below) && (
             <div
-              className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-black/10"
+              className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-200"
               role="progressbar"
-              aria-valuenow={progressToNext * 100}
+              aria-valuenow={Math.round(progressToNext * 100)}
               aria-valuemin={0}
               aria-valuemax={100}
             >
               <div
-                className="h-full rounded-full bg-brand-accent transition-all duration-300"
+                className="h-full rounded-full bg-gradient-to-r from-blue-600 to-blue-500 transition-all duration-300"
                 style={{ width: `${progressToNext * 100}%` }}
               />
             </div>
           )}
         </div>
       </div>
-    </div>
+    </GlassCard>
   );
 }

@@ -122,15 +122,15 @@ export function QuestionRenderer({
     const choices = question.choices;
     if (!choices || choices.length < 3 || choices.length > 4) {
       return (
-        <p className="text-sm text-error">Invalid MC question (need 3–4 choices).</p>
+        <p className="text-sm text-red-600">Invalid MC question (need 3–4 choices).</p>
       );
     }
     return (
       <div className="space-y-4">
-        <p className="text-lg font-medium text-text-primary">{question.prompt}</p>
+        <p className="text-lg font-medium text-slate-800">{question.prompt}</p>
         {feedback !== null && (
           <p
-            className={`text-sm ${feedback === "correct" ? "text-success" : "text-error"}`}
+            className={`text-sm ${feedback === "correct" ? "text-emerald-600" : "text-red-600"}`}
             role="status"
           >
             {feedback === "correct" ? "Nice." : "Try again."}
@@ -142,10 +142,10 @@ export function QuestionRenderer({
               key={i}
               type="button"
               onClick={() => handleChoice(i)}
-              className={`w-full rounded-xl border-2 px-4 py-3 text-left text-sm font-medium transition ${
+              className={`w-full rounded-2xl border px-4 py-3 text-left text-sm font-medium transition ${
                 selected === i
-                  ? "border-brand-primary bg-brand-primary/10 text-brand-primary"
-                  : "border-black/10 bg-surface-raised text-text-primary hover:border-brand-primary/30"
+                  ? "border-blue-500/60 bg-blue-50 text-blue-800"
+                  : "border-blue-100/70 bg-white/80 text-slate-800 hover:border-blue-200"
               }`}
             >
               {choice}
@@ -160,22 +160,22 @@ export function QuestionRenderer({
     const choices = question.choices;
     if (!choices || choices.length < 2) {
       return (
-        <p className="text-sm text-error">Invalid scenario question (need at least 2 choices).</p>
+        <p className="text-sm text-red-600">Invalid scenario question (need at least 2 choices).</p>
       );
     }
     const caseTitle = question.title ?? "Mini Case";
     return (
       <div className="space-y-4">
-        <div className="rounded-xl border-2 border-brand-primary/20 bg-surface-base p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-secondary">
+        <div className="rounded-2xl border border-blue-100/70 bg-white/75 p-4 shadow-[0_20px_60px_rgba(37,99,235,0.08)] backdrop-blur-xl">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
             {caseTitle}
           </p>
-          <p className="mt-2 whitespace-pre-line text-sm text-text-primary">{question.context}</p>
+          <p className="mt-2 whitespace-pre-line text-sm text-slate-800">{question.context}</p>
         </div>
-        <p className="text-lg font-medium text-text-primary">{question.prompt}</p>
+        <p className="text-lg font-medium text-slate-800">{question.prompt}</p>
         {feedback !== null && (
           <p
-            className={`text-sm ${feedback === "correct" ? "text-success" : "text-error"}`}
+            className={`text-sm ${feedback === "correct" ? "text-emerald-600" : "text-red-600"}`}
             role="status"
           >
             {feedback === "correct" ? "Nice." : "Try again."}
@@ -187,10 +187,10 @@ export function QuestionRenderer({
               key={i}
               type="button"
               onClick={() => handleChoice(i)}
-              className={`w-full rounded-xl border-2 px-4 py-3 text-left text-sm font-medium transition ${
+              className={`w-full rounded-2xl border px-4 py-3 text-left text-sm font-medium transition ${
                 selected === i
-                  ? "border-brand-primary bg-brand-primary/10 text-brand-primary"
-                  : "border-black/10 bg-surface-raised text-text-primary hover:border-brand-primary/30"
+                  ? "border-blue-500/60 bg-blue-50 text-blue-800"
+                  : "border-blue-100/70 bg-white/80 text-slate-800 hover:border-blue-200"
               }`}
             >
               {choice}
@@ -204,10 +204,10 @@ export function QuestionRenderer({
   if (isBooleanQuestion(question)) {
     return (
       <div className="space-y-4">
-        <p className="text-lg font-medium text-text-primary">{question.prompt}</p>
+        <p className="text-lg font-medium text-slate-800">{question.prompt}</p>
         {feedback !== null && (
           <p
-            className={`text-sm ${feedback === "correct" ? "text-success" : "text-error"}`}
+            className={`text-sm ${feedback === "correct" ? "text-emerald-600" : "text-red-600"}`}
             role="status"
           >
             {feedback === "correct" ? "Nice." : "Try again."}
@@ -217,10 +217,10 @@ export function QuestionRenderer({
           <button
             type="button"
             onClick={() => handleChoice(true)}
-            className={`flex-1 rounded-xl border-2 px-4 py-3 text-sm font-medium transition ${
+            className={`flex-1 rounded-2xl border px-4 py-3 text-sm font-medium transition ${
               selected === true
-                ? "border-brand-primary bg-brand-primary/10 text-brand-primary"
-                : "border-black/10 bg-surface-raised text-text-primary hover:border-brand-primary/30"
+                ? "border-blue-500/60 bg-blue-50 text-blue-800"
+                : "border-blue-100/70 bg-white/80 text-slate-800 hover:border-blue-200"
             }`}
           >
             True
@@ -228,10 +228,10 @@ export function QuestionRenderer({
           <button
             type="button"
             onClick={() => handleChoice(false)}
-            className={`flex-1 rounded-xl border-2 px-4 py-3 text-sm font-medium transition ${
+            className={`flex-1 rounded-2xl border px-4 py-3 text-sm font-medium transition ${
               selected === false
-                ? "border-brand-primary bg-brand-primary/10 text-brand-primary"
-                : "border-black/10 bg-surface-raised text-text-primary hover:border-brand-primary/30"
+                ? "border-blue-500/60 bg-blue-50 text-blue-800"
+                : "border-blue-100/70 bg-white/80 text-slate-800 hover:border-blue-200"
             }`}
           >
             False
@@ -261,10 +261,10 @@ export function QuestionRenderer({
     };
     return (
       <div className="space-y-4">
-        <p className="text-lg font-medium text-text-primary">{question.prompt}</p>
+        <p className="text-lg font-medium text-slate-800">{question.prompt}</p>
         {feedback !== null && (
           <p
-            className={`text-sm ${feedback === "correct" ? "text-success" : "text-error"}`}
+            className={`text-sm ${feedback === "correct" ? "text-emerald-600" : "text-red-600"}`}
             role="status"
           >
             {feedback === "correct" ? "Nice." : "Try again."}
@@ -276,7 +276,7 @@ export function QuestionRenderer({
           onChange={(e) => setFillInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={question.placeholder}
-          className="w-full rounded-xl border-2 border-black/10 bg-surface-raised px-4 py-3 text-text-primary placeholder:text-text-secondary focus:border-brand-primary focus:outline-none focus:ring-0"
+          className="w-full rounded-2xl border border-blue-100/70 bg-white px-4 py-3 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200"
           aria-label="Your answer"
           disabled={showNextForFillNumeric}
         />
@@ -285,7 +285,7 @@ export function QuestionRenderer({
             type="button"
             onClick={handleNext}
             onKeyDown={(e) => e.key === "Enter" && handleNext()}
-            className="rounded-xl bg-brand-primary px-6 py-3 font-semibold text-text-inverse transition hover:opacity-90 active:scale-[0.98]"
+            className="rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-3 font-semibold text-white shadow-[0_10px_25px_rgba(37,99,235,0.30)] transition hover:shadow-[0_12px_28px_rgba(37,99,235,0.35)] active:scale-[0.98]"
           >
             Next
           </button>
@@ -293,7 +293,7 @@ export function QuestionRenderer({
           <button
             type="button"
             onClick={handleCheck}
-            className="rounded-xl bg-brand-primary px-6 py-3 font-semibold text-text-inverse transition hover:opacity-90 active:scale-[0.98]"
+            className="rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-3 font-semibold text-white shadow-[0_10px_25px_rgba(37,99,235,0.30)] transition hover:shadow-[0_12px_28px_rgba(37,99,235,0.35)] active:scale-[0.98]"
           >
             Check
           </button>
@@ -323,10 +323,10 @@ export function QuestionRenderer({
     };
     return (
       <div className="space-y-4">
-        <p className="text-lg font-medium text-text-primary">{question.prompt}</p>
+        <p className="text-lg font-medium text-slate-800">{question.prompt}</p>
         {feedback !== null && (
           <p
-            className={`text-sm ${feedback === "correct" ? "text-success" : "text-error"}`}
+            className={`text-sm ${feedback === "correct" ? "text-emerald-600" : "text-red-600"}`}
             role="status"
           >
             {feedback === "correct" ? "Nice." : "Try again."}
@@ -339,12 +339,12 @@ export function QuestionRenderer({
             value={numericInput}
             onChange={(e) => setNumericInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="w-full min-w-0 rounded-xl border-2 border-black/10 bg-surface-raised px-4 py-3 text-text-primary focus:border-brand-primary focus:outline-none focus:ring-0 sm:max-w-[200px]"
+            className="w-full min-w-0 rounded-2xl border border-blue-100/70 bg-white px-4 py-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-200 sm:max-w-[200px]"
             aria-label="Your answer"
             disabled={showNextForFillNumeric}
           />
           {question.unit && (
-            <span className="text-sm text-text-secondary">{question.unit}</span>
+            <span className="text-sm text-slate-500">{question.unit}</span>
           )}
         </div>
         {showNextForFillNumeric ? (
@@ -352,7 +352,7 @@ export function QuestionRenderer({
             type="button"
             onClick={handleNext}
             onKeyDown={(e) => e.key === "Enter" && handleNext()}
-            className="rounded-xl bg-brand-primary px-6 py-3 font-semibold text-text-inverse transition hover:opacity-90 active:scale-[0.98]"
+            className="rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-3 font-semibold text-white shadow-[0_10px_25px_rgba(37,99,235,0.30)] transition hover:shadow-[0_12px_28px_rgba(37,99,235,0.35)] active:scale-[0.98]"
           >
             Next
           </button>
@@ -360,7 +360,7 @@ export function QuestionRenderer({
           <button
             type="button"
             onClick={handleCheck}
-            className="rounded-xl bg-brand-primary px-6 py-3 font-semibold text-text-inverse transition hover:opacity-90 active:scale-[0.98]"
+            className="rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-3 font-semibold text-white shadow-[0_10px_25px_rgba(37,99,235,0.30)] transition hover:shadow-[0_12px_28px_rgba(37,99,235,0.35)] active:scale-[0.98]"
           >
             Check
           </button>
@@ -418,10 +418,10 @@ export function QuestionRenderer({
     };
     return (
       <div className="space-y-4">
-        <p className="text-lg font-medium text-text-primary">{question.prompt}</p>
+        <p className="text-lg font-medium text-slate-800">{question.prompt}</p>
         {feedback !== null && (
           <p
-            className={`text-sm ${feedback === "correct" ? "text-success" : "text-error"}`}
+            className={`text-sm ${feedback === "correct" ? "text-emerald-600" : "text-red-600"}`}
             role="status"
           >
             {feedback === "correct" ? "Nice." : "Try again."}
@@ -430,20 +430,20 @@ export function QuestionRenderer({
         <div
           className={`flex flex-col gap-4 sm:flex-row transition-colors duration-300 ${
             feedback === "incorrect" ? "animate-shake" : ""
-          } ${feedback === "correct" ? "rounded-xl ring-2 ring-success/50 ring-offset-2 ring-offset-[var(--color-surface-base)]" : ""}`}
+          } ${feedback === "correct" ? "rounded-2xl ring-2 ring-emerald-300 ring-offset-2 ring-offset-white" : ""}`}
         >
           <div
-            className={`min-h-[120px] flex-1 rounded-xl border-2 p-3 transition-colors ${
+            className={`min-h-[120px] flex-1 rounded-2xl border p-3 transition-colors ${
               feedback === "correct"
-                ? "border-success/30 bg-success/5"
-                : "border-dashed border-black/15 bg-black/5"
+                ? "border-emerald-200 bg-emerald-50/80"
+                : "border-dashed border-blue-100/70 bg-white/60"
             }`}
             onDragOver={handleDragOver}
             onDrop={handleDropOnPool}
             role="region"
             aria-label="Card pool"
           >
-            <p className="mb-2 text-xs font-medium text-text-secondary">Cards</p>
+            <p className="mb-2 text-xs font-medium text-slate-500">Cards</p>
             <div className="flex flex-wrap gap-2">
               {dragMatchPool.map((id) => {
                 const item = itemById[id];
@@ -453,7 +453,7 @@ export function QuestionRenderer({
                     key={id}
                     draggable
                     onDragStart={(e) => handleDragStart(e, id)}
-                    className="cursor-grab rounded-lg border-2 border-black/10 bg-surface-raised px-3 py-2 text-sm font-medium text-text-primary shadow-sm transition hover:border-brand-primary/30 hover:shadow active:cursor-grabbing active:scale-[0.98]"
+                    className="cursor-grab rounded-xl border border-blue-100/70 bg-white px-3 py-2 text-sm font-medium text-slate-800 shadow-sm transition hover:border-blue-200 hover:shadow active:cursor-grabbing active:scale-[0.98]"
                     role="button"
                     tabIndex={0}
                     aria-label={`Drag ${item.label}`}
@@ -465,21 +465,21 @@ export function QuestionRenderer({
             </div>
           </div>
           <div
-            className={`flex min-w-0 flex-1 flex-col gap-2 rounded-xl border-2 p-3 transition-colors ${
+            className={`flex min-w-0 flex-1 flex-col gap-2 rounded-2xl border p-3 transition-colors ${
               feedback === "correct"
-                ? "border-success/30 bg-success/5"
-                : "border-black/10 bg-surface-base"
+                ? "border-emerald-200 bg-emerald-50/80"
+                : "border-blue-100/70 bg-white/75"
             }`}
           >
-            <p className="text-xs font-medium text-text-secondary">Slots</p>
+            <p className="text-xs font-medium text-slate-500">Slots</p>
             {question.slots.map((slot) => {
               const assignedItemId = dragMatchAssignments[slot.id];
               const assignedItem = assignedItemId ? itemById[assignedItemId] : null;
               return (
                 <div
                   key={slot.id}
-                  className={`flex min-h-[44px] items-center rounded-lg border-2 border-dashed p-2 transition-colors ${
-                    feedback === "correct" ? "border-success/25 bg-success/5" : "border-black/15 bg-black/5"
+                  className={`flex min-h-[44px] items-center rounded-xl border border-dashed p-2 transition-colors ${
+                    feedback === "correct" ? "border-emerald-200 bg-emerald-50/50" : "border-blue-100/70 bg-white/60"
                   }`}
                   onDragOver={handleDragOver}
                   onDrop={(e) => handleDropOnSlot(e, slot.id)}
@@ -487,17 +487,17 @@ export function QuestionRenderer({
                   role="region"
                   aria-label={`Slot: ${slot.label}`}
                 >
-                  <span className="mr-2 shrink-0 text-xs text-text-secondary">{slot.label}</span>
+                  <span className="mr-2 shrink-0 text-xs text-slate-500">{slot.label}</span>
                   {assignedItem ? (
                     <div
                       draggable
                       onDragStart={(e) => handleDragStart(e, assignedItem.id)}
-                      className="cursor-grab rounded border border-black/10 bg-surface-raised px-2 py-1.5 text-sm text-text-primary transition hover:border-brand-primary/30 hover:shadow active:cursor-grabbing active:scale-[0.98]"
+                      className="cursor-grab rounded-lg border border-blue-100/70 bg-white px-2 py-1.5 text-sm text-slate-800 transition hover:border-blue-200 hover:shadow active:cursor-grabbing active:scale-[0.98]"
                     >
                       {assignedItem.label}
                     </div>
                   ) : (
-                    <span className="text-sm text-text-secondary">Drop here</span>
+                    <span className="text-sm text-slate-400">Drop here</span>
                   )}
                 </div>
               );
@@ -507,7 +507,7 @@ export function QuestionRenderer({
         <button
           type="button"
           onClick={handleCheck}
-          className="rounded-xl bg-brand-primary px-6 py-3 font-semibold text-text-inverse transition hover:opacity-90 active:scale-[0.98]"
+          className="rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-3 font-semibold text-white shadow-[0_10px_25px_rgba(37,99,235,0.30)] transition hover:shadow-[0_12px_28px_rgba(37,99,235,0.35)] active:scale-[0.98]"
         >
           Check
         </button>
@@ -549,17 +549,17 @@ export function QuestionRenderer({
     };
     return (
       <div className="space-y-4">
-        <p className="text-lg font-medium text-text-primary">{question.prompt}</p>
+        <p className="text-lg font-medium text-slate-800">{question.prompt}</p>
         {feedback !== null && (
           <p
-            className={`text-sm ${feedback === "correct" ? "text-success" : "text-error"}`}
+            className={`text-sm ${feedback === "correct" ? "text-emerald-600" : "text-red-600"}`}
             role="status"
           >
             {feedback === "correct" ? "Nice." : "Try again."}
           </p>
         )}
         <ul
-          className={`flex flex-col gap-2 transition-colors duration-300 ${feedback === "incorrect" ? "animate-shake" : ""} ${feedback === "correct" ? "rounded-xl ring-2 ring-success/50 ring-offset-2 ring-offset-[var(--color-surface-base)] p-1" : ""}`}
+          className={`flex flex-col gap-2 transition-colors duration-300 ${feedback === "incorrect" ? "animate-shake" : ""} ${feedback === "correct" ? "rounded-2xl ring-2 ring-emerald-300 ring-offset-2 ring-offset-white p-1" : ""}`}
           role="list"
         >
           {orderOrderedIds.map((id, index) => {
@@ -572,16 +572,16 @@ export function QuestionRenderer({
                 onDragStart={(e) => handleDragStart(e, id)}
                 onDragOver={handleDragOver}
                 onDrop={(e) => handleDrop(e, index)}
-                className={`cursor-grab rounded-xl border-2 px-4 py-3 text-sm font-medium text-text-primary shadow-sm transition active:cursor-grabbing active:scale-[0.98] ${
+                className={`cursor-grab rounded-2xl border px-4 py-3 text-sm font-medium text-slate-800 shadow-sm transition active:cursor-grabbing active:scale-[0.98] ${
                   feedback === "correct"
-                    ? "border-success/30 bg-success/10"
-                    : "border-black/10 bg-surface-raised hover:border-brand-primary/30 hover:shadow"
+                    ? "border-emerald-200 bg-emerald-50"
+                    : "border-blue-100/70 bg-white/80 hover:border-blue-200 hover:shadow"
                 }`}
                 role="button"
                 tabIndex={0}
                 aria-label={`Drag to reorder: ${item.label}`}
               >
-                <span className="mr-2 inline-block w-6 shrink-0 rounded bg-black/10 text-center text-xs font-bold text-text-secondary">
+                <span className="mr-2 inline-block w-6 shrink-0 rounded-lg bg-slate-100 text-center text-xs font-bold text-slate-600">
                   {index + 1}
                 </span>
                 {item.label}
@@ -592,7 +592,7 @@ export function QuestionRenderer({
         <button
           type="button"
           onClick={handleCheck}
-          className="rounded-xl bg-brand-primary px-6 py-3 font-semibold text-text-inverse transition hover:opacity-90 active:scale-[0.98]"
+          className="rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-3 font-semibold text-white shadow-[0_10px_25px_rgba(37,99,235,0.30)] transition hover:shadow-[0_12px_28px_rgba(37,99,235,0.35)] active:scale-[0.98]"
         >
           Check
         </button>
@@ -624,32 +624,32 @@ export function QuestionRenderer({
     };
     return (
       <div className="space-y-4">
-        <p className="text-xs font-semibold uppercase tracking-wide text-text-secondary">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
           {title}
         </p>
-        <p className="text-lg font-medium text-text-primary">{question.prompt}</p>
+        <p className="text-lg font-medium text-slate-800">{question.prompt}</p>
 
         {/* Cash in Pocket meter */}
-        <div className="rounded-xl border-2 border-black/10 bg-surface-base p-4">
-          <p className="text-xs font-medium text-text-secondary">
+        <div className="rounded-2xl border border-blue-100/70 bg-white/75 p-4 shadow-[0_20px_60px_rgba(37,99,235,0.08)] backdrop-blur-xl">
+          <p className="text-xs font-medium text-slate-500">
             Cash in Pocket
           </p>
-          <p className="mt-1 font-semibold tabular-nums text-brand-accent">
+          <p className="mt-1 font-semibold tabular-nums text-blue-600">
             {displayCash.toLocaleString("en-US")}
           </p>
           <div
-            className="mt-2 h-2.5 overflow-hidden rounded-full bg-black/10"
+            className="mt-2 h-2.5 overflow-hidden rounded-full bg-slate-200"
             role="progressbar"
             aria-valuenow={displayCash}
             aria-valuemin={0}
             aria-valuemax={maxRange}
           >
             <div
-              className="h-full rounded-full bg-brand-accent transition-all duration-500 ease-out"
+              className="h-full rounded-full bg-gradient-to-r from-blue-600 to-blue-500 transition-all duration-500 ease-out"
               style={{ width: `${barPct}%` }}
             />
           </div>
-          <p className="mt-1 text-xs text-text-secondary">
+          <p className="mt-1 text-xs text-slate-500">
             Starting cash: {question.startingCash.toLocaleString("en-US")}
           </p>
         </div>
@@ -659,29 +659,29 @@ export function QuestionRenderer({
           {question.steps.map((step) => (
             <div
               key={step.id}
-              className="rounded-xl border-2 border-black/10 bg-surface-raised p-3"
+              className="rounded-2xl border border-blue-100/70 bg-white/80 p-3"
             >
-              <p className="font-medium text-text-primary">{step.label}</p>
+              <p className="font-medium text-slate-800">{step.label}</p>
               <div className="mt-2 flex flex-wrap gap-1.5">
                 <span
-                  className={`rounded px-2 py-0.5 text-xs font-medium ${
+                  className={`rounded-lg px-2 py-0.5 text-xs font-medium ${
                     step.direction === "wc_asset"
-                      ? "bg-brand-primary/15 text-brand-primary"
-                      : "bg-warning/15 text-warning"
+                      ? "bg-blue-100 text-blue-700"
+                      : "bg-amber-100 text-amber-800"
                   }`}
                 >
                   {step.direction === "wc_asset" ? "WC Asset" : "WC Liability"}
                 </span>
                 <span
-                  className={`rounded px-2 py-0.5 text-xs font-medium ${
+                  className={`rounded-lg px-2 py-0.5 text-xs font-medium ${
                     step.polarity === "increase"
-                      ? "bg-success/15 text-success"
-                      : "bg-error/15 text-error"
+                      ? "bg-emerald-100 text-emerald-700"
+                      : "bg-red-100 text-red-700"
                   }`}
                 >
                   {step.polarity === "increase" ? "Increase" : "Decrease"}
                 </span>
-                <span className="text-sm font-semibold tabular-nums text-text-primary">
+                <span className="text-sm font-semibold tabular-nums text-slate-800">
                   {step.amount.toLocaleString("en-US")}
                 </span>
               </div>
@@ -691,7 +691,7 @@ export function QuestionRenderer({
 
         {/* Ending Cash input */}
         <div>
-          <label htmlFor="cash-meter-ending" className="text-sm font-medium text-text-primary">
+          <label htmlFor="cash-meter-ending" className="text-sm font-medium text-slate-800">
             Ending Cash
           </label>
           <input
@@ -700,14 +700,14 @@ export function QuestionRenderer({
             inputMode="decimal"
             value={cashMeterEndingInput}
             onChange={(e) => setCashMeterEndingInput(e.target.value)}
-            className="mt-1 w-full max-w-[200px] rounded-xl border-2 border-black/10 bg-surface-raised px-4 py-3 text-text-primary focus:border-brand-primary focus:outline-none focus:ring-0"
+            className="mt-1 w-full max-w-[200px] rounded-2xl border border-blue-100/70 bg-white px-4 py-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-200"
             aria-label="Ending cash"
           />
         </div>
 
         {feedback !== null && (
           <p
-            className={`text-sm ${feedback === "correct" ? "text-success" : "text-error"}`}
+            className={`text-sm ${feedback === "correct" ? "text-emerald-600" : "text-red-600"}`}
             role="status"
           >
             {feedback === "correct"
@@ -719,7 +719,7 @@ export function QuestionRenderer({
         <button
           type="button"
           onClick={handleCheck}
-          className="rounded-xl bg-brand-primary px-6 py-3 font-semibold text-text-inverse transition hover:opacity-90 active:scale-[0.98]"
+          className="rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-3 font-semibold text-white shadow-[0_10px_25px_rgba(37,99,235,0.30)] transition hover:shadow-[0_12px_28px_rgba(37,99,235,0.35)] active:scale-[0.98]"
         >
           Check
         </button>
@@ -728,6 +728,6 @@ export function QuestionRenderer({
   }
 
   return (
-    <p className="text-sm text-text-secondary">This question type is not supported yet.</p>
+    <p className="text-sm text-slate-500">This question type is not supported yet.</p>
   );
 }

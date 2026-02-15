@@ -7,8 +7,16 @@ import { getWorldBySlug } from "@/lib/worlds";
 import type { PathNode } from "@/lib/worlds";
 import type { ModelingProgress } from "@/lib/worlds/progress";
 import { getProgressSnapshot } from "@/lib/worlds/progress";
+import { getLabBySlug } from "@/lib/worlds/catalog";
 import { SalaryHUD } from "@/components/worlds/SalaryHUD";
+import { FSMDetailClient } from "@/components/worlds/FSMDetailClient";
+import { WorldComingSoon } from "@/components/worlds/WorldComingSoon";
 import { useMounted } from "@/hooks/useMounted";
+
+const worldsDetailBg = {
+  backgroundImage: `radial-gradient(ellipse at top, rgba(37,99,235,0.14), transparent 60%), linear-gradient(rgba(37,99,235,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.035) 1px, transparent 1px)`,
+  backgroundSize: "100% 100%, 44px 44px, 44px 44px",
+};
 
 type NodeState = "locked" | "unlocked" | "completed";
 
@@ -95,12 +103,14 @@ function NodeBubble({ node, state, worldSlug, onLockedClick }: NodeBubbleProps) 
 
 const EMPTY_PROGRESS: ModelingProgress = { completedNodeIds: [] };
 
-export default function WorldPage() {
-  const params = useParams();
-  const worldSlug = typeof params?.worldSlug === "string" ? params.worldSlug : "";
-  const world = getWorldBySlug(worldSlug);
+function ExistingWorldMap({
+  worldSlug,
+  world,
+}: {
+  worldSlug: string;
+  world: { title: string; nodes: PathNode[] };
+}) {
   const mounted = useMounted();
-
   const [progress, setProgress] = useState<ModelingProgress>(EMPTY_PROGRESS);
   const [lockedMessage, setLockedMessage] = useState<string | null>(null);
 
@@ -120,12 +130,7 @@ export default function WorldPage() {
     return () => window.removeEventListener("focus", onFocus);
   }, [mounted, refreshProgress]);
 
-  if (!worldSlug || !world) {
-    notFound();
-  }
-
   const nodes = [...world.nodes].sort((a, b) => a.order - b.order);
-
   const handleLockedClick = () => {
     setLockedMessage("Finish the previous node first.");
     setTimeout(() => setLockedMessage(null), 3000);
@@ -137,11 +142,9 @@ export default function WorldPage() {
         <h1 className="font-display text-2xl font-bold text-brand-primary">
           {world.title}
         </h1>
-
         <div className="mt-4">
           <SalaryHUD />
         </div>
-
         {lockedMessage && (
           <p
             className="mt-3 rounded-lg bg-warning/15 px-3 py-2 text-sm text-warning"
@@ -151,7 +154,6 @@ export default function WorldPage() {
           </p>
         )}
       </header>
-
       <section aria-label="Path">
         <ul className="flex flex-col gap-3">
           {nodes.map((node, index) => (
@@ -168,4 +170,48 @@ export default function WorldPage() {
       </section>
     </div>
   );
+}
+
+export default function WorldPage() {
+  const params = useParams();
+  const worldSlug = typeof params?.worldSlug === "string" ? params.worldSlug : "";
+
+  const lab = getLabBySlug(worldSlug);
+  const world = getWorldBySlug(worldSlug);
+
+  if (!worldSlug) {
+    notFound();
+  }
+
+  if (lab && lab.slug === "fsm") {
+    return (
+      <div
+        className="min-h-screen px-4 py-8 md:py-12"
+        style={worldsDetailBg}
+      >
+        <FSMDetailClient />
+      </div>
+    );
+  }
+
+  if (lab && lab.slug !== "fsm") {
+    return (
+      <div
+        className="min-h-screen"
+        style={worldsDetailBg}
+      >
+        <WorldComingSoon lab={lab} />
+      </div>
+    );
+  }
+
+  if (world) {
+    return (
+      <div className="mx-auto max-w-4xl px-4 py-8">
+        <ExistingWorldMap worldSlug={worldSlug} world={world} />
+      </div>
+    );
+  }
+
+  notFound();
 }

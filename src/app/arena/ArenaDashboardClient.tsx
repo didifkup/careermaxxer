@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 
 export function ArenaDashboardClient() {
   const router = useRouter();
@@ -40,13 +39,13 @@ export function ArenaDashboardClient() {
   }
 
   return (
-    <Button
-      size="lg"
+    <button
+      type="button"
       onClick={handleEnterRanked}
       disabled={loading}
-      className="w-full sm:w-auto"
+      className="inline-flex w-full items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_25px_rgba(37,99,235,0.30)] transition hover:shadow-[0_12px_28px_rgba(37,99,235,0.35)] active:scale-[0.98] disabled:opacity-60 sm:w-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 focus-visible:ring-offset-2"
     >
       {loading ? "Starting…" : "Enter Ranked Sprint"}
-    </Button>
+    </button>
   );
 }

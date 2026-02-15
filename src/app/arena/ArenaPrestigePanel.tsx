@@ -67,35 +67,38 @@ export function ArenaPrestigePanel() {
 
   return (
     <div
-      className="rounded-xl border border-black/8 bg-surface-raised/80 px-4 py-3 shadow-sm"
+      className="rounded-2xl border border-blue-100/70 bg-white/75 px-4 py-3 shadow-[0_20px_60px_rgba(37,99,235,0.08)] backdrop-blur-xl"
       aria-label="Ranking summary"
     >
       <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
         <div className="flex items-baseline gap-2">
-          <span className="text-text-secondary">Global Rank</span>
-          <span className="font-semibold tabular-nums text-text-primary">
+          <span className="text-slate-500">Global Rank</span>
+          <span className="font-semibold tabular-nums text-slate-800">
             {userId == null ? "—" : globalRank != null ? `#${globalRank}` : "Unranked"}
           </span>
         </div>
-        <div className="h-4 w-px bg-black/10" aria-hidden />
+        <div className="h-4 w-px bg-slate-200" aria-hidden />
         <div className="flex items-baseline gap-2">
-          <span className="text-text-secondary">School Rank</span>
+          <span className="text-slate-500">School Rank</span>
           {schoolSet === false ? (
             <Link
               href="/account"
-              className="font-medium text-brand-primary hover:underline"
+              className="font-medium text-blue-600 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 rounded"
             >
               Set school
             </Link>
           ) : (
-            <span className="font-semibold tabular-nums text-text-primary">
+            <span className="font-semibold tabular-nums text-slate-800">
               {userId == null ? "—" : schoolRank != null ? `#${schoolRank}` : "Unranked"}
             </span>
           )}
         </div>
       </div>
-      <p className="mt-1.5 text-xs text-text-secondary">
-        <Link href="/leaderboard" className="hover:underline">
+      <p className="mt-1.5 text-xs text-slate-500">
+        <Link
+          href="/leaderboard"
+          className="text-blue-600 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 rounded"
+        >
           View leaderboards →
         </Link>
       </p>

@@ -7,6 +7,7 @@ export const SALARY_CAP = 180_000;
 
 const STORAGE_KEY_PROGRESS = "modeling_progress_v1";
 const STORAGE_KEY_SALARY = "modeling_salary_v1";
+const STORAGE_KEY_WORLD_FSM = "worldProgress:fsm";
 
 export type ModelingProgress = {
   completedNodeIds: string[];
@@ -186,4 +187,51 @@ export function resetSalary(): void {
       storageAvailable = false;
     }
   }
+}
+
+// ---------------------------------------------------------------------------
+// World (lab) module completion — FSM only, for overview/detail progress
+// ---------------------------------------------------------------------------
+
+function safeParseModuleIds(raw: string | null): string[] {
+  if (raw == null || raw === "") return [];
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return [];
+    return (parsed as unknown[]).filter(
+      (id): id is string => typeof id === "string"
+    );
+  } catch {
+    return [];
+  }
+}
+
+export function getFSMModuleCompletions(): string[] {
+  const storage = getStorage();
+  if (!storageAvailable || !storage) return [];
+  try {
+    return safeParseModuleIds(storage.getItem(STORAGE_KEY_WORLD_FSM));
+  } catch {
+    return [];
+  }
+}
+
+export function setFSMModuleComplete(moduleId: string, complete: boolean): void {
+  const storage = getStorage();
+  if (!storageAvailable || !storage) return;
+  const current = safeParseModuleIds(storage.getItem(STORAGE_KEY_WORLD_FSM));
+  const next = complete
+    ? current.includes(moduleId)
+      ? current
+      : [...current, moduleId]
+    : current.filter((id) => id !== moduleId);
+  try {
+    storage.setItem(STORAGE_KEY_WORLD_FSM, JSON.stringify(next));
+  } catch {
+    storageAvailable = false;
+  }
+}
+
+export function isFSMModuleComplete(moduleId: string): boolean {
+  return getFSMModuleCompletions().includes(moduleId);
 }

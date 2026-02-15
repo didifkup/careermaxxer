@@ -19,7 +19,7 @@ export function SchoolBadge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-2 font-semibold text-text-primary",
+        "inline-flex items-center gap-2 font-semibold text-slate-800",
         className
       )}
     >
@@ -32,7 +32,7 @@ export function SchoolBadge({
       ) : (
         <span
           className={cn(
-            "flex shrink-0 items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary",
+            "flex shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-700",
             size === "sm" ? "h-[18px] w-[18px] text-[10px]" : "h-5 w-5 text-xs"
           )}
           aria-hidden

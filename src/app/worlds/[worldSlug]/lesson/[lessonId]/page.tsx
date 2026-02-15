@@ -61,6 +61,11 @@ type Phase = "read" | "practice" | "boss" | "mastery";
 // READ screen
 // ---------------------------------------------------------------------------
 
+const worldsLessonBg = {
+  backgroundImage: `radial-gradient(ellipse at top, rgba(37,99,235,0.14), transparent 60%), linear-gradient(rgba(37,99,235,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.035) 1px, transparent 1px)`,
+  backgroundSize: "100% 100%, 44px 44px, 44px 44px",
+};
+
 function ReadScreen({
   lesson,
   onStart,
@@ -70,20 +75,20 @@ function ReadScreen({
 }) {
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-2xl font-bold text-brand-primary">
+      <h1 className="font-display text-2xl font-semibold text-slate-800">
         {lesson.headline}
       </h1>
-      <div className="whitespace-pre-line text-text-primary">
+      <div className="whitespace-pre-line text-slate-700">
         {lesson.story}
       </div>
-      <div className="rounded-xl border-2 border-brand-primary/20 bg-surface-base p-4">
-        <p className="text-sm font-medium text-text-secondary">Rule</p>
-        <p className="mt-1 text-text-primary">{lesson.ruleCard}</p>
+      <div className="rounded-2xl border border-blue-100/70 bg-white/75 p-5 shadow-[0_20px_60px_rgba(37,99,235,0.08)] backdrop-blur-xl">
+        <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Rule</p>
+        <p className="mt-2 text-slate-800">{lesson.ruleCard}</p>
       </div>
       <button
         type="button"
         onClick={onStart}
-        className="rounded-xl bg-brand-primary px-6 py-3 font-semibold text-text-inverse transition hover:opacity-90 active:scale-[0.98]"
+        className="rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-3 font-semibold text-white shadow-[0_10px_25px_rgba(37,99,235,0.30)] transition hover:shadow-[0_12px_28px_rgba(37,99,235,0.35)] active:scale-[0.98]"
       >
         Start Practice
       </button>
@@ -105,26 +110,26 @@ function MasteryScreen({
   onBackToPath: () => void;
 }) {
   return (
-    <div className="space-y-6 text-center">
+    <div className="space-y-6 rounded-3xl border border-blue-100/70 bg-white/75 p-8 text-center shadow-[0_20px_60px_rgba(37,99,235,0.10)] backdrop-blur-xl">
       <div
-        className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-success/20 text-4xl text-success animate-scale-pop"
+        className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 text-4xl text-emerald-600"
         aria-hidden
       >
         ✓
       </div>
-      <h2 className="font-display text-xl font-bold text-brand-primary">
-        Mastery unlocked
+      <h2 className="font-display text-xl font-semibold text-slate-800">
+        Module complete
       </h2>
-      <p className="text-lg font-semibold text-text-primary">{badgeName}</p>
-      <p className="text-brand-accent font-semibold">
+      <p className="text-lg font-medium text-slate-700">{badgeName}</p>
+      <p className="text-sm font-semibold text-emerald-600">
         +{formatSalary(salaryReward)} earned
       </p>
       <button
         type="button"
         onClick={onBackToPath}
-        className="rounded-xl bg-brand-primary px-6 py-3 font-semibold text-text-inverse transition hover:opacity-90 active:scale-[0.98]"
+        className="rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-3 font-semibold text-white shadow-[0_10px_25px_rgba(37,99,235,0.30)] transition hover:shadow-[0_12px_28px_rgba(37,99,235,0.35)] active:scale-[0.98]"
       >
-        Back to Path
+        Back to path
       </button>
     </div>
   );
@@ -189,51 +194,57 @@ export default function LessonRunnerPage() {
 
   if (!worldSlug) {
     return (
-      <div className="mx-auto max-w-2xl">
-        <p className="text-text-secondary">Invalid world.</p>
-        <Link href="/worlds" className="mt-2 inline-block text-brand-primary underline">
-          Back to Worlds
-        </Link>
-      </div>
-    );
-  }
-
-  if (!lesson) {
-    return (
-      <div className="mx-auto max-w-2xl">
-        <div className="rounded-2xl border-2 border-black/10 bg-surface-base p-8 text-center">
-          <h2 className="font-display text-xl font-bold text-text-primary">
-            Lesson not found
-          </h2>
-          <p className="mt-2 text-text-secondary">
-            This lesson doesn&apos;t exist or has been removed.
-          </p>
-          <Link
-            href={`/worlds/${worldSlug}`}
-            className="mt-4 inline-block rounded-xl bg-brand-primary px-4 py-2 font-semibold text-text-inverse transition hover:opacity-90"
-          >
-            Back to path
+      <div className="min-h-screen px-4 py-8" style={worldsLessonBg}>
+        <div className="mx-auto max-w-2xl">
+          <p className="text-slate-600">Invalid world.</p>
+          <Link href="/worlds" className="mt-2 inline-block text-blue-600 underline hover:text-blue-700">
+            Back to Worlds
           </Link>
         </div>
       </div>
     );
   }
 
-  return (
-    <div className="mx-auto max-w-2xl">
-      <header className="mb-6 flex flex-col gap-4 border-b border-black/10 pb-4">
-        <Link
-          href={`/worlds/${worldSlug}`}
-          className="self-start rounded-lg px-2 py-1 text-sm text-text-secondary transition hover:bg-black/5 hover:text-text-primary"
-        >
-          ← Back to path
-        </Link>
-        <SalaryHUD />
-      </header>
+  if (!lesson) {
+    return (
+      <div className="min-h-screen px-4 py-8" style={worldsLessonBg}>
+        <div className="mx-auto max-w-2xl">
+          <div className="rounded-3xl border border-blue-100/70 bg-white/75 p-8 text-center shadow-[0_20px_60px_rgba(37,99,235,0.10)] backdrop-blur-xl">
+            <h2 className="font-display text-xl font-semibold text-slate-800">
+              Lesson not found
+            </h2>
+            <p className="mt-2 text-slate-600">
+              This lesson doesn&apos;t exist or has been removed.
+            </p>
+            <Link
+              href={`/worlds/${worldSlug}`}
+              className="mt-4 inline-block rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 px-4 py-2 font-semibold text-white shadow-[0_10px_25px_rgba(37,99,235,0.30)] transition hover:shadow-[0_12px_28px_rgba(37,99,235,0.35)] active:scale-[0.98]"
+            >
+              Back to path
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-      <main>
-        {phase === "read" && (
-          <ReadScreen
+  return (
+    <div className="min-h-screen px-4 py-8" style={worldsLessonBg}>
+      <div className="mx-auto max-w-2xl">
+        <header className="mb-6 flex flex-col gap-4 border-b border-blue-100/70 pb-4">
+          <Link
+            href={`/worlds/${worldSlug}`}
+            className="self-start rounded-xl px-3 py-1.5 text-sm text-slate-600 transition hover:bg-white/60 hover:text-slate-800"
+          >
+            ← Back to path
+          </Link>
+          <SalaryHUD />
+        </header>
+
+        <main>
+          {phase === "read" && (
+            <div className="rounded-3xl border border-blue-100/70 bg-white/75 p-8 shadow-[0_20px_60px_rgba(37,99,235,0.10)] backdrop-blur-xl">
+              <ReadScreen
             lesson={{
               headline: lesson.headline,
               story: lesson.story,
@@ -247,57 +258,59 @@ export default function LessonRunnerPage() {
                 fireConfettiLight();
               }
             }}
-          />
-        )}
-
-        {phase === "practice" && currentPracticeQuestion && (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between gap-2 text-sm">
-              <span className="font-medium text-text-secondary">
-                {practiceIndex + 1} / {practiceTotal}
-              </span>
-              {streak > 0 && (
-                <span className="rounded-full bg-success/15 px-2 py-0.5 font-medium text-success">
-                  Streak: {streak}
-                </span>
-              )}
+              />
             </div>
-            <QuestionRenderer
+          )}
+
+          {phase === "practice" && currentPracticeQuestion && (
+            <div className="space-y-4 rounded-3xl border border-blue-100/70 bg-white/75 p-6 shadow-[0_20px_60px_rgba(37,99,235,0.10)] backdrop-blur-xl">
+              <div className="flex items-center justify-between gap-2 text-sm">
+                <span className="font-medium text-slate-500">
+                  {practiceIndex + 1} / {practiceTotal}
+                </span>
+                {streak > 0 && (
+                  <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 font-medium text-emerald-700">
+                    Streak: {streak}
+                  </span>
+                )}
+              </div>
+              <QuestionRenderer
               question={currentPracticeQuestion}
               onCorrect={handleCorrect}
               onIncorrect={handleWrong}
             />
-          </div>
-        )}
-
-        {phase === "boss" && bossQuestion && (
-          <div className="space-y-4">
-            <p className="rounded-lg bg-warning/15 px-3 py-1.5 text-sm font-semibold text-warning">
-              Boss
-            </p>
-            <div className="flex items-center justify-between gap-2 text-sm">
-              {streak > 0 && (
-                <span className="rounded-full bg-success/15 px-2 py-0.5 font-medium text-success">
-                  Streak: {streak}
-                </span>
-              )}
             </div>
-            <QuestionRenderer
+          )}
+
+          {phase === "boss" && bossQuestion && (
+            <div className="space-y-4 rounded-3xl border border-blue-100/70 bg-white/75 p-6 shadow-[0_20px_60px_rgba(37,99,235,0.10)] backdrop-blur-xl">
+              <p className="rounded-xl bg-amber-100/80 px-3 py-1.5 text-sm font-semibold text-amber-800">
+                Boss
+              </p>
+              <div className="flex items-center justify-between gap-2 text-sm">
+                {streak > 0 && (
+                  <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 font-medium text-emerald-700">
+                    Streak: {streak}
+                  </span>
+                )}
+              </div>
+              <QuestionRenderer
               question={bossQuestion}
               onCorrect={handleCorrect}
               onIncorrect={handleWrong}
             />
-          </div>
-        )}
+            </div>
+          )}
 
-        {phase === "mastery" && (
-          <MasteryScreen
-            badgeName={lesson.mastery.badgeName}
-            salaryReward={lesson.mastery.salaryReward}
-            onBackToPath={handleComplete}
-          />
-        )}
-      </main>
+          {phase === "mastery" && (
+            <MasteryScreen
+              badgeName={lesson.mastery.badgeName}
+              salaryReward={lesson.mastery.salaryReward}
+              onBackToPath={handleComplete}
+            />
+          )}
+        </main>
+      </div>
     </div>
   );
 }

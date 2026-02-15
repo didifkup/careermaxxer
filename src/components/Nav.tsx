@@ -57,7 +57,7 @@ export function Nav() {
     { label: "Technicals", href: "/practice" },
     { label: "Reading", href: "/reading" },
     { label: "Quiz", href: "/quiz" },
-    { label: "Worlds", href: "/worlds" },
+    { label: "Labs", href: "/worlds" },
     { label: "Storyteller", href: "/storyteller" },
     { label: "Arena", href: "/arena" },
   ];

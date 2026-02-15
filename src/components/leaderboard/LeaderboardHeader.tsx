@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { SectionHeader } from "@/components/ui/section-header";
 
 const REFRESH_INTERVAL_SEC = 6 * 3600;
 
@@ -13,8 +14,10 @@ function formatCountdown(sec: number): string {
 
 export function LeaderboardHeader({
   tab,
+  subtitle,
 }: {
   tab: "global" | "school";
+  subtitle?: string;
 }) {
   const [secondsLeft, setSecondsLeft] = useState(REFRESH_INTERVAL_SEC);
 
@@ -26,29 +29,27 @@ export function LeaderboardHeader({
     return () => clearInterval(t);
   }, [tab]);
 
-  const subheader =
+  const defaultSubheader =
     tab === "global"
       ? "Climb the global ladder. Every sprint changes rank."
       : "Be the #1 at your school. Flex it.";
 
   return (
-    <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-      <div>
-        <h1 className="font-display text-2xl font-bold text-brand-primary">
-          Leaderboards
-        </h1>
-        <p className="mt-1 text-sm text-text-secondary">{subheader}</p>
-      </div>
-      <div className="flex items-center gap-2 text-sm">
-        <span className="relative flex h-2 w-2">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
-        </span>
-        <span className="font-medium text-text-primary">Live Rankings</span>
-        <span className="tabular-nums text-text-secondary">
-          Next refresh in: {formatCountdown(secondsLeft)}
-        </span>
-      </div>
-    </div>
+    <SectionHeader
+      title="Leaderboards"
+      subtitle={subtitle ?? defaultSubheader}
+      rightSlot={
+        <>
+          <span className="relative flex h-2 w-2" aria-hidden>
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+          </span>
+          <span className="font-medium text-slate-700">Live</span>
+          <span className="tabular-nums text-slate-500">
+            Refresh: {formatCountdown(secondsLeft)}
+          </span>
+        </>
+      }
+    />
   );
 }
