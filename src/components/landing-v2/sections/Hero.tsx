@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { WaveBackgroundWrapper } from "@/components/ui/wave-background-wrapper";
 import { StaggerContainer, motionVariants, useReducedMotion } from "../ui/Motion";
 import { CountUp } from "../ui/CountUp";
 
@@ -22,7 +23,37 @@ export function Hero() {
 
   return (
     <section className="relative overflow-hidden px-4 pt-12 pb-16 md:pt-16 md:pb-24 lg:pt-20">
-      <div className="mx-auto max-w-6xl">
+      {/* Background stack: wave lowest, then grid/blob, veil, tint. Content above. */}
+      <div className="absolute inset-0 -z-10">
+        <WaveBackgroundWrapper enabled />
+        {/* Existing grid/blob layers (same as GlowGrid) above the wave */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+          <div
+            className="absolute inset-0 opacity-[0.06]"
+            style={{
+              backgroundImage: `
+                linear-gradient(rgba(37,99,235,0.4) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(37,99,235,0.4) 1px, transparent 1px)
+              `,
+              backgroundSize: "44px 44px",
+            }}
+          />
+          <div
+            className={`absolute top-1/4 left-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.08] ${!reduced ? "animate-blob-drift" : ""}`}
+            style={{
+              background: "radial-gradient(circle, rgba(37,99,235,0.35) 0%, transparent 70%)",
+            }}
+          />
+        </div>
+        <div className="absolute inset-0 bg-white/35" />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: "radial-gradient(circle at 20% 15%, rgba(59,130,246,0.12), transparent 55%), radial-gradient(circle at 75% 25%, rgba(99,102,241,0.08), transparent 60%)",
+          }}
+        />
+      </div>
+      <div className="relative z-10 mx-auto max-w-6xl">
         <div className="grid gap-12 lg:grid-cols-[1fr,400px] lg:gap-16 items-start">
           {/* Left: copy + CTA */}
           <div className="flex flex-col">

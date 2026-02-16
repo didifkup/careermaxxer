@@ -38,6 +38,7 @@ export function Nav() {
     { label: "Reading", href: "/reading" },
     { label: "Quiz", href: "/quiz" },
     { label: "Labs", href: "/worlds" },
+    { label: "Resume Lab", href: "/worlds/resume" },
     { label: "Storyteller", href: "/storyteller" },
     { label: "Mock", href: "/mock-interview" },
     { label: "Arena", href: "/arena" },

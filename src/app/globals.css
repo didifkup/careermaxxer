@@ -430,6 +430,21 @@ svg .svg-origin {
   }
 }
 
+/* Hero wave: subtle moving gradient (CSS-only, no WebGL) */
+@keyframes hero-wave-drift {
+  0%, 100% {
+    background-position: 0% 40%, 100% 60%, 50% 80%;
+  }
+  50% {
+    background-position: 100% 60%, 0% 40%, 50% 20%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-wave-drift {
+    animation: none !important;
+  }
+}
+
 @keyframes marquee-vertical {
   from {
     transform: translateY(0);

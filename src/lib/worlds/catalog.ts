@@ -9,7 +9,8 @@ export type WorldSlug =
   | "ma"
   | "market-signals"
   | "deal-intelligence"
-  | "leverage";
+  | "leverage"
+  | "resume";
 
 export type LabDef = {
   slug: WorldSlug;
@@ -60,6 +61,13 @@ export const LABS: LabDef[] = [
     title: "Leverage Engine",
     hook: "Understand LBOs: debt, paydown, returns — from zero to solid.",
     placeholderMinutes: 75,
+    available: true,
+  },
+  {
+    slug: "resume",
+    title: "Resume Lab",
+    hook: "Score + Tailor + Pitch",
+    placeholderMinutes: 7,
     available: true,
   },
 ];

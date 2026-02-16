@@ -47,6 +47,7 @@ export function WorldIcon({ slug, active, className }: WorldIconProps) {
         {slug === "market-signals" && <IconMarketSignals />}
         {slug === "deal-intelligence" && <IconDealIntelligence />}
         {slug === "leverage" && <IconLeverage />}
+        {slug === "resume" && <IconResume />}
       </svg>
     </div>
   );
@@ -172,6 +173,18 @@ function IconLeverage() {
         className="svg-origin transition-transform duration-200 group-hover:translate-y-[-1px]"
       />
       <line x1="5.5" y1="18.5" x2="12.5" y2="18.5" className="opacity-70" />
+    </>
+  );
+}
+
+function IconResume() {
+  return (
+    <>
+      <path d="M7 4 L7 20 L17 20 L17 14 L21 14 L21 4 Z" className="opacity-90" />
+      <path d="M17 14 L17 20 L21 14 Z" className="opacity-70" />
+      <line x1="10" y1="8" x2="14" y2="8" className="opacity-80" />
+      <line x1="10" y1="11" x2="14" y2="11" className="opacity-80" />
+      <line x1="10" y1="14" x2="12" y2="14" className="opacity-80" />
     </>
   );
 }
