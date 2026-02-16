@@ -14,7 +14,7 @@ function useReducedMotion(): boolean {
   return reduced;
 }
 
-function useInView(ref: React.RefObject<HTMLElement>, once = true): boolean {
+function useInView(ref: React.RefObject<HTMLElement | null>, once = true): boolean {
   const [inView, setInView] = useState(false);
   useEffect(() => {
     const el = ref.current;
