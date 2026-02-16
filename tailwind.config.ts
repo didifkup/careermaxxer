@@ -105,6 +105,7 @@ const config: Config = {
         "practice-idle-pulse": "practice-idle-pulse var(--practice-motion-idle-pulse-duration) var(--practice-motion-idle-pulse-ease) infinite",
         "practice-completion-pop": "practice-completion-pop var(--practice-motion-completion-pop-duration) var(--practice-motion-completion-pop-ease) forwards",
         "practice-reward-float": "practice-reward-float var(--practice-motion-reward-float-duration) var(--practice-motion-reward-float-ease) forwards",
+        "blob-drift": "blob-drift 18s ease-in-out infinite",
       },
       keyframes: {
         shake: {
@@ -146,6 +147,10 @@ const config: Config = {
         float: {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-4px)" },
+        },
+        "blob-drift": {
+          "0%, 100%": { transform: "translate(-50%, -50%) scale(1)", opacity: "0.08" },
+          "50%": { transform: "translate(-48%, -52%) scale(1.05)", opacity: "0.12" },
         },
       },
     },
