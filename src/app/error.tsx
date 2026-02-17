@@ -37,14 +37,19 @@ export default function Error({
   }, [error]);
 
   const code = error && "code" in error ? (error as { code?: string }).code : undefined;
-  const message =
-    error instanceof Error
-      ? error.message
-      : typeof error === "object" && error !== null && "message" in error
-        ? String((error as { message: unknown }).message)
-        : typeof error === "string"
-          ? error
-          : "An unexpected error occurred";
+  let message: string;
+  if (error instanceof Error) {
+    message = error.message;
+  } else if (typeof error === "object" && error !== null && "message" in error) {
+    const m = (error as { message: unknown }).message;
+    const s = typeof m === "string" ? m : String(m ?? "");
+    message = s && s !== "[object Object]" && !s.startsWith("[object ") ? s : "An unexpected error occurred";
+  } else if (typeof error === "string") {
+    message = error;
+  } else {
+    message = "An unexpected error occurred";
+  }
+  if (!message || message.startsWith("[object ")) message = "An unexpected error occurred";
   const isConfigMissing =
     code === SUPABASE_CONFIG_ERROR_CODE ||
     message.includes("Missing Supabase") ||

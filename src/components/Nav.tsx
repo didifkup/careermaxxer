@@ -35,7 +35,7 @@ export function Nav() {
 
   const tabs = [
     { label: "Technicals", href: "/practice" },
-    { label: "Reading", href: "/reading" },
+    { label: "Reading", href: "/learn" },
     { label: "Quiz", href: "/quiz" },
     { label: "Labs", href: "/worlds" },
     { label: "Resume Lab", href: "/worlds/resume" },
@@ -129,7 +129,9 @@ export function Nav() {
                   ? pathname === "/storyteller" || pathname.startsWith("/storyteller/")
                   : href === "/mock-interview"
                     ? pathname === "/mock-interview" || pathname.startsWith("/mock-interview/")
-                    : pathname === href || (href === "/" && pathname === "/");
+                    : href === "/learn"
+                      ? pathname === "/learn" || pathname.startsWith("/learn/")
+                      : pathname === href || (href === "/" && pathname === "/");
             return (
               <Link
                 key={href}

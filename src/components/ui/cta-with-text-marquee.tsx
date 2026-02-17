@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ReactNode, useEffect, useRef } from "react";
 
@@ -128,13 +129,13 @@ export function FinalCTA() {
                 <span className="relative z-10">START FLOOR 1</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></div>
               </a>
-              <a
-                href="/reading"
+              <Link
+                href="/learn"
                 className="group relative px-6 py-3 bg-secondary text-secondary-foreground rounded-md font-medium overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg border border-border"
               >
                 <span className="relative z-10">SEE THE WORLDS</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-foreground/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></div>
-              </a>
+              </Link>
             </div>
           </div>
 

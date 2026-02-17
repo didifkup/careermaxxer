@@ -610,3 +610,35 @@ svg .svg-origin {
     animation: none;
   }
 }
+
+/* Learn / Reading Lab — card particles (optional, light) */
+@keyframes learn-particle-float {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+  50% { transform: translate(2px, -4px) scale(1.1); opacity: 0.7; }
+}
+.learn-card-particle {
+  animation: learn-particle-float 4s ease-in-out infinite;
+}
+.learn-card-particle-delay-1 { animation-delay: 0.8s; }
+.learn-card-particle-delay-2 { animation-delay: 1.6s; }
+@media (prefers-reduced-motion: reduce) {
+  .learn-card-particle { animation: none; }
+}
+
+/* Learn Lab Visuals — hover intensity ramp (.lvIdle is wrapper in LearnCard) */
+.lvIdle {
+  --lv-speed: 1;
+  --lv-glow: 0.35;
+}
+.group\/card:hover .lvIdle {
+  --lv-speed: 1.35;
+  --lv-glow: 0.65;
+  transform: translateY(-2px);
+}
+.group\/card:hover .lvIdle svg {
+  opacity: 1;
+}
+.lvIdle svg {
+  opacity: 0.96;
+  transition: opacity 0.3s ease;
+}

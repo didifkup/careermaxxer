@@ -34,7 +34,7 @@ const cards = [
     description:
       "If you can't explain it simply, you don't understand it. CareerMaxxer fixes that.",
     cta: "View a lesson",
-    href: "/reading",
+    href: "/learn",
     Icon: Brain,
     background: (
       <>
