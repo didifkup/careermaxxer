@@ -35,7 +35,7 @@ export function Nav() {
 
   const tabs = [
     { label: "Technicals", href: "/practice" },
-    { label: "Reading", href: "/learn" },
+    { label: "Learn", href: "/learn" },
     { label: "Quiz", href: "/quiz" },
     { label: "Labs", href: "/worlds" },
     { label: "Resume Lab", href: "/worlds/resume" },
